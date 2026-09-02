@@ -32,6 +32,7 @@
 * [6. 딥링크](ios/deeplink.md)
 * [7. 개인정보 · 사용자 속성](ios/privacy.md)
 * [공개 API 목록](ios/api.md)
+* [네이티브 SDK 에서 이관](ios/migration.md)
 * [문제 해결](ios/troubleshooting.md)
 
 ## Common

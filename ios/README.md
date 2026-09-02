@@ -85,6 +85,7 @@ func sceneDidBecomeActive(_ scene: UIScene) {
 | [6. 딥링크](deeplink.md) | `tnkscheme://` 처리 |
 | [7. 개인정보 · 사용자 속성](privacy.md) | 동의, COPPA/GDPR, 연령/성별 |
 | [공개 API 목록](api.md) | 전체 시그니처 |
+| [네이티브 SDK 에서 이관](migration.md) | `TnkRwdSdk2` 를 사용 중이라면 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
 | [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [지원 범위](../common/support-matrix.md) | 제공 / 미제공 기능 |
