@@ -1,0 +1,18 @@
+# GitBook Git Sync — 사이트 구조 정의
+# 스키마: https://api.gitbook.com/gitbook-docs.yaml
+#
+# key 는 GitBook 이 스페이스를 식별하는 영구 값이다. 바꾸면 기존 스페이스가
+# 분리되고 새 스페이스가 만들어지므로 절대 변경하지 말 것.
+# (title / path 는 언제든 바꿔도 안전하다)
+
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: 하이브리드 오퍼월 개발자센터
+  structure:
+    - type: space
+      key: sdk-docs
+      title: 연동 가이드
+      path: guides
+      default: true
+      content:
+        directory: ./
