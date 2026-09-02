@@ -2,7 +2,7 @@
 
 * [소개](README.md)
 
-## 시작하기
+## Publisher
 
 * [APP ID 발급받기](publisher/app-id.md)
 * [테스트 기기 등록](publisher/test-device.md)
@@ -34,7 +34,7 @@
 * [공개 API 목록](ios/api.md)
 * [문제 해결](ios/troubleshooting.md)
 
-## 공통
+## Common
 
 * [서버 보상 콜백 URL](common/server-callback.md)
 * [지원 범위](common/support-matrix.md)
