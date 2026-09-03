@@ -24,6 +24,7 @@ TnkFactory 하이브리드 오퍼월 SDK 문서입니다.
 
 - [**서버 보상 콜백 URL**](common/server-callback.md) — 실제 포인트 지급 경로입니다. **반드시 구현하셔야 합니다.**
 - [지원 범위](common/support-matrix.md) — 제공 / 미제공 기능과 플랫폼별 차이
+- [AI 도구에 문서 연결하기](publisher/ai-tools.md) — Claude Code · Cursor 등에서 이 가이드를 바로 참조하기
 
 ---
 

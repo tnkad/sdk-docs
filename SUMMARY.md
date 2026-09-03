@@ -6,6 +6,7 @@
 
 * [APP ID 발급받기](publisher/app-id.md)
 * [테스트 기기 등록](publisher/test-device.md)
+* [AI 도구에 문서 연결하기](publisher/ai-tools.md)
 
 ## Android
 
