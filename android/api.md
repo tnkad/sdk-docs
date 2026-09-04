@@ -23,7 +23,6 @@ description: TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 등 하이브리드 �
 | `enableLogging(enabled: Boolean)` | 로그 on/off |
 | `enableLogging(context: Context, enabled: Boolean)` | 위와 동일 (네이티브 SDK 호환) |
 | `VERSION: String` | SDK 버전 문자열 |
-| `OFFERWALL_BASE_URL: String` | 오퍼월 랜딩 기본 URL |
 
 ### 사용자 · 개인정보
 

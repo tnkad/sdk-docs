@@ -102,8 +102,8 @@ sdk.configure(appId: "발급받은-앱-아이디")
 sdk.setUserName("개발사-사용자-식별값")
 sdk.applicationStarted()
 
-sdk.setRewardListener { reward in
-    self.refreshMyPointBalance()
+sdk.setRewardListener { [weak self] reward in
+    self?.refreshMyPointBalance()
 }
 
 // ATT 는 앱이 활성 상태일 때 (sceneDidBecomeActive)

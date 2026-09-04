@@ -116,17 +116,6 @@ ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
 
 ---
 
-## 특정 URL 로 열기
-
-테스트 환경 등에서 오퍼월 URL 을 직접 지정해야 할 때 사용합니다.
-실서비스에서는 `openOfferwall()` 을 사용하세요.
-
-```kotlin
-TnkOfferwall.show(context, "https://...")
-```
-
----
-
 ## 인스턴스 방식 (네이티브 SDK 호환)
 
 네이티브 SDK 를 사용 중인 개발사가 코드 변경을 최소화할 수 있도록 인스턴스 패턴도 제공합니다.
@@ -136,6 +125,15 @@ val offerwall = TnkOfferwall(this)
 offerwall.setUserName("개발사-사용자-식별값")
 offerwall.setCOPPA(false)
 offerwall.startOfferwallActivity(this)
+```
+
+### 특정 URL 로 열기
+
+테스트 환경 등에서 오퍼월 URL 을 직접 지정해야 할 때 사용합니다.
+실서비스에서는 `openOfferwall()` 을 사용하세요.
+
+```kotlin
+TnkOfferwall.show(context, "https://...")
 ```
 
 ---

@@ -14,9 +14,9 @@ description: setRewardListener 로 보상 지급 완료를 수신하는 방법�
 ## 등록
 
 ```swift
-TnkPpiHybSdk.shared.setRewardListener { reward in
+TnkPpiHybSdk.shared.setRewardListener { [weak self] reward in
     print("적립: \(reward.payPoint)\(reward.pointUnit ?? "")")
-    self.refreshMyPointBalance()   // 개발사 자체 잔액 UI 갱신
+    self?.refreshMyPointBalance()   // 개발사 자체 잔액 UI 갱신
 }
 ```
 
@@ -35,7 +35,7 @@ TnkPpiHybSdk.shared.setRewardListener(nil)
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `appId` | `Int64` | 광고 ID |
+| `appId` | `Int64` | 광고 캠페인 ID |
 | `appName` | `String?` | 광고명 |
 | `payPoint` | `Int64` | 지급 포인트 |
 | `pointUnit` | `String?` | 개발사 포인트 명칭(예: `"캐시"`) |
@@ -61,6 +61,10 @@ TnkPpiHybSdk.shared.setRewardListener(nil)
 | `3` | 동영상 |
 | `4` | 클릭형 |
 | `5` | 구매형 |
+| `6` | 이벤트 |
+
+> `payType` · `actionId` 는 값이 없으면 `-1` 로 전달됩니다.
+> 분기 처리 시 위 코드 외의 값도 들어올 수 있다고 가정하세요.
 
 ---
 

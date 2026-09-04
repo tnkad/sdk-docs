@@ -22,8 +22,6 @@ import TnkPpiHyb
 |---|---|
 | `static let shared: TnkPpiHybSdk` | 싱글턴 인스턴스 |
 | `static let version: String` | SDK 버전 |
-| `static let protocolVersion: String` | 브릿지 프로토콜 버전 |
-| `static let offerwallBaseURL: String` | 오퍼월 랜딩 기본 URL |
 
 ### 초기화 · 수명주기
 
@@ -42,7 +40,7 @@ import TnkPpiHyb
 |---|---|
 | `setUserName(_ userName: String)` | 개발사 사용자 식별값. **보상 지급 기준값** |
 | `getUserName() -> String?` | 설정된 식별값 조회 |
-| `getAppId() -> String?` | 적용된 개발사 앱 ID |
+| `getAppId() -> String?` | 적용된 개발사 앱 ID (하이픈 제거) |
 | `setAgreePrivacy(_ agree: Bool)` | 개인정보 동의 상태 |
 | `isAgreePrivacy() -> Bool` | 동의 상태 조회 |
 | `setCOPPA(_ coppa: Int)` | 만 13세 미만 여부 |
@@ -158,5 +156,7 @@ public enum TnkCode {
 | `setCOPPA` | `Int` | `Bool` |
 | `setUserGender` | `Int` 만 | `Int` / `String` 둘 다 |
 | 광고 ID 준비 콜백 | 없음 (`getAdid()` 만) | `onAdidReady` / `refreshAdid` |
+| `loadOfferwall` | URL 하나만 받음 — 파라미터는 `buildOfferwallURL(extraParams:)` 에 | `url` + `extraParams` 둘 다 받음 |
+| 상단 안전영역 전달 | 없음 | `setSafeAreaTopPx(cssPx:)` |
 | ATT 동의 요청 | ✅ | 해당 없음 |
 | 뷰 정리 | `cleanup()` 수동 호출 | 생명주기 자동 처리 |

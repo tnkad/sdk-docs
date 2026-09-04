@@ -49,7 +49,7 @@ maven("https://repository.tnkad.net:8443/repository/public/")
 ```
 
 `settings.gradle.kts` 에 `repositoriesMode` 가 `FAIL_ON_PROJECT_REPOS` 로 되어 있는데
-저장소를 모듈 `build.gradle` 쪽에 추가했다면 무시됩니다.
+저장소를 모듈 `build.gradle` 쪽에 추가했다면 그 선언은 무시됩니다.
 `settings.gradle.kts` 의 `dependencyResolutionManagement` 안에 넣으세요.
 
 ### `Manifest merger failed ... AdWallActivity`
@@ -73,7 +73,7 @@ Log.i("TNK", "appId=${TnkPpiHybSdk.getAppId(this)}")
 
 ### 패키지명이 어드민 등록값과 다릅니다
 
-TNK 어드민은 **패키지명(`applicationId`)으로 앱을 식별**합니다.
+TNK 는 **패키지명(`applicationId`)으로 앱을 식별**합니다.
 `applicationIdSuffix` 로 `.debug` 등을 붙인 빌드는 등록되지 않은 패키지로 취급되어
 세션이 만들어지지 않습니다.
 
@@ -91,7 +91,7 @@ android {
 ### 네트워크 오류 팝업이 뜹니다
 
 오퍼월 페이지 로드에 실패했습니다. 기기의 네트워크 상태를 먼저 확인하고,
-회사 네트워크나 VPN 을 통해 접속 중이라면 `tnkfactory.com` 도메인 접근이 차단되지 않았는지 확인하세요.
+회사 네트워크나 VPN 을 통해 접속 중이라면 `tnkfactory.com` · `tnkad.net` 도메인 접근이 차단되지 않았는지 확인하세요.
 
 ---
 
@@ -99,8 +99,8 @@ android {
 
 `setRewardListener` 는 **UI 알림용**입니다. 실제 포인트 지급은 서버 콜백으로 이루어집니다.
 
-1. TNK 어드민에 개발사 콜백 URL 이 등록되어 있는지 확인
-2. 콜백 서버가 **HTTP 200** 을 응답하는지 확인 (200 이 아니면 재시도 후 24시간 뒤 폐기)
+1. 퍼블리셔 페이지에 개발사 콜백 URL 이 등록되어 있는지 확인
+2. 콜백 서버가 **HTTP 200** 을 응답하는지 확인 (200 이 아니면 5분 · 1시간 간격으로 최대 24시간 재시도 후 폐기)
 3. `md_chk` 검증이 정식 규격과 맞는지 확인
 4. `setUserName()` 에 넣은 값과 콜백의 `md_user_nm` 이 일치하는지 확인
 
@@ -139,8 +139,11 @@ binding.offerwallView.onCloseRequested = {
 
 edge-to-edge 화면이라면 상단 inset 을 전달하세요.
 
+물리 픽셀이 아니라 **CSS px**(물리 px ÷ density) 를 넘겨야 합니다.
+
 ```kotlin
-binding.offerwallView.setSafeAreaTopPx(topInsetPx / resources.displayMetrics.density)
+val topPx = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+binding.offerwallView.setSafeAreaTopPx(topPx / resources.displayMetrics.density)
 ```
 
 ---
@@ -155,7 +158,7 @@ binding.offerwallView.setSafeAreaTopPx(topInsetPx / resources.displayMetrics.den
 터미널에서 직접 테스트할 수 있습니다.
 
 ```bash
-adb shell am start -a android.intent.action.VIEW -d "tnkscheme://select_menu?cat_id=3" 앱.패키지명
+adb shell am start -a android.intent.action.VIEW -d "tnkscheme://select_menu?cat_id=3"
 ```
 
 ---

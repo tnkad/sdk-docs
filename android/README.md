@@ -16,14 +16,14 @@ JS 브릿지를 담당하고 **오퍼월 화면과 보상 로직은 WebView 안�
 
 ## 연동에 필요한 것
 
-시작하기 전에 TnkFactory 담당자로부터 아래 두 가지를 받으셔야 합니다.
+시작하기 전에 [퍼블리셔 페이지](../publisher/app-id.md)에서 앱을 등록하고 아래 두 가지를 발급받으셔야 합니다.
 
 | 항목 | 설명 |
 |------|------|
 | **개발사 앱 ID** (`tnkad_app_id`) | 앱마다 발급되는 UUID 형식의 식별자 |
 | **앱 키** (`app_key`) | 서버 보상 콜백 검증에 사용. 개발사 백엔드에서만 사용하며 앱에 넣지 않습니다 |
 
-> ⚠️ TNK 어드민은 **패키지명(`applicationId`)으로 앱을 식별**합니다.
+> ⚠️ TNK 는 **패키지명(`applicationId`)으로 앱을 식별**합니다.
 > 등록한 패키지명과 실제 앱의 `applicationId` 가 다르면 세션이 생성되지 않습니다.
 > `applicationIdSuffix` 로 `.debug` 등을 붙인 빌드도 마찬가지이니 주의하세요.
 
@@ -100,8 +100,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-여기까지가 최소 연동입니다. 별도의 권한 선언이나 Activity 등록은 필요하지 않습니다
-(SDK 가 자동으로 병합합니다 — [2. AndroidManifest 설정](manifest.md) 참고).
+여기까지가 최소 연동입니다. 별도의 권한 선언이나 Activity 등록은 필요하지 않습니다.
+SDK 가 자동으로 병합합니다 — [2. AndroidManifest 설정](manifest.md)을 참고하세요.
 
 ---
 
@@ -114,11 +114,11 @@ class MainActivity : AppCompatActivity() {
 | [3. 초기화](initialize.md) | 초기화 시점, 사용자 식별값, 광고 ID |
 | [4. 오퍼월 띄우기](offerwall.md) | 전체화면 진입 / 화면 안에 삽입 |
 | [5. 보상 지급 수신](reward.md) | `TnkRewardListener` 와 `RewardInfo` |
-| [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [6. 딥링크](deeplink.md) | `tnkscheme://` 처리 |
 | [7. 개인정보 · 사용자 속성](privacy.md) | 동의, COPPA/GDPR, 연령/성별 |
 | [공개 API 목록](api.md) | 전체 시그니처 |
 | [네이티브 SDK 에서 이관](migration.md) | `com.tnkfactory:rwd` 를 사용 중이라면 |
+| [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [지원 범위](../common/support-matrix.md) | 제공 / 미제공 기능 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
 

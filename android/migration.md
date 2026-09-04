@@ -32,7 +32,7 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 - [ ] 보상 지급 UI 갱신을 `setRewardListener` 로 이전
 - [ ] 서버 콜백 URL 구현은 **그대로 유지** (변경 없음)
 - [ ] `tnkad_app_id` meta-data 는 **그대로 유지** (변경 없음)
-- [ ] `tnkad_tracking` meta-data 는 남겨두셔도 무해합니다 (하이브리드 SDK 는 사용 활동 리포팅 API 를 제공하지 않습니다)
+- [ ] `tnkad_tracking` meta-data 는 남겨두셔도 무해합니다 (하이브리드 SDK 는 이 값을 사용하지 않습니다)
 
 ---
 

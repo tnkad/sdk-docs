@@ -10,7 +10,7 @@ description: TnkFactory Maven 저장소 등록과 Gradle 의존성 추가 방법
 |------|-----|
 | `minSdk` | **21** 이상 |
 | `compileSdk` | **36** 이상 |
-| `targetSdk` | 제한 없음 (34 이상 권장) |
+| `targetSdk` | 제한 없음 (Google Play 의 대상 API 요구사항을 따르세요) |
 | Java / Kotlin jvmTarget | **17** |
 | AndroidX | 필수 (`android.useAndroidX=true`) |
 

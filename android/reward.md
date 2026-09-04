@@ -46,7 +46,7 @@ TnkPpiHybSdk.setRewardListener(null)
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| `appId` | `Long` | 광고 ID. 파싱 실패 시 `0` |
+| `appId` | `Long` | 광고 캠페인 ID. 파싱 실패 시 `0` |
 | `appName` | `String?` | 광고명. 없으면 `null` |
 | `payPoint` | `Long` | 지급 포인트. 파싱 실패 시 `0` |
 | `pointUnit` | `String?` | 개발사 포인트 명칭(예: `"P"`). 없으면 `null` |
@@ -72,6 +72,10 @@ TnkPpiHybSdk.setRewardListener(null)
 | `3` | 동영상 |
 | `4` | 클릭형 |
 | `5` | 구매형 |
+| `6` | 이벤트 |
+
+> `payType` · `actionId` 는 값이 없으면 `-1` 로 전달됩니다.
+> 분기 처리 시 위 코드 외의 값도 들어올 수 있다고 가정하세요.
 
 ---
 
@@ -91,6 +95,6 @@ TnkPpiHybSdk.setEventListener { type, rawJson ->
 
 ---
 
-다음: [6. 딥링크](deeplink.md)
-
 > 실제 지급 구현은 [서버 보상 콜백 URL](../common/server-callback.md) 을 참고하세요.
+
+다음: [6. 딥링크](deeplink.md)

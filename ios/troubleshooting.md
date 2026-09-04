@@ -71,11 +71,11 @@ print(TnkPpiHybSdk.shared.getAppId() ?? "nil")
 
 ### 사용자 식별값이 없습니다
 
-`setUserName()` 을 호출하지 않으면 보상 대상을 특정할 수 없어 오퍼월이 정상 동작하지 않습니다.
+`setUserName(_:)` 을 호출하지 않으면 보상 대상을 특정할 수 없어 오퍼월이 정상 동작하지 않습니다.
 
 ### 번들 ID 가 어드민 등록값과 다릅니다
 
-TNK 어드민은 **번들 ID 로 앱을 식별**합니다. 디버그 빌드에서 번들 ID 에
+TNK 는 **번들 ID 로 앱을 식별**합니다. 디버그 빌드에서 번들 ID 에
 접미사를 붙이고 계시다면 등록되지 않은 앱으로 취급됩니다.
 
 ---
@@ -98,10 +98,10 @@ ATT 동의를 받지 않으면 IDFA 가 없어 매칭되는 광고가 크게 줄
 
 `setRewardListener` 는 **UI 알림용**입니다. 실제 포인트 지급은 서버 콜백으로 이루어집니다.
 
-1. TNK 어드민에 개발사 콜백 URL 이 등록되어 있는지 확인
+1. 퍼블리셔 페이지에 개발사 콜백 URL 이 등록되어 있는지 확인
 2. 콜백 서버가 **HTTP 200** 을 응답하는지 확인
 3. `md_chk` 검증이 정식 규격과 맞는지 확인
-4. `setUserName()` 에 넣은 값과 콜백의 `md_user_nm` 이 일치하는지 확인
+4. `setUserName(_:)` 에 넣은 값과 콜백의 `md_user_nm` 이 일치하는지 확인
 
 자세한 내용은 [서버 보상 콜백 URL](../common/server-callback.md)을 참고하세요.
 
@@ -118,7 +118,7 @@ guard let url = TnkPpiHybSdk.shared.buildOfferwallURL() else { return }
 offerwall.loadOfferwall(url)
 ```
 
-`buildOfferwallURL()` 이 `nil` 을 반환한다면 초기화가 안 된 상태입니다.
+URL 자체는 초기화 전에도 반환됩니다. 화면이 비어 있다면 위의 앱 ID · 사용자 식별값 항목을 먼저 확인하세요.
 
 ### 화면을 닫아도 메모리가 줄지 않습니다
 

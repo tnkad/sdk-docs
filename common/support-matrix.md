@@ -33,7 +33,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 
 | 기능 | 대체 |
 |------|------|
-| 플레이스먼트 뷰 (특정 광고만 노출) | 없음. 네이티브 SDK 의 `AdPlacementView` 를 사용 중이라면 문의 |
+| 플레이스먼트 뷰 (특정 광고만 노출) | 없음. 네이티브 SDK 의 `AdPlacementView` 를 사용 중이라면 문의해 주세요 |
 | 광고 상세 화면 직접 호출 | 오퍼월(FE) |
 | 광고 데이터 콜백 | SDK 가 광고 목록·상세 데이터를 앱으로 넘겨주지 않습니다. 광고 데이터는 오퍼월(FE)이 서버에서 직접 받아 화면을 그립니다 |
 
@@ -45,7 +45,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 IDFA 를 쓰려면 사용자 동의가 필요합니다. 동의를 받지 않으면 참여 가능한 광고가 크게 줄어듭니다.
 
 **시그니처 차이**
-`setCOPPA` 는 Android 가 `Bool`, iOS 가 `Int` 입니다.
+`setCOPPA` 는 Android 가 `Boolean`, iOS 가 `Int` 입니다.
 자세한 차이는 [iOS 공개 API 목록](../ios/api.md#android-와-다른-점)을 참고하세요.
 
 ---

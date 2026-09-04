@@ -28,8 +28,8 @@ sdk.applicationStarted()
 sdk.configure(appId: "발급받은-앱-아이디")
 ```
 
-`Info.plist` 에 `tnkad_app_id` 를 넣어두었다면 인자 없는 형태로도 됩니다.
-오퍼월 URL 을 직접 지정해야 하는 경우에는 설정 객체를 쓸 수 있습니다.
+`Info.plist` 에 `tnkad_app_id` 를 넣어두었다면 **`configure` 호출 자체를 생략**할 수 있습니다
+(SDK 가 첫 사용 시점에 자동 초기화합니다). 오퍼월 URL 을 직접 지정해야 하는 경우에는 설정 객체를 쓸 수 있습니다.
 
 ```swift
 sdk.configure(TnkPpiHybConfig(appId: "발급받은-앱-아이디"))

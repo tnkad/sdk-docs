@@ -42,7 +42,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // 앱이 이미 떠 있는 경우
     func scene(_ scene: UIScene, openURLContexts contexts: Set<UIOpenURLContext>) {
-        contexts.forEach { TnkPpiHybSdk.shared.handleScheme($0.url) }
+        for context in contexts where !TnkPpiHybSdk.shared.handleScheme(context.url) {
+            // tnkscheme 이 아니므로 개발사 자체 딥링크로 처리
+        }
     }
 
     // 딥링크로 앱이 처음 뜨는 경우

@@ -60,7 +60,7 @@ sdk.setUserGender(TnkCode.FEMALE)   // 여성
 | `TnkCode.MALE` | `1` |
 | `TnkCode.FEMALE` | `2` |
 
-> 두 값은 현재 **SDK 에 저장만 되고 서버로 전송되지 않습니다.**
+> 연령과 성별 값은 현재 **SDK 에 저장만 되고 서버로 전송되지 않습니다.**
 > 광고 매칭에 반영이 필요하시면 TnkFactory 담당자에게 문의해 주세요.
 
 ---
