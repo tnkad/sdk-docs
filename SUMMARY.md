@@ -21,6 +21,7 @@
 * [공개 API 목록](android/api.md)
 * [네이티브 SDK 에서 이관](android/migration.md)
 * [문제 해결](android/troubleshooting.md)
+* [릴리스 노트](android/changelog.md)
 
 ## iOS
 
@@ -35,6 +36,7 @@
 * [공개 API 목록](ios/api.md)
 * [네이티브 SDK 에서 이관](ios/migration.md)
 * [문제 해결](ios/troubleshooting.md)
+* [릴리스 노트](ios/changelog.md)
 
 ## Common
 

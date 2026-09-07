@@ -87,6 +87,7 @@ func sceneDidBecomeActive(_ scene: UIScene) {
 | [공개 API 목록](api.md) | 전체 시그니처 |
 | [네이티브 SDK 에서 이관](migration.md) | `TnkRwdSdk2` 를 사용 중이라면 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
+| [릴리스 노트](changelog.md) | 버전별 변경 사항 |
 | [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [지원 범위](../common/support-matrix.md) | 제공 / 미제공 기능 |
 

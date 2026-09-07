@@ -39,7 +39,7 @@ android {
 }
 ```
 
-### `Could not find com.tnkfactory.ad:hrwd:1.0.6`
+### `Could not find com.tnkfactory.ad:hrwd:...`
 
 TnkFactory Maven 저장소가 등록되지 않았습니다.
 [1. 설치](install.md)의 저장소 등록을 확인하세요.

@@ -24,7 +24,7 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 
 ## 이관 체크리스트
 
-- [ ] 의존성 좌표를 `com.tnkfactory:rwd:...` → `com.tnkfactory.ad:hrwd:1.0.6` 으로 교체
+- [ ] 의존성 좌표를 `com.tnkfactory:rwd:...` → `com.tnkfactory.ad:hrwd` 로 교체 (최신 버전은 [1. 설치](install.md) 참고)
 - [ ] import 경로를 `com.tnkfactory.ad.*` → `com.tnkfactory.ad.hrwd.*` 로 교체
 - [ ] `TnkSession.*` 호출을 `TnkPpiHybSdk.*` 로 치환
 - [ ] 매니페스트에서 `com.tnkfactory.ad.AdWallActivity` `<activity>` 선언 **제거**

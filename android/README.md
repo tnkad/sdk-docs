@@ -121,6 +121,7 @@ SDK 가 자동으로 병합합니다 — [2. AndroidManifest 설정](manifest.md
 | [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [지원 범위](../common/support-matrix.md) | 제공 / 미제공 기능 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
+| [릴리스 노트](changelog.md) | 버전별 변경 사항 |
 
 ---
 
