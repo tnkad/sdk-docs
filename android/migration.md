@@ -58,8 +58,6 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 | `TnkSession.applicationStarted(ctx)` | `TnkPpiHybSdk.applicationStarted(ctx)` |
 | `TnkSession.enableLogging(ctx, bool)` | `TnkPpiHybSdk.enableLogging(ctx, bool)` |
 | `TnkSession.setAgreePrivacy(ctx, bool)` | `TnkPpiHybSdk.setAgreePrivacy(ctx, bool)` |
-| `TnkSession.setUserAge(ctx, int)` | `TnkPpiHybSdk.setUserAge(ctx, int)` |
-| `TnkSession.setUserGender(ctx, TnkCode.MALE)` | `TnkPpiHybSdk.setUserGender(ctx, TnkCode.MALE)` |
 | `setCOPPA` / `setGdprConsent` | `TnkPpiHybSdk.setCOPPA(ctx, bool)` / `setGDPR(ctx, int)` |
 | `new TnkOfferwall(ctx)` 인스턴스 패턴 | `TnkOfferwall(ctx)` — `setUserName` / `setCOPPA` / `startOfferwallActivity` |
 | meta-data `tnkad_app_id` | 동일 |

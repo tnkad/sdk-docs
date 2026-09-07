@@ -1,8 +1,8 @@
 ---
-description: 개인정보 수집 동의, COPPA·GDPR 설정, 연령·성별 등 사용자 속성을 TnkPpiHyb SDK 에 전달하는 방법입니다.
+description: 개인정보 수집 동의와 COPPA·GDPR 설정을 TnkPpiHyb SDK 에 전달하는 방법입니다.
 ---
 
-# 7. 개인정보 · 사용자 속성
+# 7. 개인정보 설정
 
 모두 선택 사항입니다. 필요한 항목만 사용하세요.
 
@@ -44,24 +44,6 @@ sdk.setCOPPA(1)   // 1 = 만 13세 미만
 ```swift
 sdk.setGDPR(1)    // 1 = GDPR 적용 대상
 ```
-
----
-
-## 연령 · 성별
-
-```swift
-sdk.setUserAge(25)
-sdk.setUserGender(TnkCode.MALE)     // 남성
-sdk.setUserGender(TnkCode.FEMALE)   // 여성
-```
-
-| 상수 | 값 |
-|------|-----|
-| `TnkCode.MALE` | `1` |
-| `TnkCode.FEMALE` | `2` |
-
-> 연령과 성별 값은 현재 **SDK 에 저장만 되고 서버로 전송되지 않습니다.**
-> 광고 매칭에 반영이 필요하시면 TnkFactory 담당자에게 문의해 주세요.
 
 ---
 

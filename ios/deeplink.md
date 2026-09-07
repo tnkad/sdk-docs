@@ -108,4 +108,4 @@ xcrun simctl openurl booted "tnkscheme://select_menu?cat_id=3"
 
 ---
 
-다음: [7. 개인정보 · 사용자 속성](privacy.md)
+다음: [7. 개인정보 설정](privacy.md)

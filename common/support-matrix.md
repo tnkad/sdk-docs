@@ -21,10 +21,10 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 개발사 사용자 식별값 | ✅ | ✅ | `setUserName` |
 | 광고 식별자 수집 | ✅ | ✅ | Android ADID / iOS IDFA |
 | 개인정보 동의 · COPPA · GDPR | ✅ | ✅ | 세션 정보로 서버에 전달됩니다 |
-| 연령 · 성별 | ○ | ○ | SDK 에 저장됩니다. 현재 광고 매칭에는 반영되지 않습니다 |
 | 딥링크 (`tnkscheme://`) | ✅ | ✅ | `handleScheme` |
 | 범용 이벤트 수신 | ✅ | ✅ | `setEventListener` |
 | ATT 동의 요청 | — | ✅ | iOS 전용 |
+
 
 > 네이티브 오퍼월 SDK 에서 옮겨오시는 경우, 어떤 호출을 그대로 쓸 수 있고 무엇을 걷어내야 하는지는
 > [네이티브 SDK 에서 이관](../android/migration.md)에 정리되어 있습니다.

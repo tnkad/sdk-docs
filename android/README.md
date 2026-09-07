@@ -115,7 +115,7 @@ SDK 가 자동으로 병합합니다 — [2. AndroidManifest 설정](manifest.md
 | [4. 오퍼월 띄우기](offerwall.md) | 전체화면 진입 / 화면 안에 삽입 |
 | [5. 보상 지급 수신](reward.md) | `TnkRewardListener` 와 `RewardInfo` |
 | [6. 딥링크](deeplink.md) | `tnkscheme://` 처리 |
-| [7. 개인정보 · 사용자 속성](privacy.md) | 동의, COPPA/GDPR, 연령/성별 |
+| [7. 개인정보 설정](privacy.md) | 수집 동의, COPPA/GDPR |
 | [공개 API 목록](api.md) | 전체 시그니처 |
 | [네이티브 SDK 에서 이관](migration.md) | `com.tnkfactory:rwd` 를 사용 중이라면 |
 | [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |

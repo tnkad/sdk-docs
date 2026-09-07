@@ -45,8 +45,6 @@ import TnkPpiHyb
 | `isAgreePrivacy() -> Bool` | 동의 상태 조회 |
 | `setCOPPA(_ coppa: Int)` | 만 13세 미만 여부 |
 | `setGDPR(_ gdpr: Int)` | GDPR 설정값 |
-| `setUserAge(_ age: Int)` | 연령 |
-| `setUserGender(_ gender: Int)` | 성별. `TnkCode.MALE` / `TnkCode.FEMALE` |
 
 ### 광고 식별자 · ATT
 
@@ -138,23 +136,11 @@ public struct RewardInfo {
 
 ---
 
-## `TnkCode`
-
-```swift
-public enum TnkCode {
-    static let MALE: Int    // 1
-    static let FEMALE: Int  // 2
-}
-```
-
----
-
 ## Android 와 다른 점
 
 | 항목 | iOS | Android |
 |---|---|---|
-| `setCOPPA` | `Int` | `Bool` |
-| `setUserGender` | `Int` 만 | `Int` / `String` 둘 다 |
+| `setCOPPA` | `Int` | `Boolean` |
 | 광고 ID 준비 콜백 | 없음 (`getAdid()` 만) | `onAdidReady` / `refreshAdid` |
 | `loadOfferwall` | URL 하나만 받음 — 파라미터는 `buildOfferwallURL(extraParams:)` 에 | `url` + `extraParams` 둘 다 받음 |
 | 상단 안전영역 전달 | 없음 | `setSafeAreaTopPx(cssPx:)` |

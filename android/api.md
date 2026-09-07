@@ -35,9 +35,6 @@ description: TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 등 하이브리드 �
 | `isAgreePrivacy(context: Context): Boolean` | 동의 상태 조회 |
 | `setCOPPA(context: Context, enabled: Boolean)` | 만 13세 미만 여부 |
 | `setGDPR(context: Context, gdpr: Int)` | GDPR 설정값 |
-| `setUserAge(context: Context, age: Int)` | 연령 |
-| `setUserGender(context: Context, gender: Int)` | 성별. `TnkCode.MALE` / `TnkCode.FEMALE` |
-| `setUserGender(context: Context, gender: String)` | 성별. `"M"` / `"F"` |
 
 ### 광고 ID (ADID)
 
@@ -132,12 +129,3 @@ data class RewardInfo(
 ```
 
 필드 의미와 코드값은 [5. 보상 지급 수신](reward.md)을 참고하세요.
-
-## `TnkCode`
-
-```kotlin
-object TnkCode {
-    const val MALE: Int = 1
-    const val FEMALE: Int = 2
-}
-```

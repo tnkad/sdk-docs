@@ -72,7 +72,6 @@ TnkPpiHybSdk.setRewardListener(null)
 | `3` | 동영상 |
 | `4` | 클릭형 |
 | `5` | 구매형 |
-| `6` | 이벤트 |
 
 > `payType` · `actionId` 는 값이 없으면 `-1` 로 전달됩니다.
 > 분기 처리 시 위 코드 외의 값도 들어올 수 있다고 가정하세요.

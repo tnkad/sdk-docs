@@ -83,7 +83,7 @@ func sceneDidBecomeActive(_ scene: UIScene) {
 | [4. 오퍼월 띄우기](offerwall.md) | 풀스크린 / 뷰 삽입 |
 | [5. 보상 지급 수신](reward.md) | `setRewardListener` 와 `RewardInfo` |
 | [6. 딥링크](deeplink.md) | `tnkscheme://` 처리 |
-| [7. 개인정보 · 사용자 속성](privacy.md) | 동의, COPPA/GDPR, 연령/성별 |
+| [7. 개인정보 설정](privacy.md) | 수집 동의, COPPA/GDPR |
 | [공개 API 목록](api.md) | 전체 시그니처 |
 | [네이티브 SDK 에서 이관](migration.md) | `TnkRwdSdk2` 를 사용 중이라면 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
