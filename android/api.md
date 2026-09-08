@@ -51,6 +51,30 @@ description: TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 등 하이브리드 �
 | `openOfferwall(context: Context, extraParams: Map<String, String>? = null)` | 전체화면 오퍼월 진입 |
 | `buildOfferwallUrl(context: Context, extraParams: Map<String, String>? = null): String` | 오퍼월 URL 조립 |
 
+### 특정 광고 진입
+
+네이티브 SDK 의 `adDetail` / `adJoin` / `adAction` 과 같은 이름·의미입니다.
+`actionId` 는 기본 0, CPS(쇼핑) 광고만 5 를 지정합니다.
+결과 콜백은 없습니다 — 광고 조회·참여와 오류 안내를 오퍼월(FE)이 처리합니다.
+
+| 시그니처 | 설명 |
+|---|---|
+| `adDetail(context: Context, appId: Long, actionId: Int = 0)` | 해당 광고의 **상세 화면으로 바로 진입**. 닫으면 오퍼월도 닫혀 개발사 화면으로 복귀 |
+| `adJoin(context: Context, appId: Long, actionId: Int = 0)` | 상세 없이 **바로 참여** 후 광고주 페이지로 이동 |
+| `adAction(context: Context, appId: Long, actionId: Int = 0)` | 리스트 클릭과 동일 규칙(상세 또는 바로 참여). 닫으면 오퍼월 홈 |
+
+### 적립 가능 포인트 조회
+
+네이티브 SDK 의 `queryAdvertiseCount` / `getEarnPoint` 에 대응합니다. 네트워크 I/O 는 백그라운드에서
+수행되고 콜백은 메인 스레드로 옵니다. 실패 시 `null` 이 전달됩니다 (Android 전용 — iOS 는 미제공).
+
+| 시그니처 | 설명 |
+|---|---|
+| `getAdvertiseTotalPoint(context: Context, callback: (TotalPointInfo?) -> Unit)` | 비구매형(PPI) 적립 가능 포인트·광고 수 |
+| `getProductTotalPoint(context: Context, callback: (TotalPointInfo?) -> Unit)` | 구매형(CPS) 적립 가능 포인트·광고 수 |
+
+`TotalPointInfo`: `pointAmount: Long`(포인트 총합) · `adCount: Int`(광고 수) · `retCode: Int` · `retMessage: String?` · `isSuccess: Boolean`
+
 ### 콜백 등록
 
 | 시그니처 | 설명 |

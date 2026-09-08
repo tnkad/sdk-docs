@@ -14,6 +14,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 기능 | Android | iOS | 비고 |
 |------|:-------:|:---:|------|
 | 전체화면 오퍼월 | ✅ | ✅ | `openOfferwall` |
+| 특정 광고 바로 진입 | ✅ | ✅ | `adDetail` / `adJoin` / `adAction` — 네이티브 SDK 와 같은 이름 |
 | 화면 안에 오퍼월 삽입 | ✅ | ✅ | `TnkOfferwallView` |
 | 헤더 숨김 등 개발사 파라미터 | ✅ | ✅ | `hideHeader=1` |
 | 보상 지급 완료 알림 | ✅ | ✅ | `setRewardListener` — UI 갱신용 |
@@ -34,7 +35,6 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 기능 | 대체 |
 |------|------|
 | 플레이스먼트 뷰 (특정 광고만 노출) | 없음. 네이티브 SDK 의 `AdPlacementView` 를 사용 중이라면 문의해 주세요 |
-| 광고 상세 화면 직접 호출 | 오퍼월(FE) |
 | 광고 데이터 콜백 | SDK 가 광고 목록·상세 데이터를 앱으로 넘겨주지 않습니다. 광고 데이터는 오퍼월(FE)이 서버에서 직접 받아 화면을 그립니다 |
 
 ---

@@ -60,6 +60,18 @@ import TnkPpiHyb
 | `openOfferwall(from presenter: UIViewController, animated: Bool = true, extraParams: [String: String]? = nil)` | 풀스크린 오퍼월 진입 |
 | `buildOfferwallURL(extraParams: [String: String]? = nil) -> URL?` | 오퍼월 URL 조립 |
 
+### 특정 광고 진입
+
+네이티브 SDK 의 `presentAdDetailView` / `adJoin` / `adAction` 에 대응합니다 (Android 하이브리드와 같은 이름).
+`actionId` 는 기본 0, CPS(쇼핑) 광고만 5 를 지정합니다.
+결과 콜백은 없습니다 — 광고 조회·참여와 오류 안내를 오퍼월(FE)이 처리합니다.
+
+| 시그니처 | 설명 |
+|---|---|
+| `adDetail(from presenter: UIViewController, appId: Int64, actionId: Int = 0, animated: Bool = true)` | 해당 광고의 **상세 화면으로 바로 진입**. 닫으면 오퍼월도 닫혀 개발사 화면으로 복귀 |
+| `adJoin(from presenter: UIViewController, appId: Int64, actionId: Int = 0, animated: Bool = true)` | 상세 없이 **바로 참여** 후 광고주 페이지로 이동 |
+| `adAction(from presenter: UIViewController, appId: Int64, actionId: Int = 0, animated: Bool = true)` | 리스트 클릭과 동일 규칙(상세 또는 바로 참여). 닫으면 오퍼월 홈 |
+
 ### 콜백 등록
 
 | 시그니처 | 설명 |
