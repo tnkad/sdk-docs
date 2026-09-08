@@ -25,6 +25,12 @@ description: 네이티브 오퍼월 SDK(TnkRwdSdk2)에서 하이브리드 SDK �
 아래 [전체 API 대조표](#전체-api-대조표)에 네이티브 `TnkSession` 의 공개 API 를 전수 대조해 두었으니,
 사용 중인 호출을 표에서 찾아 그대로 치환·제거하시면 이관이 끝납니다.
 
+> 💡 **컴파일러가 이관을 안내합니다**: 이름이 바뀐 API(`TnkSession`, `initInstance`,
+> `setAgreePrivacyPolicy`, `presentAdDetailView` 등)는 SDK 에 안내 스텁이 들어 있어,
+> 의존성만 교체하고 빌드하면 각 호출 지점에서 **"~로 대체되었습니다" 컴파일 에러와
+> Xcode fix-it** 이 뜹니다. 에러 목록이 곧 이관 체크리스트이고, 대부분 fix-it 클릭으로 끝납니다.
+> (스텁은 컴파일 불가·자동완성 비노출이라 런타임과 API 표면에 영향이 없습니다.)
+
 ---
 
 ## 이관 체크리스트
