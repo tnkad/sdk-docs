@@ -24,6 +24,8 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 요약하면: **걷어낼 코드는 있어도, 새로 배워야 할 개념은 거의 없습니다.**
 아래 **전체 API 대조표**에 네이티브 SDK 의 공개 API 를 전수 대조해 두었으니,
 사용 중인 호출을 표에서 찾아 그대로 치환·제거하시면 이관이 끝납니다.
+치환 작업 자체를 AI 도구에 맡기실 수도 있습니다 — [AI 도구에 문서 연결하기](../publisher/ai-tools.md)에
+이 대조표를 근거로 코드베이스를 자동 치환시키는 프롬프트가 있습니다.
 
 > 💡 **Java 개발사에 좋은 소식**: 네이티브 SDK 의 `TnkSession`/`TnkAdConfig` 는 Kotlin `object` 라
 > Java 에서 `TnkSession.INSTANCE.xxx()` 로 불러야 했지만, 하이브리드 SDK 는 모든 메서드가
@@ -158,8 +160,8 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 | `TnkAdHideUtil` / `TnkOnBackPressListener` / `TnkAdListModel` (준공개 내부 클래스) | 없음 | 문의 |
 | 포인트 스토어 모듈(`rwd-store` 의 `RwdPlusStore*` 다이얼로그) | 없음 | 문의 |
 
-> 개발사 자체 화면에 포인트 잔액을 표시하고 계셨다면 별도 협의가 필요합니다.
-> TnkFactory 담당자에게 문의하세요.
+> 적립 가능 포인트를 개발사 화면에 표시하려면 [9. 적립 가능 포인트 조회](total-point.md)를 사용하세요.
+> 사용자의 **적립된 잔액**은 [서버 보상 콜백](../common/server-callback.md)으로 적립한 값을 개발사가 직접 관리합니다.
 
 ---
 

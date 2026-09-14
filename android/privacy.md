@@ -47,4 +47,4 @@ TnkPpiHybSdk.setGDPR(context, 1)   // 1 = GDPR 적용 대상
 
 ---
 
-다음: [공개 API 목록](api.md)
+다음: [8. 특정 광고 진입](ad-entry.md)

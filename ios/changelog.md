@@ -13,11 +13,11 @@ description: 하이브리드 오퍼월 SDK(iOS) 버전별 변경 사항입니다
 
 ## 1.0.1 — 2026-09-10
 
-- 포인트 조회 액션 getAdvertiseTotalPoint/getProductTotalPoint 기능 추가
+- 포인트 조회 액션 getAdvertiseTotalPoint/getProductTotalPoint 기능 추가 — [9. 적립 가능 포인트 조회](total-point.md)
 
 ## 1.0.0 — 2026-09-09
 
-- 상세 랜딩 액션 adDetail/adJoin/adAction 기능 추가
+- 상세 랜딩 액션 adDetail/adJoin/adAction 기능 추가 — [8. 특정 광고 진입](ad-entry.md)
 
 ## 0.1.0 — 2026-08-19
 

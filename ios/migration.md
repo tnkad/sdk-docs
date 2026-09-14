@@ -24,6 +24,8 @@ description: 네이티브 오퍼월 SDK(TnkRwdSdk2)에서 하이브리드 SDK �
 요약하면: **걷어낼 코드는 있어도, 새로 배워야 할 개념은 거의 없습니다.**
 아래 **전체 API 대조표**에 네이티브 `TnkSession` 의 공개 API 를 전수 대조해 두었으니,
 사용 중인 호출을 표에서 찾아 그대로 치환·제거하시면 이관이 끝납니다.
+치환 작업 자체를 AI 도구에 맡기실 수도 있습니다 — [AI 도구에 문서 연결하기](../publisher/ai-tools.md)에
+이 대조표를 근거로 코드베이스를 자동 치환시키는 프롬프트가 있습니다.
 
 > 💡 **컴파일러가 이관을 안내합니다**: 이름이 바뀐 API(`TnkSession`, `initInstance`,
 > `setAgreePrivacyPolicy`, `presentAdDetailView` 등)는 SDK 에 안내 스텁이 들어 있어,
@@ -102,7 +104,7 @@ description: 네이티브 오퍼월 SDK(TnkRwdSdk2)에서 하이브리드 SDK �
 | 네이티브 | 대체 | 구분 |
 |---|---|---|
 | `queryPoint(...)` (2종) | 오퍼월(FE)이 조회·표시 | 제거 |
-| `queryAdvertiseCount(...)` (3종) | 오퍼월(FE). Android 하이브리드에만 `getAdvertiseTotalPoint` / `getProductTotalPoint` 가 있고 iOS 는 미제공 | 제거 |
+| `queryAdvertiseCount(...)` (3종) | `getAdvertiseTotalPoint { info in }` (PPI) / `getProductTotalPoint` (CPS) — 광고 수·포인트 합계를 `TotalPointInfo` 로 반환 | 치환 |
 | `queryPublishState(...)` (2종) | 오퍼월(FE) | 제거 |
 | `purchaseItem(_:cost:...)` (2종) / `withdrawPoints(...)` (2종) | 오퍼월(FE) | 제거 |
 | `actionCompleted()` / `actionCompleted(actionName:)` | 지급은 서버가 처리, 완료 통지는 `setRewardListener` | 제거 |
@@ -112,8 +114,8 @@ description: 네이티브 오퍼월 SDK(TnkRwdSdk2)에서 하이브리드 SDK �
 | `OfferwallEventListener` (`didAdDataLoaded` / `didAdItemClicked` / `didOfferwallRemoved` …) | `setRewardListener` (지급 완료) / `setEventListener` (범용) | 치환 |
 | `plusInstance()` / `getEventWebView` / `openEventWebView` / `getEventLink` (이벤트·Plus 계열) | 없음 | 문의 |
 
-> 개발사 자체 화면에 포인트 잔액을 표시하고 계셨다면 별도 협의가 필요합니다.
-> TnkFactory 담당자에게 문의하세요.
+> 적립 가능 포인트를 개발사 화면에 표시하려면 [9. 적립 가능 포인트 조회](total-point.md)를 사용하세요.
+> 사용자의 **적립된 잔액**은 [서버 보상 콜백](../common/server-callback.md)으로 적립한 값을 개발사가 직접 관리합니다.
 
 ---
 

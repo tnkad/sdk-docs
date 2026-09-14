@@ -72,6 +72,17 @@ import TnkPpiHyb
 | `adJoin(from presenter: UIViewController, appId: Int64, actionId: Int = 0, animated: Bool = true)` | 상세 없이 **바로 참여** 후 광고주 페이지로 이동 |
 | `adAction(from presenter: UIViewController, appId: Int64, actionId: Int = 0, animated: Bool = true)` | 리스트 클릭과 동일 규칙(상세 또는 바로 참여). 닫으면 오퍼월 홈 |
 
+### 적립 가능 포인트 조회
+
+콜백은 **메인 스레드**로 오며, 실패 시 `nil` 이 전달됩니다.
+
+| 시그니처 | 설명 |
+|---|---|
+| `getAdvertiseTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 비구매형(PPI) 적립 가능 포인트·광고 수 |
+| `getProductTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 구매형(CPS) 적립 가능 포인트·광고 수 |
+
+`TotalPointInfo`: `pointAmount: Int64`(포인트 총합) · `adCount: Int`(광고 수) · `retCode: Int` · `retMessage: String?` · `isSuccess: Bool`
+
 ### 콜백 등록
 
 | 시그니처 | 설명 |

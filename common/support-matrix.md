@@ -22,6 +22,8 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 개발사 사용자 식별값 | ✅ | ✅ | `setUserName` |
 | 광고 식별자 수집 | ✅ | ✅ | Android ADID / iOS IDFA |
 | 개인정보 동의 · COPPA · GDPR | ✅ | ✅ | 세션 정보로 서버에 전달됩니다 |
+| 특정 광고 진입 | ✅ | ✅ | `adDetail` / `adJoin` / `adAction` |
+| 적립 가능 포인트 조회 | ✅ | ✅ | `getAdvertiseTotalPoint` / `getProductTotalPoint` |
 | 딥링크 (`tnkscheme://`) | ✅ | ✅ | `handleScheme` |
 | 범용 이벤트 수신 | ✅ | ✅ | `setEventListener` |
 | ATT 동의 요청 | — | ✅ | iOS 전용 |
@@ -35,7 +37,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 기능 | 대체 |
 |------|------|
 | 플레이스먼트 뷰 (특정 광고만 노출) | 없음. 네이티브 SDK 의 `AdPlacementView` 를 사용 중이라면 문의해 주세요 |
-| 광고 데이터 콜백 | SDK 가 광고 목록·상세 데이터를 앱으로 넘겨주지 않습니다. 광고 데이터는 오퍼월(FE)이 서버에서 직접 받아 화면을 그립니다 |
+| 광고 목록·상세 데이터 콜백 | 개별 광고의 목록·상세 데이터는 앱으로 넘겨주지 않습니다 (오퍼월(FE)이 직접 조회·표시). 적립 가능 포인트 **요약**만 조회할 수 있습니다 |
 
 ---
 

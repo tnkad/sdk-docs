@@ -84,6 +84,8 @@ func sceneDidBecomeActive(_ scene: UIScene) {
 | [5. 보상 지급 수신](reward.md) | `setRewardListener` 와 `RewardInfo` |
 | [6. 딥링크](deeplink.md) | `tnkscheme://` 처리 |
 | [7. 개인정보 설정](privacy.md) | 수집 동의, COPPA/GDPR |
+| [8. 특정 광고 진입](ad-entry.md) | 배너·푸시에서 특정 광고로 바로 진입 |
+| [9. 적립 가능 포인트 조회](total-point.md) | "최대 N포인트 적립 가능" 표시용 |
 | [공개 API 목록](api.md) | 전체 시그니처 |
 | [네이티브 SDK 에서 이관](migration.md) | `TnkRwdSdk2` 를 사용 중이라면 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |
