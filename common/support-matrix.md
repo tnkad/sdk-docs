@@ -46,7 +46,7 @@ IDFA 를 쓰려면 사용자 동의가 필요합니다. 동의를 받지 않으�
 
 **시그니처 차이**
 `setCOPPA` 는 Android 가 `Boolean`, iOS 가 `Int` 입니다.
-자세한 차이는 [iOS 공개 API 목록](../ios/api.md#android-와-다른-점)을 참고하세요.
+자세한 차이는 [iOS 공개 API 목록](../ios/api.md)의 "Android 와 다른 점" 절을 참고하세요.
 
 ---
 
