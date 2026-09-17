@@ -16,7 +16,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 전체화면 오퍼월 | ✅ | ✅ | `openOfferwall` |
 | 특정 광고 바로 진입 | ✅ | ✅ | `adDetail` / `adJoin` / `adAction` — 네이티브 SDK 와 같은 이름 |
 | 화면 안에 오퍼월 삽입 | ✅ | ✅ | `TnkOfferwallView` |
-| 헤더 숨김 등 개발사 파라미터 | ✅ | ✅ | `hideHeader=1` |
+| 헤더 숨김 등 개발사 파라미터 | ✅ | ✅ | `hideHeader=1` · `hideBack=1` |
 | 보상 지급 완료 알림 | ✅ | ✅ | `setRewardListener` — UI 갱신용 |
 | 서버 보상 콜백 | ✅ | ✅ | 개발사 백엔드. **실제 지급 경로** |
 | 개발사 사용자 식별값 | ✅ | ✅ | `setUserName` |

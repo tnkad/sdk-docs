@@ -34,6 +34,7 @@ TnkPpiHybSdk.shared.openOfferwall(from: self, extraParams: ["hideHeader": "1"])
 | 파라미터 | 값 | 설명 |
 |---------|-----|------|
 | `hideHeader` | `"1"` | 오퍼월 상단 헤더(타이틀 · 닫기)를 숨깁니다. 개발사가 자체 헤더를 그리는 경우 사용 |
+| `hideBack` | `"1"` | 오퍼월 상단 좌측의 닫기 버튼만 숨깁니다. 개발사가 자체 뒤로가기를 제공하는 경우 사용 |
 
 ### URL 만 얻기
 
