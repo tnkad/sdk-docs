@@ -11,6 +11,11 @@ description: 하이브리드 오퍼월 SDK(iOS) 버전별 변경 사항입니다
 
 ---
 
+## 1.0.2 — 2026-10-01
+
+- 최소 지원 iOS 버전을 15.0 으로 상향 — [1. 설치](install.md)
+- `setUserName` 으로 사용자가 바뀌면 동의 상태 초기화 (`setUserName` → `setAgreePrivacy` 순서로 호출) — [7. 개인정보 설정](privacy.md)
+
 ## 1.0.1 — 2026-09-10
 
 - 포인트 조회 액션 getAdvertiseTotalPoint/getProductTotalPoint 기능 추가 — [9. 적립 가능 포인트 조회](total-point.md)

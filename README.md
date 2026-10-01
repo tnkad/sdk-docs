@@ -18,7 +18,7 @@ TnkFactory 하이브리드 오퍼월 SDK 문서입니다.
 | 플랫폼 | 최소 지원 | 배포 | 가이드 |
 |--------|----------|------|--------|
 | **Android** | Android 5.0 (API 21) | Maven (AAR) | [연동 가이드 (Android)](android/README.md) |
-| **iOS** | iOS 14.0 | SPM · CocoaPods | [연동 가이드 (iOS)](ios/README.md) |
+| **iOS** | iOS 15.0 | SPM · CocoaPods | [연동 가이드 (iOS)](ios/README.md) |
 
 플랫폼과 무관한 내용은 공통 문서에 있습니다.
 

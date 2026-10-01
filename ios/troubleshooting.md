@@ -32,7 +32,7 @@ print("version=\(TnkPpiHybSdk.version)",
 
 ### 배포 타깃 오류
 
-SDK 는 **iOS 14.0** 이상입니다. 앱의 Minimum Deployments 를 확인하세요.
+SDK 는 **iOS 15.0** 이상입니다. 앱의 Minimum Deployments 를 확인하세요.
 
 ### 시뮬레이터에서 링크 실패
 

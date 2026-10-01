@@ -1,5 +1,5 @@
 ---
-description: Swift Package Manager 와 CocoaPods 로 TnkPpiHyb SDK 를 설치하는 방법. iOS 14.0 이상, Swift 5.9, xcframework 바이너리 배포입니다.
+description: Swift Package Manager 와 CocoaPods 로 TnkPpiHyb SDK 를 설치하는 방법. iOS 15.0 이상, Swift 5.9, xcframework 바이너리 배포입니다.
 ---
 
 # 1. 설치
@@ -8,7 +8,7 @@ description: Swift Package Manager 와 CocoaPods 로 TnkPpiHyb SDK 를 설치하
 
 | 항목 | 값 |
 |------|-----|
-| 배포 타깃 | **iOS 14.0** 이상 |
+| 배포 타깃 | **iOS 15.0** 이상 |
 | Swift | **5.9** |
 | 배포 형태 | xcframework (바이너리) |
 | 지원 아키텍처 | 실기기 `arm64`, 시뮬레이터 `arm64` · `x86_64` |
@@ -33,7 +33,7 @@ https://github.com/tnkad/ios-ppi-hyb-sdk
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.1")
+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.2")
 ]
 ```
 
@@ -44,7 +44,7 @@ dependencies: [
 `Podfile`
 
 ```ruby
-platform :ios, '14.0'
+platform :ios, '15.0'
 
 target 'YourApp' do
   use_frameworks!

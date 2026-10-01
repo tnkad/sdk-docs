@@ -8,7 +8,7 @@ TnkFactory 하이브리드 오퍼월 SDK 입니다. 네이티브는 기기 컨�
 JS 브릿지를 담당하고 **오퍼월 화면과 보상 로직은 WebView 안의 웹(FE)이 처리**합니다.
 그래서 오퍼월 UI 개선이나 개발사별 커스터마이징은 **앱 업데이트 없이** 반영됩니다.
 
-- 최소 지원: **iOS 14.0** (ATT 사용)
+- 최소 지원: **iOS 15.0** (ATT 사용)
 - Swift 5.9 / xcframework 바이너리 배포
 - 배포: [Swift Package Manager](install.md#swift-package-manager) · [CocoaPods](install.md#cocoapods)
 
