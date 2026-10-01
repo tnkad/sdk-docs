@@ -26,8 +26,9 @@ sdk.isAgreePrivacy()                     // Bool
 
 | 상황 | 동작 |
 |---|---|
-| `setAgreePrivacy(true)` 호출 | 오퍼월에 동의 팝업이 나오지 않습니다. |
-| 동의 전 (`setAgreePrivacy(true)` 를 호출하지 않은 상태) | 오퍼월 진입 시 동의 팝업으로 사용자 동의를 받습니다. |
+| `setAgreePrivacy(true)` 호출 | 오퍼월에 동의 팝업이 나오지 않고, 오퍼월의 "개인 정보 수집 동의 해제" 메뉴도 노출되지 않습니다. |
+| 동의 전 (`setAgreePrivacy(true)` 를 호출하지 않은 상태) | 오퍼월 진입 시 동의 팝업으로 사용자 동의를 받습니다. 동의 후에는 "개인 정보 수집 동의 해제" 메뉴가 노출됩니다. |
+| 오퍼월에서 사용자가 동의/거부 | 그 결과가 `isAgreePrivacy()` 에 반영됩니다 (SDK 1.0.2 이상 + 오퍼월 업데이트). |
 | `setUserName` 으로 이전과 다른 사용자 지정 (SDK 1.0.2 이상) | 동의 상태가 초기화되어 `isAgreePrivacy()` 가 `false` 가 됩니다. |
 
 ### 호출 순서
@@ -35,6 +36,14 @@ sdk.isAgreePrivacy()                     // Bool
 (SDK 1.0.2 이상) 사용자가 바뀌면 동의 상태가 초기화되므로, 항상 **`setUserName` → `setAgreePrivacy`** 순서로 호출하세요.
 `setAgreePrivacy(true)` 를 먼저 호출한 뒤 `setUserName` 으로 다른 사용자를 지정하면 동의 상태가 지워집니다.
 (최초로 `setUserName` 을 지정할 때도 같습니다.)
+
+> 동의 상태의 기준은 `isAgreePrivacy()` 입니다. 오퍼월에서의 동의·거부 여부는 이 값을 읽어 확인하세요.
+
+### 동의 철회
+
+`setAgreePrivacy(true)` 를 설정한 앱에서는 오퍼월에 "개인 정보 수집 동의 해제" 메뉴가 나오지 않습니다.
+사용자가 동의를 철회할 수 있는 수단은 **매체 앱이 직접 제공**해야 하며, 철회 시 `setAgreePrivacy(false)` 를 호출하세요.
+다만 철회 후 오퍼월에서 동의 화면이 다시 나타나는 것까지 보장되지는 않습니다.
 
 > 개발사가 이미 동의를 받았다면 `true` 로 설정해 중복 노출을 없애는 편이 좋습니다.
 

@@ -42,7 +42,7 @@ import TnkPpiHyb
 | `getUserName() -> String?` | 설정된 식별값 조회 |
 | `getAppId() -> String?` | 적용된 개발사 앱 ID (하이픈 제거) |
 | `setAgreePrivacy(_ agree: Bool)` | 개인정보 동의 상태 설정. `true` 이면 오퍼월 동의 팝업 미노출. `setUserName` 이후에 호출 ([7. 개인정보 설정](privacy.md)) |
-| `isAgreePrivacy() -> Bool` | 동의 상태 조회 |
+| `isAgreePrivacy() -> Bool` | 동의 상태 조회. 오퍼월에서의 동의·거부 결과도 반영 (SDK 1.0.2 이상 + 오퍼월 업데이트) |
 | `setCOPPA(_ coppa: Int)` | 만 13세 미만 여부 |
 | `setGDPR(_ gdpr: Int)` | GDPR 설정값 |
 
