@@ -18,6 +18,9 @@ description: 하이브리드 오퍼월 SDK(Android) 버전별 변경 사항입�
 
 - 오퍼월에서 사용자가 동의·거부한 결과가 SDK 에 저장되어 `isAgreePrivacy(context)` 에 반영됩니다 — [7. 개인정보 설정](privacy.md)
 - `setUserName` 으로 사용자가 바뀌면(최초 지정 포함) 동의 상태가 초기화됩니다. `setUserName` → `setAgreePrivacy` 순서로 호출하세요 — [7. 개인정보 설정](privacy.md)
+
+**오퍼월 업데이트 (SDK 버전과 무관)**
+
 - 특정 광고 진입(adDetail/adJoin/adAction)도 개인정보 동의 확인 후 진행됩니다 — [8. 특정 광고 진입](ad-entry.md)
 
 ## 1.0.10 — 2026-09-09
