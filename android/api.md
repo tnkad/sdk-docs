@@ -28,11 +28,11 @@ description: TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 등 하이브리드 �
 
 | 시그니처 | 설명 |
 |---|---|
-| `setUserName(context: Context, userName: String)` | 개발사 사용자 식별값. **보상 지급 기준값** |
+| `setUserName(context: Context, userName: String)` | 개발사 사용자 식별값. **보상 지급 기준값**. 이전과 다른 값으로 바꾸면 동의 상태 초기화 (최초 지정 포함, SDK 1.0.11 이상) |
 | `getUserName(context: Context): String?` | 설정된 식별값 조회 |
 | `getAppId(context: Context): String?` | 적용된 개발사 앱 ID (하이픈 제거) |
-| `setAgreePrivacy(context: Context, agree: Boolean)` | 개인정보 동의 상태. `true` 면 오퍼월 동의 화면 스킵 |
-| `isAgreePrivacy(context: Context): Boolean` | 동의 상태 조회 |
+| `setAgreePrivacy(context: Context, agree: Boolean)` | 개인정보 동의 상태. `true` 로 설정하면 오퍼월 동의 팝업·"동의 해제" 메뉴 미노출. 앱 시작 시마다 `setUserName` 다음에 호출 권장 ([7. 개인정보 설정](privacy.md)) |
+| `isAgreePrivacy(context: Context): Boolean` | 동의 상태 조회. 오퍼월에서의 동의·거부 결과도 반영 (SDK 1.0.11 이상) |
 | `setCOPPA(context: Context, enabled: Boolean)` | 만 13세 미만 여부 |
 | `setGDPR(context: Context, gdpr: Int)` | GDPR 설정값 |
 

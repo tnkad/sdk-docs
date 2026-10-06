@@ -45,6 +45,10 @@ TnkPpiHybSdk.adDetail(context, appId, actionId = 5)   // 구매형 광고
 
 초기화 요건은 동일합니다 — [`setUserName`](initialize.md) 이 설정돼 있어야 보상이 정상 지급됩니다.
 
+특정 광고 진입도 오퍼월과 같이 **개인정보 수집 동의를 확인한 뒤** 진행됩니다.
+사용자가 아직 동의하지 않았다면 동의 팝업이 먼저 나오고, 동의 후에 해당 광고로 진입합니다(거부하면 진입하지 않습니다).
+앱에서 이미 동의를 받았다면 `setAgreePrivacy(context, true)` 로 알려 팝업을 생략할 수 있습니다(이 경우 오퍼월의 "동의 해제" 메뉴도 노출되지 않습니다) — [7. 개인정보 설정](privacy.md)
+
 ---
 
 다음: [9. 적립 가능 포인트 조회](total-point.md)

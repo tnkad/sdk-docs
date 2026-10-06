@@ -49,7 +49,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.tnkfactory.ad:hrwd:1.0.10")
+    implementation("com.tnkfactory.ad:hrwd:1.0.12")
 }
 ```
 
