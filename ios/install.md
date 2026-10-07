@@ -33,7 +33,7 @@ https://github.com/tnkad/ios-ppi-hyb-sdk
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.3")
+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.4")
 ]
 ```
 

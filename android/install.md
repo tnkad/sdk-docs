@@ -63,7 +63,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.tnkfactory.ad:hrwd:1.0.12")
+    implementation("com.tnkfactory.ad:hrwd:1.0.13")
 }
 ```
 
@@ -71,7 +71,7 @@ Groovy — `build.gradle`
 
 ```groovy
 dependencies {
-    implementation 'com.tnkfactory.ad:hrwd:1.0.12'
+    implementation 'com.tnkfactory.ad:hrwd:1.0.13'
 }
 ```
 
@@ -111,7 +111,7 @@ dependencies {
 ```
 
 ```
-+--- com.tnkfactory.ad:hrwd:1.0.12
++--- com.tnkfactory.ad:hrwd:1.0.13
 ```
 
 코드에서 버전을 확인할 수도 있습니다.
