@@ -41,8 +41,9 @@ import TnkPpiHyb
 | `setUserName(_ userName: String)` | 개발사 사용자 식별값. **보상 지급 기준값**. 이전과 다른 값으로 바꾸면 동의 상태 초기화 (최초 지정 포함, SDK 1.0.2 이상) |
 | `getUserName() -> String?` | 설정된 식별값 조회 |
 | `getAppId() -> String?` | 적용된 개발사 앱 ID (하이픈 제거) |
-| `setAgreePrivacy(_ agree: Bool)` | 개인정보 동의 상태 설정. `true` 로 설정하면 오퍼월 동의 팝업·"동의 해제" 메뉴 미노출. 앱 시작 시마다 `setUserName` 다음에 호출 권장 ([7. 개인정보 설정](privacy.md)) |
+| `setAgreePrivacy(_ agree: Bool)` | 개인정보 동의 상태 설정. 개발사가 직접 동의를 받은 경우에만 `true` 로 설정하며(직접 받지 않는 개발사는 호출하지 않음), 설정하면 오퍼월 동의 팝업·"동의 해제" 메뉴 미노출. 앱 시작 시마다 `setUserName` 다음에 호출 권장. 단, 동의를 철회한 사용자에게는 `true` 로 다시 설정하지 않음 ([7. 개인정보 설정](privacy.md#동의-철회)) |
 | `isAgreePrivacy() -> Bool` | 동의 상태 조회. 오퍼월에서의 동의·거부 결과도 반영 (SDK 1.0.2 이상) |
+| `revokePrivacyConsent()` | 개인정보 동의 철회. 파라미터·반환값 없음. 호출 즉시 동의가 해제되고 열려 있는 오퍼월은 첫 화면부터 다시 열려 동의 팝업을 보여 줌. 사용자의 철회 동작에서만 호출 — 반복·자동 호출 금지 (SDK 1.0.5 이상, [7. 개인정보 설정](privacy.md#동의-철회)) |
 | `setCOPPA(_ coppa: Int)` | 만 13세 미만 여부 |
 | `setGDPR(_ gdpr: Int)` | GDPR 설정값 |
 

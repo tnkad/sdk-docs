@@ -81,8 +81,10 @@ description: 네이티브 오퍼월 SDK(TnkRwdSdk2)에서 하이브리드 SDK �
 | `setAgreePrivacyPolicy(_:)` | `setAgreePrivacy(_:)` | 치환 |
 | `setCOPPA(_ coppa: Bool)` | `setCOPPA(_ coppa: Int)` — **타입이 Int** | 치환 |
 | `setGDPRConsent(_ gdpr: Bool)` | `setGDPR(_ gdpr: Int)` — **타입이 Int** | 치환 |
-| `openPrivacyTermAlert(...)` | 오퍼월(FE) 동의 화면. 사전 동의는 `setAgreePrivacy(true)` | 제거 |
+| `openPrivacyTermAlert(...)` | 오퍼월(FE) 동의 화면. 사전 동의는 `setAgreePrivacy(true)` (개발사가 직접 동의를 받은 경우에만) | 제거 |
 | `setTrackingEnabled(_:)` | ATT 는 `requestTrackingAuthorization` 으로 요청 | 치환 |
+
+> 네이티브 SDK 에서 하이브리드 SDK 1.0.5 이상으로 바로 옮기는 경우, 사용자에게 받은 동의는 같은 사용자라면 그대로 이어집니다. 이관했다고 동의를 다시 받을 필요는 없습니다. 하이브리드 SDK 1.0.4 이하를 이미 실행한 기기에서는 그때 저장된 동의 상태를 그대로 쓰며, 네이티브 SDK 의 동의를 다시 가져오지 않습니다 — [7. 개인정보 설정](privacy.md)
 
 ### 오퍼월 · 특정 광고 진입
 

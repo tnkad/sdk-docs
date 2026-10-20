@@ -107,6 +107,8 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 | `TnkOfferwall.showTermsDialog` / `termsCheck` | 오퍼월(FE) 동의 화면 | 제거 |
 | `AgreePrivacyPopupListener` | 없음 (동의 화면이 FE 로 이동) | 제거 |
 
+> 네이티브 SDK 에서 사용자에게 받은 동의는 같은 사용자라면 하이브리드 SDK 로 옮긴 뒤에도 그대로 이어집니다(SDK 1.0.12 이상). 이관했다고 동의를 다시 받을 필요는 없습니다 — [7. 개인정보 설정](privacy.md)
+
 ### 오퍼월 진입
 
 | 네이티브 (`TnkOfferwall`) | 하이브리드 | 구분 |
@@ -152,7 +154,7 @@ description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이�
 | 네이티브 | 대체 | 구분 |
 |---|---|---|
 | `TnkAdConfig.*` (`pointEffectType`, `useCuration`, `detailViewImageType`, `layoutConfig`, `setLayoutInfo` 등 전체) | 오퍼월 UI·레이아웃·테마는 서버에서 개발사별로 관리 — **SDK 업데이트 없이 반영** | 제거 |
-| `TnkAdConfig.useTermsPopup = false` | `setAgreePrivacy(true)` | 치환 |
+| `TnkAdConfig.useTermsPopup = false` | `setAgreePrivacy(true)` (개발사가 직접 동의를 받은 경우에만) | 치환 |
 | `TnkAdConfig.headerConfig.startCategory` / `startFilterID` (시작 탭·필터) | 딥링크 `tnkscheme://select_menu?cat_id=..&filter_id=..` → `handleScheme` | 치환 |
 | `TnkStyle.*` (애니메이션·언어·동의 버튼 색 등) | 서버 관리 / 오퍼월(FE) | 제거 |
 | `TnkAdLayoutConfig` / `TnkHeaderConfig` / 커스텀 툴바·헤더 클래스 | 서버 관리 | 제거 |
