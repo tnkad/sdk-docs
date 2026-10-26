@@ -6,7 +6,7 @@
 #   ./scripts/release.sh ios 0.2.0
 #
 # 하는 일:
-#   1) 설치 문서의 SDK 버전 문자열을 새 버전으로 치환
+#   1) 설치·빠른 시작·이관 문서의 SDK 의존성 줄(Gradle hrwd 좌표 / SPM ios-ppi-hyb-sdk)의 버전을 새 버전으로 치환
 #   2) 해당 플랫폼 릴리스 노트(changelog.md) 맨 위에 새 버전 스텁 삽입
 #
 # [경계 규칙] 이 스크립트는 이 저장소(sdk-docs) 안의 md 파일만 수정한다.
@@ -33,9 +33,9 @@ import os, re, sys
 platform, new, today = os.environ['PLATFORM'], os.environ['NEW'], os.environ['TODAY']
 
 if platform == 'android':
-    pat, files = re.compile(r'(com\.tnkfactory\.ad:hrwd:)\d+\.\d+\.\d+'), ['android/install.md', 'android/README.md']
+    pat, files = re.compile(r'(com\.tnkfactory\.ad:hrwd:)\d+\.\d+\.\d+'), ['android/install.md', 'android/README.md', 'android/migration.md']
 else:
-    pat, files = re.compile(r'(from: ")\d+\.\d+\.\d+(")'), ['ios/install.md']
+    pat, files = re.compile(r'(ios-ppi-hyb-sdk", from: ")\d+\.\d+\.\d+(")'), ['ios/install.md', 'ios/migration.md']
 
 total = 0
 for f in files:
