@@ -60,7 +60,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 |------|---------|-----|
 | 에뮬레이터 · 시뮬레이터 | Android 에뮬레이터·가상 기기에서는 오퍼월이 열리지 않습니다. 동작 확인은 실기기에서 해 주세요 — [문제 해결](../android/troubleshooting.md) | 시뮬레이터에서도 오퍼월 화면을 확인할 수 있습니다. 광고 참여·적립 확인은 실기기를 권장합니다 — [문제 해결](../ios/troubleshooting.md) |
 | 오퍼월 열기 | `openOfferwall(context)` | `openOfferwall(from: presenter)` — 오퍼월을 띄울 화면(ViewController)을 넘깁니다 |
-| 딥링크 `handleScheme` | `handleScheme(context, intent)` | `handleScheme(url, from: presenter)` — 앱이 딥링크로 막 실행되는 시점에는 `from:` 으로 오퍼월을 띄울 화면을 직접 넘기세요 — [iOS 딥링크](../ios/deeplink.md) |
+| 딥링크 `handleScheme` | `handleScheme(context, intent)` | `handleScheme(url, from: presenter)` — 앱이 딥링크로 막 실행되는 시점과 백그라운드에서 돌아오는 시점(푸시 알림을 눌러 부르는 경우 포함)에는 `from:` 으로 오퍼월을 띄울 화면을 직접 넘기세요 — [iOS 딥링크](../ios/deeplink.md) |
 | 광고 식별자 동의 | 별도 동의 요청은 없습니다. 기기에서 광고 ID 를 삭제하거나 추적을 제한한 사용자는 광고 ID 가 필요한 광고에 참여할 수 없습니다 | ATT 동의를 요청해야 합니다. 동의를 받지 못해도 오퍼월은 열리지만 참여할 수 있는 광고가 줄어들 수 있습니다 — [iOS 초기화](../ios/initialize.md)의 'ATT 동의 요청' |
 | `setCOPPA` | `Boolean` (`true`: 적용) | `Int` (`1`: 적용, `0`: 해당 없음) |
 | `setGDPR` 를 호출하지 않았을 때 | `-1`(지정하지 않음)로 전달됩니다 | `0` 으로 전달됩니다. GDPR 대상 사용자가 있는 앱은 두 플랫폼 모두에서 값을 직접 지정하세요 — [Android](../android/privacy.md) · [iOS](../ios/privacy.md) |

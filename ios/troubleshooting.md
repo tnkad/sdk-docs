@@ -326,6 +326,7 @@ override var preferredStatusBarStyle: UIStatusBarStyle {
 - **원인과 해결**: 아래를 순서대로 확인하세요.
   1. `Info.plist` 의 `CFBundleURLTypes` 에 `tnkscheme` 이 등록됐는지 — [6. 딥링크](deeplink.md)
   2. `openURLContexts` 와 `willConnectTo` **양쪽 모두**에서 `handleScheme` 을 호출하는지 (`SceneDelegate` 를 쓰지 않는 앱은 `AppDelegate` 의 `application(_:open:options:)`)
+  3. 두 곳 모두(`AppDelegate` 만 쓰는 앱은 `application(_:open:options:)` 한 곳) `from:` 으로 오퍼월을 띄울 화면을 넘기는지. 푸시 알림을 눌렀을 때 문자열로 `handleScheme` 을 부르는 곳도 같습니다 — 아래 "앱이 꺼진 상태이거나 백그라운드에 있을 때 딥링크로 열면 오퍼월이 열리지 않습니다" 항목
 
 `handleScheme` 의 반환값으로 SDK 가 처리했는지 알 수 있습니다.
 
@@ -334,19 +335,33 @@ override var preferredStatusBarStyle: UIStatusBarStyle {
 | `true` | SDK 가 처리했습니다. 오퍼월이 떠 있으면 그 화면으로 전달하고, 없으면 오퍼월을 열어 전달합니다 |
 | `false` | SDK 가 다루지 않는 URL 입니다. `tnkscheme` 이 아니거나, `tnkscheme://` 뒤에 명령이 빠진 URL 입니다(예: `tnkscheme://select_menu?cat_id=3` 처럼 명령이 있어야 합니다). 앱이 자체 딥링크로 처리하세요 |
 
-### 앱이 꺼진 상태에서 딥링크로 실행하면 오퍼월이 열리지 않습니다
+### 앱이 꺼진 상태이거나 백그라운드에 있을 때 딥링크로 열면 오퍼월이 열리지 않습니다
 
-- **증상**: `willConnectTo` 에서 `handleScheme(url)` 을 호출했는데 오퍼월이 열리지 않습니다. 반환값은 `true` 이고, `enableLogging(true)` 상태라면 콘솔에 `[TnkPpiHyb][ERROR] scheme: 오퍼월을 띄울 ViewController 를 찾지 못했습니다 — presenter 를 직접 넘겨주세요.` 가 남습니다.
-- **원인**: 앱이 시작되는 시점에는 아직 화면이 활성 상태가 아니어서, SDK 가 오퍼월을 띄울 화면을 스스로 찾지 못합니다. 이 일이 한 번 생기면 앱을 다시 시작하거나 오퍼월을 직접 열기 전까지, 이후 받은 딥링크도 오퍼월을 열지 않을 수 있습니다. 나중에 오퍼월을 열면 그동안 받은 링크가 적용됩니다.
-- **해결**: 화면 구성을 마친 뒤 `from:` 으로 오퍼월을 띄울 화면을 직접 넘기세요.
+- **증상**: 앱이 꺼진 상태에서 딥링크로 실행되거나(`willConnectTo`) 백그라운드에 있던 앱이 딥링크로 돌아올 때(`openURLContexts`), `from:` 없이 `handleScheme(url)` 을 호출했더니 오퍼월이 열리지 않습니다. 푸시 알림을 눌러 앱이 열릴 때 `from:` 없이 문자열로 `handleScheme(link)` 를 부르는 경우도 같습니다. 반환값은 `true` 이고, `enableLogging(true)` 상태라면 콘솔에 `[TnkPpiHyb][ERROR] scheme: 오퍼월을 띄울 ViewController 를 찾지 못했습니다 — presenter 를 직접 넘겨주세요.` 가 남습니다.
+- **원인**: 앱이 시작되거나 백그라운드에서 돌아오는 시점에는 아직 화면이 활성 상태가 아니어서, SDK 가 오퍼월을 띄울 화면을 스스로 찾지 못합니다. 이 일이 한 번 생기면 앱을 다시 시작하거나 오퍼월을 직접 열기 전까지, 이후 받은 딥링크도 오퍼월을 열지 않을 수 있습니다. 나중에 오퍼월을 열면 그동안 받은 링크가 적용됩니다.
+- **해결**: 두 곳 모두 `from:` 으로 오퍼월을 띄울 화면을 직접 넘기세요. `willConnectTo` 에서는 화면 구성을 마친 뒤에 넘깁니다.
 
 ```swift
+// 앱이 꺼진 상태에서 딥링크로 실행될 때 (willConnectTo)
+// self.window 를 설정한 뒤에 넘깁니다 (스토리보드 앱 등).
+// 6. 딥링크 예시처럼 지역 변수 window 를 만들었다면 window.rootViewController 를 넘기세요.
 connectionOptions.urlContexts.forEach {
     TnkPpiHybSdk.shared.handleScheme($0.url, from: window?.rootViewController)
 }
+
+// 백그라운드에 있다가 딥링크로 돌아올 때 (openURLContexts)
+func scene(_ scene: UIScene, openURLContexts contexts: Set<UIOpenURLContext>) {
+    contexts.forEach {
+        TnkPpiHybSdk.shared.handleScheme($0.url, from: window?.rootViewController)
+    }
+}
 ```
 
-시뮬레이터에서 직접 테스트할 수 있습니다.
+푸시 알림을 눌러 앱이 열릴 때 문자열로 `handleScheme` 을 부르는 곳도 같습니다. 앱의 첫 화면을 `from:` 으로 넘기세요 ([6. 딥링크](deeplink.md)의 "푸시 등에서 문자열로 넘기는 경우" 항목).
+
+앱이 알림창·모달처럼 다른 화면을 띄워 둔 상태에서도 딥링크를 받을 수 있다면, `window?.rootViewController` 대신 그 맨 위에 보이는 화면을 넘기세요. 첫 화면이 이미 다른 화면을 띄우고 있으면 오퍼월이 열리지 않을 수 있습니다. 이때는 반환값이 `true` 이고 위의 `[TnkPpiHyb][ERROR]` 로그도 남지 않습니다 ([6. 딥링크](deeplink.md)).
+
+시뮬레이터에서 직접 테스트할 수 있습니다. 앱을 종료한 상태에서 실행하면 `willConnectTo` 경로를, 앱을 실행한 뒤 홈 화면으로 나가 있는 상태에서 실행하면 `openURLContexts` 경로를 확인할 수 있습니다.
 
 ```sh
 xcrun simctl openurl booted "tnkscheme://select_menu?cat_id=3"

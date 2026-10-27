@@ -147,7 +147,7 @@ import TnkPpiHyb
 
 | 시그니처 | 설명 |
 |---|---|
-| `handleScheme(_ url: URL?, from presenter: UIViewController? = nil) -> Bool` | `tnkscheme://` 딥링크이면 SDK 가 처리하고 `true` 를 돌려줍니다. `tnkscheme` 이 아니거나 명령이 없는 주소이면 `false` 이므로 앱이 직접 처리하세요. `presenter` 를 생략하면 SDK 가 가장 위에 보이는 화면에서 오퍼월을 엽니다. 앱이 꺼진 상태에서 딥링크로 막 시작되는 시점(`willConnectTo`)에는 화면을 찾지 못할 수 있으니 `presenter` 를 넘기세요 ([6. 딥링크](deeplink.md)) |
+| `handleScheme(_ url: URL?, from presenter: UIViewController? = nil) -> Bool` | `tnkscheme://` 딥링크이면 SDK 가 처리하고 `true` 를 돌려줍니다. `tnkscheme` 이 아니거나 명령이 없는 주소이면 `false` 이므로 앱이 직접 처리하세요. `presenter` 를 생략하면 SDK 가 가장 위에 보이는 화면에서 오퍼월을 엽니다. 앱이 딥링크로 막 시작되는 시점(`willConnectTo`)과 백그라운드에서 돌아오는 시점(`openURLContexts`)에는 화면을 찾지 못할 수 있으니 `presenter` 를 넘기세요. 푸시 알림을 눌러 앱이 열릴 때 부르는 경우도 같습니다 ([6. 딥링크](deeplink.md)) |
 | `handleScheme(_ urlString: String?, from presenter: UIViewController? = nil) -> Bool` | 위와 같습니다 |
 
 ---
