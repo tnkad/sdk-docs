@@ -31,7 +31,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
 - [ ] 3. import 와 호출 대상을 `TnkPpiHybSdk` 로 바꿉니다 (패턴 3)
 - [ ] 4. 오퍼월 디자인 설정(`TnkAdConfig.*`·`TnkStyle.*`) 줄과 그 import 를 삭제합니다 (패턴 3, 아래 '디자인 설정' 표)
 - [ ] 5. 앱 화면 안에 넣던 오퍼월은 `TnkOfferwallView` 로 바꿉니다 (패턴 4)
-- [ ] 6. 적립 가능 포인트 조회 코드를 바꿉니다 (패턴 5)
+- [ ] 6. 적립 가능 포인트 조회 코드(`getEarnPoint`·`queryAdvertiseCount`)를 `getTotalPoint` 로 바꿉니다 (패턴 5, SDK 1.0.16 이상)
 - [ ] 7. 개인정보 동의 호출을 바꾸고, `setUserName` 을 `setAgreePrivacy` 보다 먼저 호출합니다 (패턴 6)
 - [ ] 8. 앱에서 직접 동의를 받는 앱(`setAgreePrivacy(context, true)` 를 호출하는 앱)은 앱 화면에 '동의 철회' 수단을 두고 `revokePrivacyConsent(context)` 를 연결합니다. 이 경우 오퍼월에는 '개인 정보 수집 동의 해제' 메뉴가 나오지 않습니다 (패턴 6)
 - [ ] 9. 특정 광고 진입 코드를 바꿉니다 (패턴 7)
@@ -67,7 +67,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
  dependencies {
 -    implementation("com.tnkfactory:rwd:8.09.30")
 -    implementation("com.tnkfactory:rwd_store:8.08.81")   // 포인트 스토어를 쓰던 경우
-+    implementation("com.tnkfactory.ad:hrwd:1.0.15")
++    implementation("com.tnkfactory.ad:hrwd:1.0.16")
  }
 ```
 
@@ -204,21 +204,19 @@ offerwallView.loadOfferwall(extraParams = mapOf("hideHeader" to "1"))
 
 ### 패턴 5. 포인트 조회
 
-**무엇이 바뀌나:** 적립 가능한 포인트를 조회하는 호출이 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)로 나뉩니다. 기존 `getEarnPoint` 는 두 합계를 한 숫자로 돌려줬으므로, 하이브리드에서는 두 결과를 더합니다.
+**무엇이 바뀌나:** 기존 `getEarnPoint` 는 일반 광고와 구매형 광고의 합계를 한 숫자로 돌려줬습니다. 하이브리드 SDK 1.0.16 이상에서는 `getTotalPoint` 하나로 같은 합계를 한 번에 받습니다.
 
 ```diff
 -tnkOfferwall.getEarnPoint { point ->
 -    binding.tvPoint.text = "받을 수 있는 포인트 : $point p"
 -}
-+TnkPpiHybSdk.getAdvertiseTotalPoint(this) { ppi ->
-+    TnkPpiHybSdk.getProductTotalPoint(this) { shopping ->
-+        val point = listOfNotNull(ppi, shopping).filter { it.isSuccess }.sumOf { it.pointAmount }
-+        binding.tvPoint.text = "받을 수 있는 포인트 : $point p"
-+    }
++TnkPpiHybSdk.getTotalPoint(this) { info ->
++    if (info == null || !info.isSuccess) return@getTotalPoint   // 실패하면 표시하지 않거나 이전 값을 유지합니다
++    binding.tvPoint.text = "받을 수 있는 포인트 : ${info.pointAmount} p"
 +}
 ```
 
-광고 수와 포인트 합계를 함께 받던 `queryAdvertiseCount` 도 두 결과의 `adCount`·`pointAmount` 를 각각 더해 바꿉니다. 기존 Android SDK 는 포인트 합계로 구매형 광고의 포인트만 돌려줬으므로, 바꾼 뒤 표시되는 값이 이전과 다를 수 있습니다.
+광고 수와 포인트 합계를 함께 받던 `queryAdvertiseCount` 도 `getTotalPoint` 하나로 바꿉니다. 결과의 `adCount`(광고 수)와 `pointAmount`(포인트 합계)를 그대로 쓰면 됩니다. 기존 Android SDK 는 포인트 합계로 구매형 광고의 포인트만 돌려줬으므로, 바꾼 뒤 표시되는 값이 이전과 다를 수 있습니다.
 
 ```diff
 -TnkSession.queryAdvertiseCount(this, object : ServiceCallback() {
@@ -228,23 +226,34 @@ offerwallView.loadOfferwall(extraParams = mapOf("hideHeader" to "1"))
 -        binding.tvPoint.text = "${count}개 ${point}P"
 -    }
 -})
-+TnkPpiHybSdk.getAdvertiseTotalPoint(this) { ppi ->
-+    TnkPpiHybSdk.getProductTotalPoint(this) { shopping ->
-+        val ok = listOfNotNull(ppi, shopping).filter { it.isSuccess }
-+        val count = ok.sumOf { it.adCount }
-+        val point = ok.sumOf { it.pointAmount }
-+        binding.tvPoint.text = "${count}개 ${point}P"
-+    }
++TnkPpiHybSdk.getTotalPoint(this) { info ->
++    if (info == null || !info.isSuccess) return@getTotalPoint   // 실패하면 표시하지 않거나 이전 값을 유지합니다
++    binding.tvPoint.text = "${info.adCount}개 ${info.pointAmount}P"
 +}
 ```
 
-콜백은 항상 메인 스레드에서 호출되므로 바로 화면을 갱신해도 됩니다. 위 코드는 조회에 실패했거나(`null`) 서버가 실패로 응답한(`isSuccess` 가 `false`) 쪽을 합계에 넣지 않고 0 으로 셉니다. 콜백에 오는 `TotalPointInfo` 는 이렇게 처리하세요.
+콜백은 항상 메인 스레드에서 한 번 호출되므로 바로 화면을 갱신해도 됩니다. 일반 광고와 구매형 광고를 각각 조회하므로 함수 하나만 호출할 때보다 조금 더 걸릴 수 있습니다. 콜백에 오는 `TotalPointInfo` 는 이렇게 처리하세요.
 
 | 콜백으로 오는 값 | 의미 | 처리 |
 |---|---|---|
-| `null` | 네트워크 오류 등으로 조회에 실패했습니다. | 합계에 넣지 않습니다(0 으로 셈). 하나만 조회하는 화면이라면 표시하지 않거나 이전 값을 유지합니다. |
+| `null` | 네트워크 오류 등으로 조회에 실패했습니다. | 표시하지 않거나 이전 값을 유지합니다. |
 | `isSuccess` 가 `false` | 서버가 실패로 응답했습니다. `retCode`·`retMessage` 로 사유를 볼 수 있습니다. 이때의 `pointAmount` 는 쓰지 마세요. | `null` 과 같이 처리합니다. |
-| `isSuccess` 가 `true` | `pointAmount`(포인트 합계)와 `adCount`(광고 수)가 들어 있습니다. | 합계에 넣고 화면에 표시합니다. |
+| `isSuccess` 가 `true` | `pointAmount`(포인트 합계)와 `adCount`(광고 수)가 들어 있습니다. 일반·구매형 중 한쪽 조회만 실패한 경우에도 성공한 쪽의 값만 담아 이 값으로 옵니다(기존 `getEarnPoint` 와 같은 방식). | 화면에 표시합니다. 값이 평소보다 작을 수 있습니다. |
+
+**SDK 1.0.15 이하를 쓰는 경우:** `getTotalPoint` 가 없으므로 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 각각 호출해 결과를 더합니다. `queryAdvertiseCount` 도 두 결과의 `adCount`·`pointAmount` 를 각각 더해 바꿉니다.
+
+```kotlin
+TnkPpiHybSdk.getAdvertiseTotalPoint(this) { ppi ->
+    TnkPpiHybSdk.getProductTotalPoint(this) { shopping ->
+        val ok = listOfNotNull(ppi, shopping).filter { it.isSuccess }
+        val count = ok.sumOf { it.adCount }
+        val point = ok.sumOf { it.pointAmount }
+        binding.tvPoint.text = "${count}개 ${point}P"
+    }
+}
+```
+
+두 함수를 각각 쓰면 일반 광고와 구매형 광고를 나눠 보여 줄 수도 있고, 어느 쪽 조회가 실패했는지도 구분할 수 있습니다. `null` 이거나 `isSuccess` 가 `false` 인 쪽은 합계에 넣지 않고 0 으로 셉니다.
 
 - 호출 방법과 결과 값별 동작은 [9. 적립 가능 포인트 조회](total-point.md)에 정리되어 있습니다.
 - 합계 계산 방식은 SDK 마다 다를 수 있으니, 이관 후 화면에 표시된 값을 한 번 확인해 주세요.
@@ -442,8 +451,8 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 | 네이티브 | 하이브리드 | 구분 |
 |---|---|---|
-| `tnkOfferwall.getEarnPoint { }` · `getEarnPointSync()` · `suspend getEarnPoint()` | `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `pointAmount` 를 더합니다. (패턴 5) | **치환** |
-| `TnkSession.queryAdvertiseCount(context, callback)` | `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과(`TotalPointInfo`)의 `adCount`·`pointAmount` 를 각각 더합니다. (패턴 5) | **치환** |
+| `tnkOfferwall.getEarnPoint { }` · `getEarnPointSync()` · `suspend getEarnPoint()` | `getTotalPoint`(1.0.16 이상)의 `pointAmount` 를 씁니다. 1.0.15 이하에서는 `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `pointAmount` 를 더합니다. (패턴 5) | **치환** |
+| `TnkSession.queryAdvertiseCount(context, callback)` | `getTotalPoint`(1.0.16 이상) 결과(`TotalPointInfo`)의 `adCount`·`pointAmount` 를 씁니다. 1.0.15 이하에서는 `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `adCount`·`pointAmount` 를 각각 더합니다. (패턴 5) | **치환** |
 | `tnkOfferwall.getEarnPointByFilter(filterId) { }` | 필터별 합계는 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 | `TnkSession.queryPoint(...)` (동기·비동기) | 사용자 포인트 잔액 조회는 현재 미제공 — 담당자 문의. TNK 서버에 포인트 관리를 맡기신 앱은 이관 전에 꼭 문의해 주세요. | **현재 미제공(문의)** |
 | `TnkSession.purchaseItem(...)` · `withdrawPoints(...)` (각 2종) | 아이템 구매·전체 인출은 현재 미제공 — 담당자 문의. 위와 같이 이관 전에 문의해 주세요. | **현재 미제공(문의)** |
@@ -489,7 +498,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 - 기존 `TnkSession` 은 Kotlin `object` 라서 Java 에서 `TnkSession.INSTANCE.xxx()` 로 불렀습니다. `TnkPpiHybSdk` 의 공개 메서드는 모두 `static` 으로 호출할 수 있어 `TnkPpiHybSdk.xxx()` 로 바로 부릅니다.
 - `adDetail(context, appId)` 처럼 인자를 줄여서 부를 수 있습니다.
-- 결과를 콜백으로 받는 `getAdvertiseTotalPoint`·`getProductTotalPoint` 는 람다 끝에서 `kotlin.Unit.INSTANCE` 를 돌려줘야 합니다.
+- 결과를 콜백으로 받는 `getTotalPoint`·`getAdvertiseTotalPoint`·`getProductTotalPoint` 는 람다 끝에서 `kotlin.Unit.INSTANCE` 를 돌려줘야 합니다.
 
 ```diff
 -TnkSession.INSTANCE.setUserName(this, "개발사-사용자-식별값");
@@ -499,7 +508,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 ```java
 import kotlin.Unit;
 
-TnkPpiHybSdk.getAdvertiseTotalPoint(this, info -> {
+TnkPpiHybSdk.getTotalPoint(this, info -> {   // 1.0.16 이상
     if (info != null && info.isSuccess()) {
         tvPoint.setText(info.getPointAmount() + "P");
     }

@@ -48,7 +48,7 @@ https://github.com/tnkad/ios-ppi-hyb-sdk
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.5")
+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.6")
 ],
 targets: [
     .target(

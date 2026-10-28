@@ -35,7 +35,7 @@ Android 앱도 함께 옮긴다면 [Android 이관](../android/migration.md)을 
 - [ ] 3. `import TnkRwdSdk2` 를 `import TnkPpiHyb` 로 바꾸고, 초기화·사용자 식별값·오퍼월 열기를 바꿉니다 (패턴 3)
 - [ ] 4. 오퍼월 디자인 설정(`TnkStyles.*`·`TnkLayout.*`) 줄을 삭제합니다 (아래 '디자인 설정' 표)
 - [ ] 5. 앱 화면 안에 넣던 `AdOfferwallView` 는 `TnkOfferwallView` 로 바꿉니다 (패턴 4)
-- [ ] 6. 적립 가능 포인트 조회 코드를 바꿉니다 (패턴 5)
+- [ ] 6. 적립 가능 포인트 조회 코드(`queryAdvertiseCount`)를 `getTotalPoint` 로 바꿉니다 (패턴 5, SDK 1.0.6 이상)
 - [ ] 7. 개인정보 동의 호출을 바꾸고, `setUserName` 을 `setAgreePrivacy` 보다 먼저 호출합니다 (패턴 6)
 - [ ] 8. 앱에서 직접 동의를 받는 앱(`setAgreePrivacy(true)` 를 호출하는 앱)은 앱 화면에 '동의 철회' 수단을 두고 `revokePrivacyConsent()` 를 연결합니다. 이 경우 오퍼월에는 '개인 정보 수집 동의 해제' 메뉴가 나오지 않습니다 (패턴 6)
 - [ ] 9. 특정 광고 진입 코드를 바꿉니다 (패턴 7)
@@ -62,7 +62,7 @@ Swift Package Manager 로 설치하는 경우입니다. Xcode 에서는 **File �
  // Package.swift 를 직접 쓰는 경우
  dependencies: [
 -    .package(url: "https://github.com/tnkfactory/tnk-rwd2-spm.git", from: "5.94.0")
-+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.5")
++    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.6")
  ],
  targets: [
      .target(
@@ -277,29 +277,40 @@ SwiftUI 에서 전체 화면으로 열려면 `openOfferwall(from:)` 에 오퍼�
 
 ### 패턴 5. 포인트 조회
 
-**무엇이 바뀌나:** 적립 가능한 포인트를 조회하는 호출이 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)로 나뉩니다. 기존 `queryAdvertiseCount` 는 두 합계를 한 번에 돌려줬으므로, 하이브리드에서는 두 결과를 더합니다.
+**무엇이 바뀌나:** 기존 `queryAdvertiseCount` 는 일반 광고와 구매형 광고의 광고 수·포인트 합계를 한 번에 돌려줬습니다. 하이브리드 SDK 1.0.6 이상에서는 `getTotalPoint` 하나로 같은 합계를 한 번에 받습니다.
 
 ```diff
 -TnkSession.sharedInstance()?.queryAdvertiseCount { count, point in
 -    label.text = "\(count)개 \(point)P"
 -}
-+TnkPpiHybSdk.shared.getAdvertiseTotalPoint { ppi in
-+    TnkPpiHybSdk.shared.getProductTotalPoint { shopping in
-+        let ok = [ppi, shopping].compactMap { $0 }.filter { $0.isSuccess }
-+        let count = ok.reduce(0) { $0 + $1.adCount }
-+        let point = ok.reduce(Int64(0)) { $0 + $1.pointAmount }
-+        label.text = "\(count)개 \(point)P"
-+    }
++TnkPpiHybSdk.shared.getTotalPoint { info in
++    guard let info = info, info.isSuccess else { return }   // 실패하면 표시하지 않거나 이전 값을 유지합니다
++    label.text = "\(info.adCount)개 \(info.pointAmount)P"
 +}
 ```
 
-콜백은 항상 메인 스레드에서 호출되므로 바로 화면을 갱신해도 됩니다. 위 코드는 조회에 실패했거나(`nil`) 서버가 실패로 응답한(`isSuccess` 가 `false`) 쪽을 더하지 않습니다. 콜백에 오는 `TotalPointInfo` 는 이렇게 처리하세요.
+콜백은 항상 메인 스레드에서 한 번 호출되므로 바로 화면을 갱신해도 됩니다. 일반 광고와 구매형 광고를 각각 조회하므로 함수 하나만 호출할 때보다 조금 더 걸릴 수 있습니다. 콜백에 오는 `TotalPointInfo` 는 이렇게 처리하세요.
 
 | 콜백으로 오는 값 | 의미 | 처리 |
 |---|---|---|
-| `nil` | 네트워크 오류 등으로 조회에 실패했습니다. | 합계에 더하지 않습니다. 하나만 조회하는 화면이라면 표시하지 않거나 이전 값을 유지합니다. |
+| `nil` | 네트워크 오류 등으로 조회에 실패했습니다. | 표시하지 않거나 이전 값을 유지합니다. |
 | `isSuccess` 가 `false` | 서버가 실패로 응답했습니다. `retCode`·`retMessage` 로 사유를 볼 수 있습니다. 이때의 `pointAmount` 는 쓰지 마세요. | `nil` 과 같이 처리합니다. |
-| `isSuccess` 가 `true` | `pointAmount`(포인트 합계, `Int64`)와 `adCount`(광고 수)가 들어 있습니다. | 합계에 더하고 화면에 표시합니다. |
+| `isSuccess` 가 `true` | `pointAmount`(포인트 합계, `Int64`)와 `adCount`(광고 수)가 들어 있습니다. 일반·구매형 중 한쪽 조회만 실패한 경우에도 성공한 쪽의 값만 담아 이 값으로 옵니다. | 화면에 표시합니다. 값이 평소보다 작을 수 있습니다. |
+
+**SDK 1.0.5 이하를 쓰는 경우:** `getTotalPoint` 가 없으므로 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 각각 호출해 결과를 더합니다.
+
+```swift
+TnkPpiHybSdk.shared.getAdvertiseTotalPoint { ppi in
+    TnkPpiHybSdk.shared.getProductTotalPoint { shopping in
+        let ok = [ppi, shopping].compactMap { $0 }.filter { $0.isSuccess }
+        let count = ok.reduce(0) { $0 + $1.adCount }
+        let point = ok.reduce(Int64(0)) { $0 + $1.pointAmount }
+        label.text = "\(count)개 \(point)P"
+    }
+}
+```
+
+두 함수를 각각 쓰면 일반 광고와 구매형 광고를 나눠 보여 줄 수도 있고, 어느 쪽 조회가 실패했는지도 구분할 수 있습니다. `nil` 이거나 `isSuccess` 가 `false` 인 쪽은 합계에 더하지 않습니다.
 
 - 호출 방법과 결과 값별 동작은 [9. 적립 가능 포인트 조회](total-point.md)에 정리되어 있습니다.
 - 합계 계산 방식은 SDK 마다 다를 수 있으니, 이관 후 화면에 표시된 값을 한 번 확인해 주세요.
@@ -553,7 +564,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 | 네이티브 | 하이브리드 | 구분 |
 |---|---|---|
-| `queryAdvertiseCount(completion:)` · `queryAdvertiseCount(target:action:)` | `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `adCount`·`pointAmount` 를 더합니다. (패턴 5) | **치환** |
+| `queryAdvertiseCount(completion:)` · `queryAdvertiseCount(target:action:)` | `getTotalPoint`(1.0.6 이상)의 `adCount`·`pointAmount` 를 씁니다. 1.0.5 이하에서는 `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `adCount`·`pointAmount` 를 더합니다. (패턴 5) | **치환** |
 | `queryAdvertiseCount(adType:completion:)` | 한 종류만 조회하던 호출은 `getAdvertiseTotalPoint`(일반 광고) 또는 `getProductTotalPoint`(구매형 광고) 하나만 호출합니다. | **치환** |
 | `queryPublishState(completion:)` · `queryPublishState(target:action:)` · `PublisherState` | 게시 상태 조회는 현재 미제공 — 담당자 문의. 게시 상태에 따라 오퍼월 진입 버튼을 숨기던 앱은 문의해 주세요. | **현재 미제공(문의)** |
 | `queryPoint(completion:)` · `queryPoint(target:action:)` | 사용자 포인트 잔액 조회는 현재 미제공 — 담당자 문의. TNK 서버에 포인트 관리를 맡기신 앱은 이관 전에 꼭 문의해 주세요. | **현재 미제공(문의)** |
@@ -564,7 +575,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 | 네이티브 | 하이브리드 | 구분 |
 |---|---|---|
-| `OfferwallEventListener` (`didAdDataLoaded` · `didOfferwallTitleChanged` · `didMenuSelected` · `didAdItemClicked` · `didOfferwallRemoved` · `didDetailViewShow` · `didActionButtonClicked`) | 네이티브와 같은 종류의 이벤트는 현재 미제공 — 담당자 문의. 오퍼월이 닫혔는지는 전체 화면이면 오퍼월을 연 화면이 다시 나타날 때(`viewWillAppear`), 앱 화면 안에 넣었다면 `onCloseRequested` 로 알 수 있습니다. 적립 가능 포인트는 `getAdvertiseTotalPoint` 로 조회하고, 보상 지급 완료는 `setRewardListener` 로 받습니다. 오퍼월에서 일어난 이벤트를 이름과 JSON 문자열 그대로 받는 `setEventListener` 가 있지만 이벤트 종류가 달라 1:1 로 대응하지 않습니다 ([5. 보상 지급 수신](reward.md)). | **현재 미제공(문의)** |
+| `OfferwallEventListener` (`didAdDataLoaded` · `didOfferwallTitleChanged` · `didMenuSelected` · `didAdItemClicked` · `didOfferwallRemoved` · `didDetailViewShow` · `didActionButtonClicked`) | 네이티브와 같은 종류의 이벤트는 현재 미제공 — 담당자 문의. 오퍼월이 닫혔는지는 전체 화면이면 오퍼월을 연 화면이 다시 나타날 때(`viewWillAppear`), 앱 화면 안에 넣었다면 `onCloseRequested` 로 알 수 있습니다. 적립 가능 포인트는 `getTotalPoint`(1.0.6 이상, 이전 버전은 `getAdvertiseTotalPoint`·`getProductTotalPoint`)로 조회하고, 보상 지급 완료는 `setRewardListener` 로 받습니다. 오퍼월에서 일어난 이벤트를 이름과 JSON 문자열 그대로 받는 `setEventListener` 가 있지만 이벤트 종류가 달라 1:1 로 대응하지 않습니다 ([5. 보상 지급 수신](reward.md)). | **현재 미제공(문의)** |
 
 ### 디자인 설정
 

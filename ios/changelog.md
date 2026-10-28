@@ -13,6 +13,10 @@ description: 하이브리드 오퍼월 SDK(iOS) 버전별 변경 사항입니다
 
 ---
 
+## 1.0.6 — 2026-10-28
+
+- 적립 가능 포인트 합계를 한 번에 받는 `getTotalPoint` 를 추가했습니다. 기존 네이티브 SDK `queryAdvertiseCount` 를 이 함수 하나로 바꿀 수 있습니다. 기존 두 함수(`getAdvertiseTotalPoint` · `getProductTotalPoint`)는 그대로 쓸 수 있습니다 — [9. 적립 가능 포인트 조회](total-point.md)
+
 ## 1.0.5 — 2026-10-19
 
 - 개인정보 동의 철회 API `TnkPpiHybSdk.shared.revokePrivacyConsent()` 를 추가했습니다. 앱의 "동의 철회" 동작에서 호출하면 동의가 즉시 해제되고, 열려 있는 오퍼월은 첫 화면부터 다시 열려 동의 팝업을 보여 줍니다. 이후 오퍼월 진입도 동의 팝업부터 시작합니다. 사용자의 철회 동작에서만 호출하세요 — [7. 개인정보 설정](privacy.md)의 '동의 철회' 항목

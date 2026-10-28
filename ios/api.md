@@ -117,12 +117,14 @@ import TnkPpiHyb
 
 ### 적립 가능 포인트 조회 (SDK 1.0.1 이상)
 
-콜백은 **메인 스레드**로 옵니다. Android 에서도 같은 기능을 제공합니다 (Android SDK 1.0.10 이상).
+기존 네이티브 SDK 의 `queryAdvertiseCount`(일반·구매형 합계)는 `getTotalPoint` 로 바꿀 수 있습니다 (SDK 1.0.6 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.1 이상에서 쓸 수 있습니다.
+콜백은 **메인 스레드**로 옵니다. Android 에서도 같은 기능을 제공합니다 (`getTotalPoint` 는 Android SDK 1.0.16 이상, 나머지는 1.0.10 이상).
 
 | 시그니처 | 설명 |
 |---|---|
-| `getAdvertiseTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 비구매형(PPI) 적립 가능 포인트·광고 수 |
-| `getProductTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 구매형(CPS) 적립 가능 포인트·광고 수 |
+| `getTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 비구매형(PPI)과 구매형(CPS)을 합산한 적립 가능 포인트·광고 수를 한 번에 돌려줍니다 (SDK 1.0.6 이상). 한쪽 조회만 실패하면 성공한 쪽의 값만 담아 `isSuccess` 가 `true` 로 옵니다. 일반·구매형을 나눠 보거나 실패를 구분하려면 아래 두 함수를 각각 사용하세요 |
+| `getAdvertiseTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 비구매형(PPI) 적립 가능 포인트·광고 수 (SDK 1.0.1 이상) |
+| `getProductTotalPoint(_ completion: @escaping (TotalPointInfo?) -> Void)` | 구매형(CPS) 적립 가능 포인트·광고 수 (SDK 1.0.1 이상) |
 | `clearApiSession()` | 포인트 조회에 쓰는 사용자 정보를 초기화합니다. 로그아웃 후 다른 계정으로 로그인하는 등 `setUserName` 을 다른 값으로 바꾼 직후에 호출하면, 다음 조회부터 새 사용자 기준으로 처리합니다 |
 
 콜백으로 받은 값에 따라 다음과 같이 처리하세요.

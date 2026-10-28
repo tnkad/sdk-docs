@@ -73,7 +73,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.tnkfactory.ad:hrwd:1.0.15")
+    implementation("com.tnkfactory.ad:hrwd:1.0.16")
 }
 ```
 
@@ -81,7 +81,7 @@ Groovy — `build.gradle`
 
 ```groovy
 dependencies {
-    implementation 'com.tnkfactory.ad:hrwd:1.0.15'
+    implementation 'com.tnkfactory.ad:hrwd:1.0.16'
 }
 ```
 
@@ -131,7 +131,7 @@ dependencies {
 ```
 
 ```
-+--- com.tnkfactory.ad:hrwd:1.0.15
++--- com.tnkfactory.ad:hrwd:1.0.16
 ```
 
 `| grep hrwd` 를 빼고 실행하면 SDK 와 함께 들어온 라이브러리의 버전까지 전체 목록으로 볼 수 있습니다.

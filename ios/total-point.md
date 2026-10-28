@@ -1,5 +1,5 @@
 ---
-description: 오퍼월을 열기 전에 앱 화면에 "최대 적립 가능 포인트" 를 보여 주기 위한 getAdvertiseTotalPoint · getProductTotalPoint 사용 방법과, 결과 값별(nil · 실패 응답 · 정상) 처리 방법을 설명합니다.
+description: 오퍼월을 열기 전에 앱 화면에 "최대 적립 가능 포인트" 를 보여 주기 위한 getTotalPoint(합계를 한 번에) · getAdvertiseTotalPoint · getProductTotalPoint 사용 방법과, 결과 값별(nil · 실패 응답 · 한쪽만 실패 · 정상) 처리 방법을 설명합니다.
 ---
 
 # 9. 적립 가능 포인트 조회
@@ -10,7 +10,7 @@ description: 오퍼월을 열기 전에 앱 화면에 "최대 적립 가능 포�
 
 ## 언제 필요한가
 
-**선택 사항**입니다. 앱의 오퍼월 입구(버튼·배너 등)에 적립 가능 포인트를 보여 주고 싶은 개발사에 필요합니다. iOS SDK 1.0.1 이상에서 사용할 수 있습니다.
+**선택 사항**입니다. 앱의 오퍼월 입구(버튼·배너 등)에 적립 가능 포인트를 보여 주고 싶은 개발사에 필요합니다. iOS SDK 1.0.1 이상에서 일반 광고·구매형 광고를 각각 조회하는 `getAdvertiseTotalPoint` · `getProductTotalPoint` 를 사용할 수 있고, 둘의 합계를 한 번에 받는 `getTotalPoint` 는 **1.0.6 이상**에서 사용할 수 있습니다.
 
 - 앱 ID 설정과 `setUserName` 호출을 마친 뒤에 조회하세요. ([3. 초기화](initialize.md) 참고)
 - 문구가 보이는 화면이 나타날 때마다(`viewWillAppear` 등) 조회하면 최신 값을 보여 줄 수 있습니다. 호출할 때마다 서버에 조회하며, 참여할 수 있는 광고가 줄어들면 값도 바뀝니다.
@@ -19,7 +19,32 @@ description: 오퍼월을 열기 전에 앱 화면에 "최대 적립 가능 포�
 
 ## 호출하는 방법
 
-광고 종류에 따라 함수가 둘로 나뉩니다.
+### 합계를 한 번에 받기 (`getTotalPoint`, 1.0.6 이상)
+
+일반 광고(비구매형, PPI)와 구매형 광고(CPS)의 적립 가능 포인트·광고 수를 **합산해서 한 번에** 돌려줍니다. 오퍼월 입구에 "최대 N 포인트" 하나만 보여 주는 앱은 이 함수를 쓰세요.
+
+```swift
+TnkPpiHybSdk.shared.getTotalPoint { [weak self] info in
+    guard let info = info, info.isSuccess, info.adCount > 0 else {
+        self?.button.isHidden = true   // 조회에 실패했거나 참여할 광고가 없으면 문구를 숨깁니다
+        return
+    }
+    self?.button.setTitle("최대 \(info.pointAmount)P 적립 가능 (\(info.adCount)개)", for: .normal)
+    self?.button.isHidden = false
+}
+```
+
+- 콜백은 **항상 메인 스레드**에서 한 번 호출됩니다. 곧바로 UI 를 갱신해도 됩니다.
+- 일반 광고와 구매형 광고를 각각 조회하므로, 함수 하나만 호출할 때보다 조금 더 걸릴 수 있습니다.
+- **한쪽 조회만 실패하면** 성공한 쪽의 값만 담아 정상(`isSuccess` 가 `true`)으로 돌려줍니다. 이때는 합계가 평소보다 작게 보일 수 있고, 어느 쪽이 실패했는지는 알 수 없습니다. 일반·구매형을 정확히 나눠 보여 주거나 실패를 구분해야 하면 아래 두 함수를 각각 호출하세요.
+- 두 조회가 모두 실패하면 `info` 가 `nil` 이거나 `isSuccess` 가 `false` 입니다. 앱 처리는 아래 두 함수와 같습니다(문구를 숨깁니다).
+- 앱에 보여 줄 포인트 단위(예: `P`)는 앱에서 붙입니다.
+
+> SDK 1.0.5 이하에서는 `getTotalPoint` 가 없습니다. 아래 두 함수를 각각 호출해 `pointAmount` · `adCount` 를 더하세요 ([네이티브 SDK 에서 이관](migration.md)의 '포인트 조회' 항목에 예제가 있습니다).
+
+### 일반·구매형을 나눠 보기 (`getAdvertiseTotalPoint` · `getProductTotalPoint`)
+
+일반 광고와 구매형 광고를 따로 보여 주거나, 한쪽 조회 실패를 구분해야 할 때 씁니다. 광고 종류에 따라 함수가 둘로 나뉩니다.
 
 | 함수 | 조회하는 광고 |
 |---|---|
@@ -53,13 +78,13 @@ sdk.getProductTotalPoint { info in
 
 ## 결과 값별 동작
 
-콜백으로 받은 값에 따라 처리하세요.
+콜백으로 받은 값에 따라 처리하세요. 세 함수 모두 같은 `TotalPointInfo` 를 돌려줍니다.
 
 | 콜백으로 받은 값 | 의미 | 앱이 할 일 |
 |---|---|---|
-| `nil` | 통신 오류, 인증 실패, 응답을 읽지 못한 경우입니다 | 문구를 숨깁니다. 사유는 개발 빌드에서 켠 로그에서 확인합니다 |
-| `isSuccess` 가 `false` 인 결과 | 서버가 실패로 응답했습니다. 사유는 `retMessage`, 응답 코드는 `retCode` 에 있습니다 | 문구를 숨깁니다 |
-| `isSuccess` 가 `true` 인 결과 | 정상입니다 | `pointAmount` · `adCount` 를 보여 줍니다. 둘이 `0` 이면 적립 가능한 광고가 없는 것이므로 문구를 숨기는 것을 권장합니다 |
+| `nil` | 통신 오류, 인증 실패, 응답을 읽지 못한 경우입니다 (`getTotalPoint` 는 일반·구매형 조회가 모두 실패했을 때 올 수 있습니다) | 문구를 숨깁니다. 사유는 개발 빌드에서 켠 로그에서 확인합니다 |
+| `isSuccess` 가 `false` 인 결과 | 서버가 실패로 응답했습니다. 사유는 `retMessage`, 응답 코드는 `retCode` 에 있습니다 (`getTotalPoint` 는 두 조회가 모두 실패했을 때 올 수 있습니다) | 문구를 숨깁니다 |
+| `isSuccess` 가 `true` 인 결과 | 정상입니다 (`getTotalPoint` 는 일반·구매형 중 한쪽만 실패해도 성공한 쪽 값으로 이 결과가 옵니다. 값이 평소보다 작을 수 있습니다) | `pointAmount` · `adCount` 를 보여 줍니다. 둘이 `0` 이면 적립 가능한 광고가 없는 것이므로 문구를 숨기는 것을 권장합니다 |
 
 서버가 실패로 응답한 경우에는 `nil` 이 아니라 `isSuccess` 가 `false` 인 결과가 옵니다. 그래서 위 예제처럼 **`nil` 과 `isSuccess` 를 모두 확인**해야 합니다.
 `enableLogging(_:)` 사용법은 [3. 초기화](initialize.md)를 참고하세요.
@@ -84,7 +109,7 @@ sdk.getProductTotalPoint { info in
 
 | 기존 네이티브 SDK (`TnkRwdSdk2`) | 하이브리드 SDK |
 |---|---|
-| `queryAdvertiseCount` — 일반 광고와 구매형 광고의 광고 수·포인트 합계를 **한 번에** 돌려줌 | `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 **각각 호출**합니다. 한 숫자로 보여 주려면 두 결과의 `pointAmount`(광고 수는 `adCount`)를 더하세요 |
+| `queryAdvertiseCount` — 일반 광고와 구매형 광고의 광고 수·포인트 합계를 **한 번에** 돌려줌 | `getTotalPoint`(1.0.6 이상) 하나로 바꿀 수 있습니다. 일반·구매형 합계를 `pointAmount`, 광고 수를 `adCount` 로 한 번에 돌려줍니다. 1.0.5 이하에서는 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 **각각 호출**해 두 결과의 `pointAmount`(광고 수는 `adCount`)를 더하세요 |
 | `queryPoint` — 사용자 보유 포인트(잔액) 조회 | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 잔액은 서버 보상 콜백으로 받은 값을 개발사에서 관리해 주세요. TNK 서버에서 포인트를 관리하던 앱은 담당자에게 문의해 주세요 |
 
 기존 `queryAdvertiseCount` 코드를 옮기는 방법은 [네이티브 SDK 에서 이관](migration.md)을 참고하세요.

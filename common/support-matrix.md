@@ -17,7 +17,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 화면 안에 오퍼월 삽입 | ✅ | ✅ | `TnkOfferwallView` |
 | 특정 광고 바로 진입 | ✅ (1.0.10 이상) | ✅ (1.0.0 이상) | `adDetail` / `adJoin` / `adAction` — Android 는 기존 네이티브 SDK 와 같은 이름, iOS 는 네이티브 `presentAdDetailView` 가 `adDetail` 로 바뀌었습니다(자세한 내용은 [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)) |
 | 오퍼월 화면 옵션 | ✅ | ✅ | `hideHeader` · `hideBack` · `theme` — 화면 구성에 따라 적용되지 않는 옵션이 있을 수 있습니다 |
-| 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` |
+| 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` (일반·구매형을 각각 조회). 둘의 합계를 한 번에 받는 `getTotalPoint` 는 Android 1.0.16 이상 / iOS 1.0.6 이상 |
 | 딥링크 (`tnkscheme://`) | ✅ | ✅ | `handleScheme` |
 | 보상 지급 완료 알림 | ✅ | ✅ | `setRewardListener` — 화면 갱신용 |
 | 범용 이벤트 수신 | ✅ | ✅ | `setEventListener` |
