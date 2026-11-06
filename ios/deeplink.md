@@ -1,15 +1,16 @@
 ---
-description: tnkscheme:// 딥링크를 받아 오퍼월의 특정 카테고리로 보내는 방법. URL 스킴 등록, SceneDelegate·AppDelegate 처리, handleScheme 반환값을 안내합니다.
+description: tnkscheme:// 딥링크를 받아 오퍼월의 특정 카테고리나 큐레이션 목록 화면으로 보내는 방법. URL 스킴 등록, SceneDelegate·AppDelegate 처리, handleScheme 반환값을 안내합니다.
 ---
 
 # 6. 딥링크
 
-푸시 알림이나 외부 배너에서 `tnkscheme://` 로 시작하는 링크를 받으면, 오퍼월의 특정 카테고리로 바로 보내는 방법입니다.
+푸시 알림이나 외부 배너에서 `tnkscheme://` 로 시작하는 링크를 받으면, 오퍼월의 특정 카테고리나 큐레이션 목록 화면으로 바로 보내는 방법입니다.
 
 선택 기능입니다. 딥링크를 쓰지 않는다면 이 페이지는 건너뛰셔도 됩니다.
 
 ```
 tnkscheme://select_menu?cat_id=3
+tnkscheme://curation_list?crt_id=12
 ```
 
 ---
@@ -20,10 +21,15 @@ tnkscheme://select_menu?cat_id=3
 |---|---|
 | `tnkscheme://select_menu?cat_id={카테고리 ID}` | 오퍼월이 열리고 해당 카테고리 탭이 선택됩니다. |
 | `tnkscheme://select_menu?cat_id={카테고리 ID}&filter_id={필터 ID}` | 해당 카테고리 탭에서 그 필터까지 선택됩니다. 필터가 그 탭에 없으면 '전체'가 선택됩니다. |
+| `tnkscheme://curation_list?crt_id={큐레이션 ID}` | 오퍼월이 열리고 해당 큐레이션의 전체 목록 화면(큐레이션 헤더의 '더보기'를 눌렀을 때와 같은 화면)이 열립니다. 오퍼월 첫 화면(추천 탭)에 있는 큐레이션에 씁니다. |
+| `tnkscheme://curation_list?crt_id={큐레이션 ID}&cat_id={카테고리 ID}` | 카테고리 탭 안에 있는 큐레이션일 때 씁니다. 해당 카테고리 탭으로 이동한 뒤 그 큐레이션의 전체 목록 화면이 열립니다. |
+| `tnkscheme://curation_list?crt_id={큐레이션 ID}&cat_id={카테고리 ID}&filter_id={필터 ID}` | 해당 카테고리 탭에서 그 필터를 선택한 상태로 큐레이션의 전체 목록 화면이 열립니다. 필터가 그 탭에 없거나 `filter_id` 를 생략하면 '전체'가 선택됩니다. |
 
 <figure><img src="../assets/ios/deeplink-select-menu-game-tab.png" alt="딥링크로 열린 오퍼월. 게임 탭이 선택되어 있고 필터 칩과 광고 목록이 보임" width="300"><figcaption><p>iOS 에서 딥링크를 받으면 오퍼월이 열리고 지정한 탭(여기서는 게임)이 선택됩니다.</p></figcaption></figure>
 
-카테고리·필터 ID 와 그 밖에 사용할 수 있는 딥링크 목록은 TnkFactory 담당자에게 문의하세요. 오퍼월의 화면 구성에 따라 이동하지 않을 수 있으며, 이때는 오퍼월 첫 화면이 열립니다. 새로운 딥링크가 추가되어도 **SDK 를 업데이트할 필요가 없습니다.**
+`curation_list` 의 `crt_id` 는 필수이고, `cat_id`·`filter_id` 는 선택입니다. 전체 목록 화면을 닫으면(뒤로가기 또는 X) 오퍼월로 돌아옵니다. 큐레이션이 없거나 그 사용자에게 보여 줄 광고가 없으면 목록 화면은 열리지 않습니다(`cat_id` 를 지정했다면 그 탭까지는 이동합니다). 큐레이션 목록 딥링크도 기존 `handleScheme` 호출 그대로 쓰며, 아래 연동 방법은 `select_menu` 와 같습니다.
+
+카테고리·필터·큐레이션 ID 와 그 밖에 사용할 수 있는 딥링크 목록은 TnkFactory 담당자에게 문의하세요. 오퍼월의 화면 구성에 따라 이동하지 않을 수 있으며, 이때는 오퍼월 첫 화면이 열립니다. 새로운 딥링크가 추가되어도 **SDK 를 업데이트할 필요가 없습니다.**
 
 ---
 
@@ -162,7 +168,7 @@ func userNotificationCenter(_ center: UNUserNotificationCenter,
 
 개발사가 여러 스킴을 함께 쓰는 경우, `false` 일 때만 자체 라우팅으로 넘기면 됩니다.
 
-> `true` 는 딥링크를 받아들였다는 뜻이며, 해당 화면이 열렸다는 보장은 아닙니다. 어느 오퍼월에서 이동했는지도 알려 주지 않습니다. 지원하지 않는 링크이거나 대상 카테고리가 없으면 오퍼월이 열리기만 하고 화면은 이동하지 않습니다.
+> `true` 는 딥링크를 받아들였다는 뜻이며, 해당 화면이 열렸다는 보장은 아닙니다. 어느 오퍼월에서 이동했는지도 알려 주지 않습니다. 지원하지 않는 링크이거나 대상 카테고리가 없으면 오퍼월이 열리기만 하고 화면은 이동하지 않습니다. 대상 큐레이션이 없으면 목록 화면이 열리지 않습니다.
 
 ---
 
@@ -172,6 +178,9 @@ func userNotificationCenter(_ center: UNUserNotificationCenter,
 
 ```sh
 xcrun simctl openurl booted "tnkscheme://select_menu?cat_id=3"
+
+# 큐레이션 전체 목록 화면 (crt_id 는 TnkFactory 담당자에게 받은 큐레이션 ID)
+xcrun simctl openurl booted "tnkscheme://curation_list?crt_id=12"
 ```
 
 ---
