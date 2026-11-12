@@ -1,5 +1,5 @@
 ---
-description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(iOS)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 와 값 객체를 다룹니다.
+description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(iOS)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 값 객체를 다룹니다.
 ---
 
 # 공개 API 목록 (개발사 사용 API)
@@ -30,6 +30,7 @@ import TnkPpiHyb
 | 사용자 식별값 설정 | `TnkPpiHybSdk.shared.setUserName` | 필수 |
 | 오퍼월 열기 | `openOfferwall(from:)` (전체 화면) 또는 `TnkOfferwallView` (앱 화면 안에 삽입) | 필수 |
 | 보상 알림 받기 | `setRewardListener` | 선택 |
+| 지면 광고를 앱 화면 일부에 표시 | `TnkPlacementView` ([10. 플레이스먼트 뷰](placement.md)) | 선택 |
 
 ---
 
@@ -216,6 +217,112 @@ public final class TnkOfferwallView: UIView {
 
 ---
 
+## `TnkPlacementView` (SDK 1.0.7 이상)
+
+`UIView` 서브클래스입니다. 지면(플레이스먼트) 하나의 광고 묶음을 앱 화면 일부에 보여 줍니다. 사용 방법은 [10. 플레이스먼트 뷰](placement.md)를 보세요.
+
+```swift
+public final class TnkPlacementView: UIView {
+    public override init(frame: CGRect)
+
+    public weak var delegate: TnkPlacementViewDelegate?
+    public private(set) var contentHeight: CGFloat
+    public var verticalScrollEnabled: Bool   // load 전에 설정, 기본 false
+    public var maxHeight: CGFloat            // load 전에 설정, pt, 기본 0 (제한 없음)
+    public var layoutKey: String?            // load 전에 설정
+    public var theme: String?                // load 전에 설정. "light" · "dark"
+    public var filterIds: [Int]?             // load 전에 설정
+    public var dataOnly: Bool                // load 전에 설정, 기본 false
+    public private(set) var pubInfo: TnkPlacementPubInfo?
+    public private(set) var placementId: String?
+    public private(set) var adList: [TnkPlacementAdItem]
+    public private(set) var adListJson: String
+
+    public func load(placementId: String)
+    public func refresh()
+    public func clickItem(appId: Int64, completion: ((Bool, Int) -> Void)? = nil)
+    public func cleanup()
+}
+```
+
+| 멤버 | 설명 |
+|---|---|
+| `delegate` | 이벤트를 받는 쪽. weak 참조이므로 앱이 붙잡고 있는 객체(화면)여야 합니다 |
+| `load(placementId:)` | 지면 ID 로 지면을 불러옵니다. 성공하면 자동으로 그려집니다. 메인 스레드에서 호출하세요 |
+| `layoutKey` | 지면을 그릴 레이아웃 키. `DEFAULT` · `BOX` · `FEED_DOUBLE` · `FEED_SWIPE` · `FEED_SWIPE_DOUBLE` · `ING_CAMPAIGN` · `FEED` · `SIMPLE_LIST` · `ADAPTIVE` 중 하나이며 대소문자는 구분하지 않습니다. 모르는 키는 기본 레이아웃으로 그립니다. 같은 키라도 일반 지면과 쇼핑 지면의 모양이 다를 수 있으며, `SIMPLE_LIST` 는 두 지면 모두 같은 심플 리스트로 그립니다. TnkFactory 에서 지면 레이아웃을 정해 둔 경우에는 그 설정이 먼저 적용될 수 있습니다 |
+| `verticalScrollEnabled` | 고정 높이에서 내용이 넘칠 때 뷰 안 세로 스크롤을 켭니다. 기본 `false` |
+| `maxHeight` | 지면 높이의 상한(pt). 기본 `0` 은 제한 없음입니다. 0 보다 크면 내용 높이만큼 늘어나다가 이 높이에서 멈추고, 내용이 더 크면 `verticalScrollEnabled` 와 관계없이 뷰 안에서 스크롤되며 양 끝에서는 앱의 스크롤로 이어집니다. `onHeightChanged` 는 내용 높이와 `maxHeight` 중 작은 값을 알립니다(`contentHeight` 는 내용 높이 그대로). 쓸 때는 지면 높이를 고정하지 마세요. `dataOnly` 일 때는 무시합니다 |
+| `theme` | 지면과 지면에서 SDK 가 여는 전체 화면 오퍼월의 테마. `"light"` · `"dark"` 만 유효하고 그 밖의 값·`nil` 은 기기(앱) 설정을 따릅니다. 지면 뷰 자체의 배경은 투명하고 카드와 행은 테마색으로 그려집니다 |
+| `filterIds` | 보여 줄 항목을 `filter_id` 로 고릅니다. 목록 순서대로 id 마다 첫 항목 1건. 1~999999999 정수만, 중복은 처음 값만, 최대 50개 |
+| `dataOnly` | `true` 면 지면을 그리지 않고 `onLoaded` · `onFailed` · `pubInfo` · `adList` 만 갱신합니다. 뷰는 `load` 를 시작할 때부터 높이 0 + `isHidden = true` 이고 `onHeightChanged` 는 오지 않습니다. 뷰는 화면 계층 안에 두어야 합니다. 기본 `false` |
+| `pubInfo` | 지면 정보(`TnkPlacementPubInfo`). `onLoaded` 직전에 설정되고 새 `load`·실패·정리 때 `nil` 이 됩니다. 화면 구성용입니다 |
+| `contentHeight` | 지금 그려진 내용의 높이(pt). 불러오기 전·0건·실패면 0 |
+| `placementId` | 마지막으로 `load` 에 넘긴 지면 ID |
+| `adList` · `adListJson` | 마지막으로 불러온 광고 목록(`[TnkPlacementAdItem]`)과 같은 내용의 JSON 배열 문자열(없으면 `"[]"`). `onLoaded` 직전에 설정되므로 그 콜백 안에서 읽을 수 있고, 새 `load`·실패·정리 때 비워집니다. 화면 표시용이며 보상·과금 판단에 쓰지 마세요 |
+| `refresh()` | 요청하는 동안 접지 않고 서버에서 목록을 다시 받아 바꿉니다. 받은 목록이 화면에 있는 목록과 같으면 보던 페이지와 가로 스크롤 위치가 그대로 유지되고, 달라졌으면 목록을 1페이지부터 새로 그립니다. 새 목록이 0건이면 접히고, 0건이던 지면에 광고가 생기면 다시 펼쳐집니다(이때 `isHidden` 도 풀립니다). 불러온 적이 없거나 불러오는 중이면 무시하고, 실패한 상태이면 `load` 와 같습니다. 메인 스레드에서 호출하세요 |
+| `clickItem(appId:completion:)` | 사용자가 그 광고 행을 누른 것과 같게 처리합니다. 결과는 `completion(success, code)` 로 정확히 1번 옵니다. `code`: `0` 화면 열기 시작 · `1003` 목록에 없는 `appId` · `1004` 앞선 요청 처리 중 · `-1` 그 밖의 실패 · `-2` 3초 안에 응답 없음. 동작은 `success` 로 나누고 `code` 는 기록·진단용으로 쓰세요. 성공은 화면 열기를 시작했다는 뜻이며 참여·보상 완료가 아닙니다. 사용자의 동작(버튼 탭 등)에 대한 응답으로만 호출하세요. 메인 스레드에서 호출하세요 |
+| `cleanup()` | 내부 화면과 타이머를 정리합니다. 부르지 않아도 뷰가 해제될 때 스스로 정리합니다. `cleanup()` 뒤에 `load` 를 다시 부르면 다시 불러옵니다 |
+
+높이 제약을 주지 않으면 뷰 높이가 내용 높이를 따르고, `maxHeight` 를 쓰면 내용 높이에 맞춰지다가 `maxHeight` 에서 멈추며 내용이 더 크면 뷰 안에서 스크롤됩니다. 높이 제약이나 고정 frame 높이를 주면 그 높이를 유지합니다. `verticalScrollEnabled`·`maxHeight` 를 쓰지 않으면 넘치는 부분은 위쪽 기준으로 잘립니다.
+
+### `TnkPlacementViewDelegate`
+
+```swift
+@objc public protocol TnkPlacementViewDelegate: NSObjectProtocol {
+    @objc optional func onLoaded(placementId: String, count: Int, customData: String)
+    @objc optional func onFailed(placementId: String, code: Int)
+    @objc optional func onItemClicked(placementId: String, appId: Int64, appName: String)
+    @objc optional func onItemClosed(placementId: String, appId: Int64)
+    @objc optional func onMoreClicked(placementId: String) -> Bool
+    @objc optional func onHeightChanged(placementId: String, height: Double)
+}
+
+@objc public final class TnkPlacementPubInfo: NSObject {
+    @objc public let placementId: String
+    @objc public let adType: Int          // 0 일반 · 1 쇼핑 · 2 제휴몰 · 3 뉴스 · 4 이벤트 · 5 퀴즈, 값이 없으면 -1
+    @objc public let title: String
+    @objc public let moreLabel: String
+    @objc public let customData: String
+    @objc public let pointUnit: String
+    @objc public let layoutKey: String    // 실제로 그려진 레이아웃의 키. 알 수 없으면 ""
+}
+
+@objc public final class TnkPlacementAdItem: NSObject {
+    @objc public let appId: Int64
+    @objc public let actionId: Int
+    @objc public let appName: String
+    @objc public let imageUrl: String
+    @objc public let iconUrl: String
+    @objc public let point: Int64
+    @objc public let originalPoint: Int64
+    @objc public let pointUnit: String
+    @objc public let pointText: String
+    @objc public let price: Int64
+    @objc public let originalPrice: Int64
+    @objc public let discountRate: Int
+    @objc public let isMultiMission: Bool
+    @objc public let campaignType: Int
+    @objc public let campaignTypeName: String
+    @objc public let actionDesc: String
+    @objc public let likeYn: String
+    @objc public let filterId: Int
+    @objc public let isLink: Bool
+}
+```
+
+모든 메서드가 선택 구현이며 메인 스레드에서 호출됩니다. 메서드 이름이나 인자 레이블이 다르면 컴파일 오류 없이 호출되지 않습니다. `NSObject` 하위 클래스(`UIViewController` 등)만 채택할 수 있습니다.
+
+| 콜백 | 설명 |
+|---|---|
+| `onLoaded` | 불러오기 성공. `pubInfo` · `adList` 가 먼저 설정된 뒤 이 콜백이 오고, 그다음에 `onHeightChanged` 가 옵니다. `count` 는 불러온 광고 수(레이아웃에 따라 화면에 보이는 개수보다 많을 수 있음, 0 이면 광고 없음, 뷰는 높이 0 + `isHidden = true`), `customData` 는 지면에 설정된 값(없으면 빈 문자열) |
+| `onFailed` | 불러오기 실패. 뷰는 접힙니다. `-2`: 5초 안에 응답 없음, `-1`: 기타 실패, 그 밖의 값은 서버가 알려 준 코드 — 계속되면 담당자에게 문의 |
+| `onItemClicked` | 지면 안의 광고를 누른 즉시 1번(오퍼월을 열기 전). 일반 광고는 이후 SDK 가 광고 상세를 전체 화면 오퍼월로 엽니다. 지면이나 항목에 따라 다른 화면이 열릴 수 있고, 이때 `appId` 는 광고 ID 가 아닐 수 있습니다. `appName` 은 누른 행의 이름(없으면 빈 문자열)입니다. 화면 통지용이므로 보상·과금 판단에 쓰지 마세요 |
+| `onItemClosed` | 항목을 눌러 SDK 가 연 화면(전체 화면 오퍼월 또는 앱 안에서 열린 페이지)이 닫혔을 때 1번. 외부 브라우저로 연 링크·더보기·정리된 뒤에는 호출하지 않습니다. 오퍼월 위에 다른 전체 화면이 올라간 채 화면들이 한꺼번에 닫혀도 1번 호출합니다 |
+| `onMoreClicked` | 지면의 '더보기'(레이아웃에 따라 머리글 또는 아래쪽 버튼)를 눌렀을 때. `true` 면 앱이 직접 처리, `false` 이거나 구현하지 않으면 SDK 가 오퍼월 첫 화면을 엽니다 |
+| `onHeightChanged` | 지면 내용 높이(pt, 0 이상 5000 이하)가 바뀔 때. `maxHeight` 를 쓰면 내용 높이와 `maxHeight` 중 작은 값입니다. 직전 높이가 0 보다 컸다면 접힘(광고 없음으로 바뀜·실패)·새 `load`·`cleanup()` 때 0 이 옵니다. Android 는 0 을 보내지 않으므로 접힘은 `onLoaded`(`count` 0) 또는 `onFailed` 로 판단하세요. `dataOnly` 일 때는 오지 않습니다 |
+
+---
+
 ## 값 객체
 
 ```swift
@@ -267,3 +374,11 @@ public enum TnkCode {
 | 상단 안전 영역 전달 | 없음 | `setSafeAreaTopPx(cssPx)` |
 | 뷰 정리 | `cleanup()` 수동 호출 | 생명주기 자동 처리 |
 | `onCloseRequested` 미등록 시 닫기 | 아무 동작 없음 — 닫기 처리를 직접 등록 | 뷰가 들어 있는 Activity 종료 |
+| 플레이스먼트 뷰 리스너 | `delegate: TnkPlacementViewDelegate?` (weak 참조, 모든 메서드 선택 구현) | `listener: TnkPlacementListener?` |
+| 플레이스먼트 뷰 `onHeightChanged` 인자 | `height: Double` (pt) | `heightCssPx: Int` (dp) |
+| 플레이스먼트 뷰 `maxHeight` | `CGFloat` (pt) | `Int` (dp) |
+| 플레이스먼트 뷰 접힘 알림 | 광고 없음으로 바뀜·실패·새 `load`·`cleanup()` 때 `onHeightChanged(0)` 을 보냄 | `onHeightChanged(0)` 을 보내지 않음 |
+| 플레이스먼트 뷰 정리 | 뷰 해제 때 자동, 먼저 정리하려면 `cleanup()` | 화면 생명주기에 따라 자동 |
+| 플레이스먼트 뷰 실패 코드 상수 | 상수 없이 `-2`·`-1` 숫자 사용 | `TnkPlacementView.CODE_TIMEOUT`(-2) · `CODE_UNKNOWN`(-1) |
+| 플레이스먼트 뷰 읽기 전용 속성 | `pubInfo` · `placementId` · `contentHeight` · `adList` · `adListJson` | `pubInfo` · `placementId` · `adList` · `getAdListJson()` |
+| 플레이스먼트 뷰 `clickItem` | `clickItem(appId: Int64, completion:)` | `clickItem(appId: Long, onResult)` |

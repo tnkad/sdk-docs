@@ -13,6 +13,13 @@ description: 하이브리드 오퍼월 SDK(iOS) 버전별 변경 사항입니다
 
 ---
 
+## 1.0.7 — 2026-11-11
+
+- 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 플레이스먼트 뷰 `TnkPlacementView` · `TnkPlacementViewDelegate` 를 추가했습니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 이 뷰로 바꿀 수 있습니다 — [10. 플레이스먼트 뷰](placement.md). 기존 앱이 옮길 때 달라지는 점(추가·변경·빠진 것과 이유)은 그 페이지의 '기존 네이티브 SDK 에서 옮겨 오기'에 있습니다
+- 기존 `AdPlacementView` 에 있던 기능을 함께 제공합니다 — 클릭한 항목 이름(`onItemClicked` 의 `appName`), 항목을 눌러 연 화면이 닫혔다는 알림(`onItemClosed`), 접지 않고 다시 불러오기(`refresh()`, 기존 `refreshPlacementView()` 대응), 지면 정보(`pubInfo`), 보여 줄 항목 고르기(`filterIds`, 기존 `setFilteringIDs` 대응)
+- 지면 높이에 상한을 두는 `maxHeight`(pt)를 추가했습니다. 지면은 내용에 맞춰 늘어나다가 이 높이에서 멈추고 넘치면 뷰 안에서 스크롤됩니다 — [10. 플레이스먼트 뷰](placement.md)의 '최대 높이'
+- 지면 테마를 고정하는 `theme`, 광고를 그리지 않고 목록만 받는 `dataOnly` · `adList`(참여 방식 설명 `actionDesc` 포함) · `adListJson`, 코드로 항목 클릭을 실행하는 `clickItem(appId:completion:)` 를 추가했습니다 (기존 `getAdList()` · `onItemClick` 대응). 기존 `getAdListJson()` 을 쓰던 앱은 JSON 키 일부가, `onItemClick` 을 쓰던 앱은 결과 형식이 바뀝니다.
+
 ## 1.0.6 — 2026-10-28
 
 - 적립 가능 포인트 합계를 한 번에 받는 `getTotalPoint` 를 추가했습니다. 기존 네이티브 SDK `queryAdvertiseCount` 를 이 함수 하나로 바꿀 수 있습니다. 기존 두 함수(`getAdvertiseTotalPoint` · `getProductTotalPoint`)는 그대로 쓸 수 있습니다 — [9. 적립 가능 포인트 조회](total-point.md)

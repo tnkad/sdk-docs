@@ -166,4 +166,4 @@ TnkPpiHybSdk.clearApiSession()   // 이전 사용자 정보로 조회가 이어�
 
 지원 기능은 순차적으로 확대하고 있습니다.
 
-다음: [공개 API 목록](api.md)
+다음: [10. 플레이스먼트 뷰](placement.md)

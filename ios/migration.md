@@ -19,30 +19,31 @@ Android 앱도 함께 옮긴다면 [Android 이관](../android/migration.md)을 
 | 구분 | 내용 |
 |---|---|
 | **그대로** | 앱 ID(`tnkad_app_id`) 선언, `Info.plist` 의 추적 허용(ATT)·사진·카메라 문구, 서버 보상 콜백 URL 과 그 구현, `setUserName` 에 넘기는 값, 오퍼월을 전체 화면으로 여는 흐름 (호출 대상만 `TnkPpiHybSdk.shared` 로 바뀝니다) |
-| **바뀜** | 패키지와 import(`TnkRwdSdk2` → `TnkPpiHyb`), 최소 iOS 버전(12.0 → 15.0), 호출 대상(`TnkSession.sharedInstance()` → `TnkPpiHybSdk.shared`), 초기화(`initInstance` → `configure`), 오퍼월 열기(`AdOfferwallViewController` → `openOfferwall(from:)`), 화면 안에 넣기(`AdOfferwallView` → `TnkOfferwallView`), 적립 가능 포인트 조회, 개인정보 동의 호출, 특정 광고 진입(결과 콜백 없음), `setCOPPA`·`setGDPR` 인자 타입, ATT 요청 |
-| **빠짐** | 오퍼월 디자인 설정(`TnkStyles`·`TnkLayout`), 광고 목록 데이터 직접 조회, 사용자 포인트 잔액 조회·구매·인출, 플레이스먼트 뷰(추후 제공 예정), 이벤트·Plus·커스텀 탭 화면 등 |
+| **바뀜** | 패키지와 import(`TnkRwdSdk2` → `TnkPpiHyb`), 최소 iOS 버전(12.0 → 15.0), 호출 대상(`TnkSession.sharedInstance()` → `TnkPpiHybSdk.shared`), 초기화(`initInstance` → `configure`), 오퍼월 열기(`AdOfferwallViewController` → `openOfferwall(from:)`), 화면 안에 넣기(`AdOfferwallView` → `TnkOfferwallView`), 플레이스먼트 뷰(`AdPlacementView` → `TnkPlacementView`, SDK 1.0.7 이상. `refreshPlacementView()` → `refresh()`, `onItemClick` → `clickItem` 등), 적립 가능 포인트 조회, 개인정보 동의 호출, 특정 광고 진입(결과 콜백 없음), `setCOPPA`·`setGDPR` 인자 타입, ATT 요청 |
+| **빠짐** | 오퍼월 디자인 설정(`TnkStyles`·`TnkLayout`), 오퍼월 광고 목록 데이터 직접 조회, 사용자 포인트 잔액 조회·구매·인출, 이벤트·Plus·커스텀 탭 화면 등 (지면의 광고 목록은 `dataOnly` · `adList` 로 받을 수 있습니다. 패턴 11) |
 
 > ⚠️ **TNK 서버에 사용자 포인트 관리를 맡긴 앱**(`queryPoint`·`purchaseItem`·`withdrawPoints` 사용)은 이관 전에 담당자에게 문의해 주세요. 하이브리드 오퍼월에는 잔액 조회·구매·인출 화면이 없어 현재 미제공입니다. 하이브리드 SDK 에서는 [서버 보상 콜백](../common/server-callback.md)으로 받은 포인트를 개발사 서버에서 관리합니다.
 
 > ⚠️ **Objective-C 앱**은 먼저 아래 'Objective-C 앱이라면'을 보세요. 하이브리드 SDK 는 Swift 에서 호출하는 API 만 제공합니다.
 
-> ⚠️ 기존 네이티브 SDK 와 하이브리드 SDK 를 한 앱에 함께 두는 구성은 확인되지 않았습니다. 일부 화면(예: `AdPlacementView`)을 기존 SDK 로 유지해야 한다면 이관 전에 담당자에게 문의해 주세요. 함께 두는 동안에는 한 Swift 파일에서 `import TnkRwdSdk2` 와 `import TnkPpiHyb` 를 같이 쓰지 마세요. 기존 SDK 에서 받은 개인정보 동의는 하이브리드 SDK 를 처음 쓸 때 한 번만 이어지며, 그 뒤의 변경은 서로 반영되지 않습니다.
+> ⚠️ 기존 네이티브 SDK 와 하이브리드 SDK 를 한 앱에 함께 두는 구성은 확인되지 않았습니다. 일부 화면을 기존 SDK 로 유지해야 한다면 이관 전에 담당자에게 문의해 주세요. (`AdPlacementView` 는 `TnkPlacementView` 로 바꿀 수 있습니다. 패턴 10) 함께 두는 동안에는 한 Swift 파일에서 `import TnkRwdSdk2` 와 `import TnkPpiHyb` 를 같이 쓰지 마세요. 기존 SDK 에서 받은 개인정보 동의는 하이브리드 SDK 를 처음 쓸 때 한 번만 이어지며, 그 뒤의 변경은 서로 반영되지 않습니다.
 
 ### 이관 순서
 
 - [ ] 1. 앱의 최소 지원 버전(Deployment Target)이 iOS 15.0 이상인지 확인하고, 의존성을 `TnkPpiHyb` 로 교체합니다 (아래 패턴 1)
 - [ ] 2. `Info.plist` 는 **그대로 둡니다** (패턴 2)
 - [ ] 3. `import TnkRwdSdk2` 를 `import TnkPpiHyb` 로 바꾸고, 초기화·사용자 식별값·오퍼월 열기를 바꿉니다 (패턴 3)
-- [ ] 4. 오퍼월 디자인 설정(`TnkStyles.*`·`TnkLayout.*`) 줄을 삭제합니다 (아래 '디자인 설정' 표)
+- [ ] 4. 오퍼월 디자인 설정(`TnkStyles.*`·`TnkLayout.*`) 줄을 삭제합니다. 단 `TnkLayout.shared.registerPlacementViewLayout` 은 6단계에서 `layoutKey` 로 옮긴 뒤 지웁니다 (아래 '디자인 설정' 표)
 - [ ] 5. 앱 화면 안에 넣던 `AdOfferwallView` 는 `TnkOfferwallView` 로 바꿉니다 (패턴 4)
-- [ ] 6. 적립 가능 포인트 조회 코드(`queryAdvertiseCount`)를 `getTotalPoint` 로 바꿉니다 (패턴 5, SDK 1.0.6 이상)
-- [ ] 7. 개인정보 동의 호출을 바꾸고, `setUserName` 을 `setAgreePrivacy` 보다 먼저 호출합니다 (패턴 6)
-- [ ] 8. 앱에서 직접 동의를 받는 앱(`setAgreePrivacy(true)` 를 호출하는 앱)은 앱 화면에 '동의 철회' 수단을 두고 `revokePrivacyConsent()` 를 연결합니다. 이 경우 오퍼월에는 '개인 정보 수집 동의 해제' 메뉴가 나오지 않습니다 (패턴 6)
-- [ ] 9. 특정 광고 진입 코드를 바꿉니다 (패턴 7)
-- [ ] 10. 시작 카테고리·필터를 지정하던 코드는 딥링크로 바꿉니다 (패턴 8)
-- [ ] 11. ATT 요청을 `requestTrackingAuthorization` 으로 바꾸고, 초기화와 따로 호출합니다 (패턴 9)
-- [ ] 12. 빌드해서 컴파일 오류 목록을 확인하고, 아래 '전체 API 대조표'에서 남은 호출을 찾아 치환·삭제합니다. '현재 미제공(문의)' 항목은 담당자에게 문의합니다
-- [ ] 13. 서버 콜백 URL 구현과 `tnkad_app_id` 선언은 **그대로 둡니다** (변경 없음)
+- [ ] 6. 지면 광고를 보여 주던 `AdPlacementView` 는 `TnkPlacementView` 로 바꿉니다 (패턴 10, SDK 1.0.7 이상). 지면 광고 목록을 받아 직접 화면을 그리던 앱은 `dataOnly` · `adList` · `clickItem` 으로 바꿉니다 (패턴 11)
+- [ ] 7. 적립 가능 포인트 조회 코드(`queryAdvertiseCount`)를 `getTotalPoint` 로 바꿉니다 (패턴 5, SDK 1.0.6 이상)
+- [ ] 8. 개인정보 동의 호출을 바꾸고, `setUserName` 을 `setAgreePrivacy` 보다 먼저 호출합니다 (패턴 6)
+- [ ] 9. 앱에서 직접 동의를 받는 앱(`setAgreePrivacy(true)` 를 호출하는 앱)은 앱 화면에 '동의 철회' 수단을 두고 `revokePrivacyConsent()` 를 연결합니다. 이 경우 오퍼월에는 '개인 정보 수집 동의 해제' 메뉴가 나오지 않습니다 (패턴 6)
+- [ ] 10. 특정 광고 진입 코드를 바꿉니다 (패턴 7)
+- [ ] 11. 시작 카테고리·필터를 지정하던 코드는 딥링크로 바꿉니다 (패턴 8)
+- [ ] 12. ATT 요청을 `requestTrackingAuthorization` 으로 바꾸고, 초기화와 따로 호출합니다 (패턴 9)
+- [ ] 13. 빌드해서 컴파일 오류 목록을 확인하고, 아래 '전체 API 대조표'에서 남은 호출을 찾아 치환·삭제합니다. '현재 미제공(문의)' 항목은 담당자에게 문의합니다
+- [ ] 14. 서버 콜백 URL 구현과 `tnkad_app_id` 선언은 **그대로 둡니다** (변경 없음)
 
 치환 작업을 AI 도구에 맡길 수도 있습니다. 방법은 [AI 도구에 문서 연결하기](../publisher/ai-tools.md)를 보세요. 결과는 반드시 직접 확인하세요.
 
@@ -62,7 +63,7 @@ Swift Package Manager 로 설치하는 경우입니다. Xcode 에서는 **File �
  // Package.swift 를 직접 쓰는 경우
  dependencies: [
 -    .package(url: "https://github.com/tnkfactory/tnk-rwd2-spm.git", from: "5.94.0")
-+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.6")
++    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.7")
  ],
  targets: [
      .target(
@@ -235,7 +236,7 @@ if let url = TnkPpiHybSdk.shared.buildOfferwallURL(extraParams: ["hideHeader": "
 - 탭에 넣었다면 탭을 오갈 때마다 `loadOfferwall(_:)` 을 다시 부르지 마세요. 동의 팝업에서 [거부] 뒤 닫은 경우의 처리를 포함해 [4. 오퍼월 띄우기](offerwall.md)의 '탭에 넣을 때 주의' 항목을 보세요.
 - 상태바 글자색 연결(`onStatusBarStyleChanged`)과 뒤로가기(`goBackIfPossible()`)는 [4. 오퍼월 띄우기](offerwall.md)를 보세요.
 
-특정 광고·카테고리만 앱 화면 일부에 노출하는 플레이스먼트 뷰는 추후 제공될 예정입니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 사용 중이시면 담당자에게 알려 주세요.
+기존 `AdPlacementView` 로 지면 광고를 보여 주던 화면은 아래 패턴 10 을 보세요.
 
 **SwiftUI 앱:** `AdOfferwallViewController` 를 `UIViewControllerRepresentable` 로 감싸던 코드는 `TnkOfferwallView` 를 `UIViewRepresentable` 로 감싸는 코드로 바꿉니다.
 
@@ -469,6 +470,125 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 값별 동작과 `NSUserTrackingUsageDescription` 문구는 [3. 초기화](initialize.md)의 'ATT 동의 요청' 과 [2. Info.plist 설정](plist.md)을 보세요.
 
+### 패턴 10. 플레이스먼트 뷰
+
+**무엇이 바뀌나:** 지면 광고를 앱 화면 일부에 보여 주던 `AdPlacementView` 를 `TnkPlacementView` 로 바꿉니다. `loadData` 다음 `showAdList` 두 단계가 `load(placementId:)` 한 번으로 줄고, 성공하면 자동으로 그려집니다. iOS SDK 1.0.7 이상에서 사용할 수 있습니다.
+
+```diff
++// 화면(ViewController)의 저장 프로퍼티 — delegate 는 weak 참조이므로 화면이 붙잡고 있어야 합니다
++private let placementView = TnkPlacementView()
+-var adPlacementView: AdPlacementView?
+
+ func setupPlacementView() {
+-    let pView = AdPlacementView(frame: view.frame, viewController: self)
+-    pView.placementListener = self
+-    placementContainerView.addSubview(pView)
+-    pView.translatesAutoresizingMaskIntoConstraints = false
+-    NSLayoutConstraint.activate([
+-        pView.leftAnchor.constraint(equalTo: placementContainerView.leftAnchor),
+-        pView.rightAnchor.constraint(equalTo: placementContainerView.rightAnchor),
+-        pView.topAnchor.constraint(equalTo: placementContainerView.topAnchor),
+-        pView.bottomAnchor.constraint(equalTo: placementContainerView.bottomAnchor)
+-    ])
+-    adPlacementView = pView
++    placementView.delegate = self
++    placementView.layoutKey = "FEED_SWIPE"   // 선택 — load 전에. 대체되는 키는 레이아웃 표를 보세요
++    // 컨테이너의 높이를 고정하지 마세요. 높이 제약을 지우거나 UIStackView 에 넣습니다. 컨테이너 높이가 정해져 있으면 고정 높이로 동작합니다
++    placementView.translatesAutoresizingMaskIntoConstraints = false
++    placementContainerView.addSubview(placementView)
++    NSLayoutConstraint.activate([
++        placementView.leadingAnchor.constraint(equalTo: placementContainerView.leadingAnchor),
++        placementView.trailingAnchor.constraint(equalTo: placementContainerView.trailingAnchor),
++        placementView.topAnchor.constraint(equalTo: placementContainerView.topAnchor),
++        placementView.bottomAnchor.constraint(equalTo: placementContainerView.bottomAnchor),
++    ])
+ }
+
+ func loadPlacementView() {
+-    adPlacementView?.loadData(placementId: "open_ad")
++    placementView.load(placementId: "담당자에게 받은 지면 ID")
+ }
+
+-func didAdDataLoaded(placementId: String, customData: String?) {
+-    adPlacementView?.showAdList()
+-}
++func onLoaded(placementId: String, count: Int, customData: String) { }
++
++// 서버에서 최신 목록을 다시 받으려면 (기존 refreshPlacementView() 대신)
++func onItemClosed(placementId: String, appId: Int64) {
++    placementView.refresh()
++}
+```
+
+| 기존 네이티브 SDK | 하이브리드 SDK |
+|---|---|
+| `placementListener` (`PlacementEventListener`) | `delegate` (`TnkPlacementViewDelegate`) — 메서드 이름이 모두 바뀌었습니다 |
+| `didAdDataLoaded(placementId:customData:)` | `onLoaded(placementId:count:customData:)` — `count` 가 추가되었고 `customData` 는 옵셔널이 아닙니다. 미설정이면 기존의 `"__default_custom_data__"` 가 아니라 빈 문자열이 오니, 그 문자열과 비교하던 코드는 빈 문자열 비교로 바꾸세요. 이 콜백에서 `showAdList()` 를 부를 필요가 없습니다 |
+| `didFailedToLoad(placementId:)` | `onFailed(placementId:code:)` — 실패 코드가 추가되었습니다. **광고가 0개인 경우는 실패가 아니라 `onLoaded` 의 `count` 0** 으로 옵니다 |
+| `didAdItemClicked(placementId:appId:appName:)` | `onItemClicked(placementId:appId:appName:)` — 메서드 이름이 `onItemClicked` 로 바뀌었습니다(모두 선택 구현이라 옛 이름은 컴파일 오류 없이 호출되지 않습니다). `appName` 은 그대로 오고 `appId` 는 `Int64` 입니다. 화면 통지용이므로 보상·과금 판단에 쓰지 마세요. 탭 즉시 1번 호출되며, 기존처럼 동의 뒤에만 오지 않습니다 |
+| `didAdItemClosed(placementId:appId:)` | `onItemClosed(placementId:appId:)` — 메서드 이름이 `onItemClosed` 로 바뀌었고 `appId` 는 `Int64` 입니다. 항목 클릭으로 SDK 가 연 화면이 닫힐 때 1번 호출됩니다 |
+| `didMoreLinkClicked(placementId:)` | `onMoreClicked(placementId:) -> Bool` — 기존에 오퍼월을 여는 코드만 있었다면 `false` 를 돌려주면 됩니다. 직접 처리하려면 `true` |
+| `refreshPlacementView()` | `refresh()` — 서버에서 목록을 다시 받아 바꿉니다. SDK 가 항목을 직접 빼지는 않고 서버가 더 이상 보내지 않을 때 사라집니다. `refresh()` 로 받은 목록이 화면에 있는 목록과 같으면 보던 페이지와 가로 스크롤 위치가 그대로 유지되고, 달라졌으면 목록을 1페이지부터 새로 그립니다. 기존은 불러 둔 목록을 화면에서만 다시 그렸습니다. 화면이 보일 때마다 부르지 말고 항목을 눌러 연 화면이 닫힌 뒤(`onItemClosed`)에 부르세요 |
+| `getPubInfo()` · `getHeaderTitle()` · `getCustomData()` | `pubInfo` — 읽기 전용 속성. 제목은 `pubInfo?.title`, `customData` 는 `pubInfo?.customData` 입니다. 필드 이름이 camelCase 로 바뀌었고(`ad_type` → `adType` 등) `ctype_surl` 은 없어졌습니다. 레이아웃 `SIMPLE_LIST` 로 그린 지면은 `title`·`moreLabel` 이 빈 문자열입니다 |
+| `setFilteringIDs(_:)` | `filterIds` — `load` 전에 설정합니다. 함수가 속성으로 바뀌었습니다 |
+| `getItemViewSize()` | `contentHeight` · `onHeightChanged(placementId:height:)` |
+| 앱이 높이를 정하고 안에서 스크롤하던 목록 | 높이 제약을 고정하고 `verticalScrollEnabled = true`, 또는 높이를 고정하지 않고 `maxHeight` |
+| `TnkLayout.shared.registerPlacementViewLayout(...)` · 레이아웃 속성 | `layoutKey` — 지면은 TnkFactory 가 제공하는 화면이 그리므로 셀 레이아웃 등록이 없습니다. 대체되는 키는 [10. 플레이스먼트 뷰](placement.md)의 '기존 레이아웃에서 옮길 때 고르는 키' 표를 보세요. 레이아웃 속성(여백·폰트·열 수)은 현재 지원하지 않습니다. 열·행 수는 레이아웃 키마다 정해져 있습니다. |
+
+옮길 때 자주 놓치는 것은 다음과 같습니다.
+
+- **높이를 고정했던 컨테이너**: 기존 예제처럼 컨테이너의 높이가 정해져 있으면 네 변을 고정한 뷰도 고정 높이로 동작해 내용이 잘리거나 빈 공간이 생깁니다. 컨테이너의 높이 제약을 지우거나 `UIStackView` 를 쓰세요.
+- **미리 불러 두고 나중에 보여 주던 코드**: `load` 는 불러오기와 표시를 함께 하고, `isHidden` 은 SDK 가 관리합니다. 감싼 뷰를 숨겨 두었다가 보여 주세요. 데이터만 필요하면 패턴 11 을 보세요.
+- **`customData` 로 레이아웃을 고르던 코드**: 같은 `load` 안에서는 레이아웃을 바꿀 수 없습니다. `onLoaded` 의 `customData` 를 저장해 두었다가 다음 `load` 전에 `layoutKey` 로 쓰세요. (`onLoaded` 에서 `layoutKey` 를 바꾸고 `load` 를 다시 부르면 지면이 접혔다 펼쳐지고 서버 조회와 노출 기록이 한 번 더 생깁니다.)
+- **`viewController` 인자**: `init(frame:viewController:)` 가 없어졌습니다. 오퍼월은 뷰가 속한 화면에서 열리니 뷰를 화면 계층에 넣어 두세요.
+- **지면 ID**: 같은 앱에 등록된 지면 ID 는 그대로 씁니다. 오래 전에 만든 지면이 보이지 않으면 담당자에게 확인해 주세요.
+- **이벤트·뉴스 지면**: 행을 누르면 `onItemClicked` 뒤에 페이지가 열립니다. 뉴스 행에 포인트가 보일 수 있지만 읽기 보상은 현재 지원하지 않아 읽어도 적립되지 않습니다. 뉴스 지면을 쓰던 앱은 이관 전에 담당자에게 확인하세요. 이벤트 행에는 '참여 완료' 표시가 없습니다.
+- **숨긴 채 불러오던 코드**: 감싼 컨테이너를 숨긴 채 `load` 했다면 `onLoaded` 가 오는지, 보여 준 뒤 높이가 내용에 맞는지를 실기기에서 확인하세요. 노출 수가 중요하면 보여 주기 직전에 `load` 를 호출하세요.
+- **설치 보상 시점**: 광고를 설치한 뒤 받는 보상은 지면이 아니라 오퍼월에 들어갈 때 처리됩니다. 오퍼월로 들어가는 길(더보기 등)을 남겨 두세요.
+- **`layer.cornerRadius`**: `TnkPlacementView` 는 `UIView` 이므로 기존처럼 `placementView.layer.cornerRadius` 를 계속 쓸 수 있습니다.
+
+- 화면을 없앨 때 `cleanup()` 호출은 선택 사항입니다. 뷰가 해제되면 SDK 가 스스로 정리합니다.
+
+모든 대응(추가·변경·빠진 것과 이유)은 [10. 플레이스먼트 뷰](placement.md)의 '기존 네이티브 SDK 에서 옮겨 오기' 표에 있습니다. 사용 방법과 높이·실패 코드·화면 종료 처리도 그 페이지를 보세요.
+
+### 패턴 11. 지면 광고 목록으로 직접 화면을 그리던 앱
+
+**무엇이 바뀌나:** 기존 네이티브 SDK 의 `getAdList()` · `getAdListJson()` · `getADInfo(appId:)` · `onItemClick(appId:completion:)` 로 지면 광고를 받아 직접 UI 를 그리던 앱은 `dataOnly` 로 데이터만 받고 `adList` 와 `clickItem` 을 씁니다. iOS SDK 1.0.7 이상에서 사용할 수 있습니다.
+
+```diff
+-adPlacementView?.placementListener = self
+-adPlacementView?.loadData(placementId: "open_ad")
++placementView.dataOnly = true            // 화면에 그리지 않고 데이터만 받습니다. 뷰는 화면 계층에 두세요
++placementView.delegate = self
++placementView.load(placementId: "담당자에게 받은 지면 ID")
+
+-func didAdDataLoaded(placementId: String, customData: String?) {
+-    showMyList(adPlacementView?.getAdList() ?? [])   // showAdList() 는 부르지 않고 목록만 읽었습니다
+-}
++func onLoaded(placementId: String, count: Int, customData: String) {
++    showMyList(placementView.adList)     // 앱이 직접 그립니다
++}
+
+ // 사용자가 앱이 그린 항목을 눌렀을 때
+-adPlacementView?.onItemClick(appId: ad.app_id) { success, error in
+-    // 실패하면 TnkError 를 받았습니다
+-}
++placementView.clickItem(appId: ad.appId) { success, code in
++    // success: 화면 열기를 시작했는지 (참여·보상 완료가 아닙니다). 실패 이유는 TnkError 가 아니라 code 입니다
++}
+```
+
+| 기존 네이티브 SDK | 하이브리드 SDK |
+|---|---|
+| `loadData(placementId:)` 만 부르고 `showAdList()` 는 부르지 않음 | `dataOnly = true` 로 `load` 합니다. 뷰는 `load` 시작부터 높이 0 + `isHidden = true` 로 유지되고 `onHeightChanged` 는 오지 않으며, **뷰는 화면 계층 안에 있어야** 합니다 |
+| `getAdList()` | `adList` (`[TnkPlacementAdItem]`) — 필드 이름이 바뀌었습니다([10. 플레이스먼트 뷰](placement.md)의 '기존 광고 목록과 비교' 표). 기존에는 이벤트 지면의 항목이 오지 않았지만 지금은 이벤트·뉴스 행이 `isLink` 가 `true` 인 항목으로 들어 있고 그 `appId` 는 광고 ID 가 아닙니다 |
+| `getAdListJson()` | `adListJson` — 배열 JSON 입니다. 키가 `org_amt` → `org_pnt_amt`, `org_prd_price` → `org_price`, `filterID` → `filter_id` 로 바뀝니다. 옛 키는 별칭이 없어 값을 찾지 못하니 새 키로 바꾸세요. `actn_id` · `pnt_txt` · `is_link` · `actn_desc` 키가 추가되었습니다. 전체 키는 같은 표에 있습니다 |
+| `getADInfo(appId:)` | 없습니다. `adList` 에서 `appId` 가 같은 항목을 찾으세요 |
+| `onItemClick(appId:completion:)` | `clickItem(appId:completion:)` — 결과가 `(Bool, TnkError?)` 에서 `(Bool, Int)` 로 바뀝니다. `0`(열기 시작)·`1003`(없는 광고)·`1004`(중복 호출)·`-1`·`-2` 이고, 동작은 `success` 로 나누고 `code` 는 기록·진단용으로 쓰세요. 기존의 1001·1002·1101~1103·99·109·200·서버 코드는 오지 않습니다(대응표는 [10. 플레이스먼트 뷰](placement.md)) |
+
+- `adList` 는 화면 표시용입니다. **보상·과금 판단에 쓰지 마세요.** 보상은 [5. 보상 지급 수신](reward.md)과 서버 보상 콜백으로 확인합니다.
+- `clickItem` 은 사용자가 항목을 누르는 등 사용자의 동작에 대한 응답으로만 호출하세요. 성공은 "화면 열기를 시작했다"는 뜻이며 참여·보상 완료가 아닙니다.
+
 ---
 
 ## 컴파일러가 이관을 안내합니다
@@ -488,7 +608,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | `setPhoneNumber` | `is unavailable:` 뒤에 하이브리드 SDK 가 제공하지 않는다는 메시지 | 없음. 현재 미제공이므로 사용 중이면 담당자에게 문의해 주세요 |
 | `queryAdvertiseCount` · `queryPoint` · `appStartedOnceAMonth` · `actionCompleted` · `openPrivacyTermAlert` 처럼 없어진 호출 | `has no member '…'` | 없음. 아래 '전체 API 대조표'의 '제거'·'치환'·'현재 미제공(문의)' 행을 보세요 |
 | `showMenuViewController(from:)` | `has been renamed to 'openOfferwall(from:)'` | 있음. Fix 를 적용하면 마이메뉴가 아니라 오퍼월 첫 화면이 열립니다. 그대로 쓸지는 '전체 API 대조표'의 `showMenuViewController` 행을 보고 정하세요. 실제 호출처럼 `menuType:` 을 넘기면 `extra argument 'menuType'` 오류가 납니다 |
-| `AdOfferwallViewController` · `AdOfferwallView` · `TnkAlerts` · `TnkStyles` · `TnkLayout` · `AdPlacementView` · `OfferwallEventListener` | `cannot find … in scope` 계열 (클래스·프로토콜이 통째로 없어진 경우) | 없음. 패턴 3·4·9 와 '전체 API 대조표'의 해당 행을 보세요 |
+| `AdOfferwallViewController` · `AdOfferwallView` · `TnkAlerts` · `TnkStyles` · `TnkLayout` · `AdPlacementView` · `PlacementEventListener` · `OfferwallEventListener` | `cannot find … in scope` 계열 (클래스·프로토콜이 통째로 없어진 경우) | 없음. 패턴 3·4·9·10·11 과 '전체 API 대조표'의 해당 행을 보세요 (`AdPlacementView` 는 `TnkPlacementView` 로 바뀝니다. 패턴 10) |
 
 ---
 
@@ -544,7 +664,14 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | `AdOfferwallView(frame:viewController:)` + `loadData()` | `TnkOfferwallView(frame:)` + `loadOfferwall(TnkPpiHybSdk.shared.buildOfferwallURL())`. 닫기는 `onCloseRequested` 로 처리하고, 화면을 없앨 때 `cleanup()` 을 호출합니다. (패턴 4) | **치환** |
 | `UIViewControllerRepresentable` 로 감싼 `AdOfferwallViewController` (SwiftUI) | `UIViewRepresentable` 로 감싼 `TnkOfferwallView` (패턴 4) | **치환** |
 | `landingData = "카테고리ID//필터ID"` (`AdOfferwallViewController` · `AdOfferwallView`) | `handleScheme("tnkscheme://select_menu?cat_id=..&filter_id=..", from:)` (패턴 8) | **치환** |
-| `AdPlacementView` | 특정 광고·카테고리만 앱 화면 일부에 노출하는 플레이스먼트 뷰는 추후 제공될 예정입니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 사용 중이시면 담당자에게 알려 주세요. | **현재 미제공(문의)** |
+| `AdPlacementView(frame:viewController:)` | `TnkPlacementView()` 또는 `TnkPlacementView(frame:)` 를 화면에 넣고 `delegate`(`TnkPlacementViewDelegate`) 를 지정한 뒤 `load(placementId:)` 를 호출합니다. (패턴 10, SDK 1.0.7 이상) | **치환** |
+| `getCustomData()` | `onLoaded` 의 `customData` 로 받습니다 | **치환** |
+| `loadData(placementId:)` + `showAdList()` | `load(placementId:)` 한 번. (패턴 10) | **치환** |
+| `refreshPlacementView()` | `TnkPlacementView.refresh()`. 기존 `refreshPlacementView()` 는 불러 둔 목록을 화면에서만 다시 그렸지만, `refresh()` 는 서버에서 목록을 다시 받아 바꿉니다(참여를 마친 광고가 빠지는지는 서버 목록 기준을 따릅니다). 받은 목록이 화면에 있는 목록과 같으면 보던 페이지가 유지되고 달라졌으면 1페이지부터 다시 그립니다. 화면이 보일 때마다 부르지 말고 `onItemClosed` 에서 부르세요. (패턴 10) | **치환** |
+| `getAdList()` · `getAdListJson()` · `getADInfo(appId:)` · `onItemClick(appId:completion:)` (지면 광고 목록 직접 조회) | `TnkPlacementView` 에 `dataOnly = true` 를 설정하고 `adList` · `adListJson` · `clickItem(appId:completion:)` 를 씁니다. `getADInfo` 는 `adList` 에서 찾습니다. 옛 필드·JSON 키 일부가 바뀌고 `onItemClick` 의 오류 코드 대부분은 결과로 오지 않습니다. (패턴 11, SDK 1.0.7 이상) | **치환** |
+| `getPubInfo()` · `getPubInfoJson()` · `getHeaderTitle()` | `TnkPlacementView.pubInfo` (`TnkPlacementPubInfo`). `getPubInfoJson()` 은 필드로 대신합니다. (패턴 10) | **치환** |
+| `setFilteringIDs(_:)` | `TnkPlacementView.filterIds` (패턴 10) | **치환** |
+| `didAdItemClosed(placementId:appId:)` (지면) | `TnkPlacementViewDelegate.onItemClosed(placementId:appId:)` — 메서드 이름이 바뀌었고 `appId` 는 `Int64` 입니다. (패턴 10) | **치환** |
 | `showMenuViewController(from:navigationPush:pageAnimated:fullscreen:menuType:)` (마이메뉴: 참여·적립 내역, 도움말, 문의) | 마이메뉴 화면을 바로 여는 기능은 현재 하이브리드 SDK 에서 제공하지 않습니다. 버튼을 그대로 두려면 `openOfferwall(from:)` 으로 오퍼월을 여세요. 오퍼월 첫 화면이 열리고, 참여·적립 내역과 도움말·문의는 상단 "문의/내역"에서 볼 수 있습니다. 마이메뉴로 바로 보내야 한다면 담당자에게 문의해 주세요. | **현재 미제공(문의)** |
 | `getFaqPageUrl()` · `getHelpDeskUrl()` · `getRewardHistoryUrl()` · `getUseHistoryUrl()` · `getContactUsUrl()` · `getCpsMyPageUrl()` | 같은 내용이 오퍼월의 "문의/내역" 메뉴에 있습니다. 주소를 앱에서 얻는 기능은 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 | `showCustomTapViewController(...)` | 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
@@ -584,12 +711,13 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | 네이티브 | 하이브리드 | 구분 |
 |---|---|---|
 | `TnkStyles.shared.*` (색·폰트·포인트 아이콘 등) | 앱 코드에서 설정하지 않습니다. 호출을 삭제하세요. 바꾸고 싶은 화면 구성은 담당자에게 요청해 주세요. | **제거** |
+| `TnkLayout.shared.registerPlacementViewLayout` | `TnkPlacementView.layoutKey` 에 레이아웃 키(`"BOX"` 등 9종 중 하나)를 `load` 전에 설정합니다. 셀 클래스·레이아웃 객체는 지정할 수 없습니다. 대체되는 키는 [10. 플레이스먼트 뷰](placement.md)를 보세요. (패턴 10) | **치환** |
 | `TnkLayout.shared.registerItemViewLayout` · `registerMenuViewLayout` (목록·큐레이션·메뉴 레이아웃) | 앱 코드에서 설정하지 않습니다. 호출을 삭제하세요. | **제거** |
 | `TnkLayout.shared.alertControl` · `loadingIndicatorFactory` (안내창·로딩 표시 사용자 정의) | 앱 코드에서 설정하지 않습니다. 호출을 삭제하세요. | **제거** |
 | `TnkStyles.offerwallTheme = .dark` · `.light` | `extraParams` 의 `theme` (`"dark"` · `"light"`) — 아래 '다크 모드 고정' 과 [4. 오퍼월 띄우기](offerwall.md)의 '다크 모드' 항목 | **치환** |
 | `TnkStyles.offerwallTheme = .system` · `.unspecified` | `theme` 를 넣지 않으면 기기(앱)의 다크 모드 설정을 따릅니다. 호출을 삭제하세요. | **제거** |
 
-**다크 모드 고정:** 네이티브에서 `TnkStyles.offerwallTheme` 으로 고정했다면 오퍼월을 열 때 `theme` 를 넘깁니다. 넘기지 않으면 오퍼월은 기기(앱)의 다크 모드 설정을 따릅니다. 라이트로 고정했던 앱이 `theme` 를 빠뜨리면 다크 모드 기기에서 오퍼월이 어둡게 보입니다.
+**다크 모드 고정:** 네이티브에서 `TnkStyles.offerwallTheme` 으로 고정했다면 오퍼월을 열 때 `theme` 를 넘깁니다. 넘기지 않으면 오퍼월은 기기(앱)의 다크 모드 설정을 따릅니다. 라이트로 고정했던 앱이 `theme` 를 빠뜨리면 다크 모드 기기에서 오퍼월이 어둡게 보입니다. 플레이스먼트 뷰(`TnkPlacementView`)를 쓰면 지면과 지면에서 연 오퍼월에도 같은 값을 `theme` 속성으로 따로 지정하세요.
 
 ```diff
 -TnkStyles.offerwallTheme = .dark
@@ -647,6 +775,7 @@ final class OfferwallHelper: NSObject {
 - [ ] 광고 참여 뒤 서버 보상 콜백이 이전처럼 호출됩니다.
 - [ ] 적립 가능 포인트를 표시하는 앱은 표시 값이 이전과 비슷한지 확인합니다.
 - [ ] 대조표에서 '현재 미제공(문의)' 로 표시된 호출이 코드에 남아 있지 않은지 확인합니다.
+- [ ] 플레이스먼트 뷰를 쓰는 앱은 실기기에서 지면이 보이는지, 감싼 컨테이너를 숨긴 채 불러온다면 `onLoaded` 와 높이가 맞는지 확인합니다. ([10. 플레이스먼트 뷰](placement.md))
 
 ---
 

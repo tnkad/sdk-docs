@@ -1,5 +1,5 @@
 ---
-description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(Android)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView 와 콜백 타입을 다룹니다.
+description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(Android)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 콜백 타입을 다룹니다.
 ---
 
 # 공개 API 목록 (개발사 사용 API)
@@ -15,7 +15,7 @@ description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼�
 이 페이지에 없는 클래스와 메서드는 개발사가 사용하도록 안내하는 대상이 아닙니다.
 필요한 기능이 목록에 없다면 담당자에게 문의해 주세요.
 
-패키지: `com.tnkfactory.ad.hrwd` — 단, `TnkOfferwallView` 는 `com.tnkfactory.ad.hrwd.webview` 패키지에 있습니다.
+패키지: `com.tnkfactory.ad.hrwd` — 단, `TnkOfferwallView` · `TnkPlacementView` · `TnkPlacementListener` · `TnkPlacementListenerAdapter` · `TnkPlacementPubInfo` · `TnkPlacementAdItem` · `TnkPlacementClickCallback` 는 `com.tnkfactory.ad.hrwd.webview` 패키지에 있습니다.
 
 모든 `TnkPpiHybSdk` 메서드는 `@JvmStatic` 이므로 Java 에서 `TnkPpiHybSdk.xxx(...)` 로 호출합니다.
 Kotlin 함수 타입을 받는 콜백(`onAdidReady`, `getTotalPoint`, `getAdvertiseTotalPoint`, `getProductTotalPoint`, `TnkOfferwallView.onCloseRequested`)은
@@ -46,6 +46,7 @@ offerwallView.setOnCloseRequested(() -> {
 | 사용자 식별값 설정 | `TnkPpiHybSdk.setUserName` | 필수 |
 | 오퍼월 열기 | `TnkPpiHybSdk.openOfferwall` (전체 화면) 또는 `TnkOfferwallView` (앱 화면 안에 삽입) | 필수 |
 | 보상 알림 받기 | `TnkPpiHybSdk.setRewardListener` | 선택 |
+| 지면 광고를 앱 화면 일부에 표시 | `TnkPlacementView` ([10. 플레이스먼트 뷰](placement.md)) | 선택 |
 
 ---
 
@@ -219,6 +220,68 @@ class TnkOfferwallView : FrameLayout {
 
 ---
 
+## `TnkPlacementView` (SDK 1.0.17 이상)
+
+지면(플레이스먼트) 하나의 광고 묶음을 앱 화면 일부에 보여 주는 뷰입니다. 사용 방법은 [10. 플레이스먼트 뷰](placement.md)를 보세요.
+
+```kotlin
+class TnkPlacementView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : FrameLayout {
+    var listener: TnkPlacementListener?
+    var layoutKey: String?              // load 전에 설정
+    var verticalScrollEnabled: Boolean  // load 전에 설정, 기본 false
+    var maxHeight: Int                  // load 전에 설정, dp, 기본 0 (제한 없음)
+    var theme: String?                  // load 전에 설정. "light" · "dark"
+    var filterIds: List<Int>?           // load 전에 설정
+    var dataOnly: Boolean               // load 전에 설정, 기본 false
+    var pubInfo: TnkPlacementPubInfo?   // 읽기 전용 (private set)
+    val placementId: String?            // 읽기 전용. 마지막으로 load 한 지면 ID
+    var adList: List<TnkPlacementAdItem> // 읽기 전용 (private set)
+    fun getAdListJson(): String
+    fun load(placementId: String)
+    fun refresh()
+    fun clickItem(appId: Long, onResult: ((success: Boolean, code: Int) -> Unit)? = null)
+    fun clickItem(appId: Long)                                        // 결과가 필요 없을 때 (Java 포함)
+    fun clickItem(appId: Long, callback: TnkPlacementClickCallback?)  // Java 용
+
+    companion object {
+        const val CODE_TIMEOUT: Int = -2
+        const val CODE_UNKNOWN: Int = -1
+    }
+}
+```
+
+`import com.tnkfactory.ad.hrwd.webview.TnkPlacementView` 로 가져오고, XML 태그는 `<com.tnkfactory.ad.hrwd.webview.TnkPlacementView ... />` 로 씁니다. Java 에서는 `setListener` · `setLayoutKey` · `setVerticalScrollEnabled` · `setMaxHeight` · `setTheme` · `setFilterIds` · `setDataOnly` 로 설정합니다.
+
+| 멤버 | 설명 |
+|---|---|
+| `listener` | 이 뷰의 이벤트를 받는 리스너. 뷰마다 따로 등록하며, 등록하지 않아도 동작은 같습니다 |
+| `layoutKey` | 지면을 그릴 레이아웃 키. `DEFAULT` · `BOX` · `FEED_DOUBLE` · `FEED_SWIPE` · `FEED_SWIPE_DOUBLE` · `ING_CAMPAIGN` · `FEED` · `SIMPLE_LIST` · `ADAPTIVE` 중 하나이며 대소문자는 구분하지 않습니다. 모르는 키는 기본 레이아웃으로 그립니다. 같은 키라도 일반 지면과 쇼핑 지면의 모양이 다를 수 있으며, `SIMPLE_LIST` 는 두 지면 모두 같은 심플 리스트로 그립니다. TnkFactory 에서 지면 레이아웃을 정해 둔 경우에는 그 설정이 먼저 적용될 수 있습니다 |
+| `verticalScrollEnabled` | 고정 높이에서 내용이 넘칠 때 지면 안 세로 스크롤을 허용합니다. 기본 `false` |
+| `maxHeight` | 지면 높이의 상한(dp). 기본 `0` 은 제한 없음입니다. 0 보다 크면 내용 높이만큼 늘어나다가 이 높이에서 멈추고, 내용이 더 크면 `verticalScrollEnabled` 와 관계없이 지면 안에서 스크롤되며 양 끝에서는 앱의 스크롤로 이어집니다. `onHeightChanged` 는 내용 높이와 `maxHeight` 중 작은 값을 알립니다. 쓸 때는 지면 높이를 고정하지 마세요. `dataOnly` 일 때는 무시합니다 |
+| `theme` | 지면과 지면에서 SDK 가 여는 전체 화면 오퍼월의 테마. `"light"` · `"dark"` 만 유효하고 그 밖의 값·`null` 은 기기(앱) 설정을 따릅니다. 지면 뷰 자체의 배경은 투명하고 카드와 행은 테마색으로 그려집니다 |
+| `filterIds` | 보여 줄 항목을 `filter_id` 로 고릅니다. 목록 순서대로 id 마다 첫 항목 1건. 1~999999999 정수만, 중복은 처음 값만, 최대 50개 |
+| `dataOnly` | `true` 면 지면을 그리지 않고 `onLoaded` · `onFailed` · `pubInfo` · `adList` 만 갱신합니다. 뷰는 `load` 를 시작할 때부터 `GONE` 이고 `onHeightChanged` 는 오지 않습니다. 뷰는 화면 계층 안에 두어야 합니다. 기본 `false` |
+| `pubInfo` | 지면 정보(`TnkPlacementPubInfo`). `onLoaded` 직전에 설정되고 새 `load`·실패·정리 때 `null` 이 됩니다. 화면 구성용입니다 |
+| `placementId` | 마지막으로 `load` 한 지면 ID. 한 번도 `load` 하지 않았으면 `null` |
+| `adList` · `getAdListJson()` | 마지막으로 불러온 광고 목록(`List<TnkPlacementAdItem>`)과 같은 내용의 JSON 배열 문자열(없으면 `"[]"`). `onLoaded` 직전에 설정되므로 그 콜백 안에서 읽을 수 있고, 새 `load`·실패·정리 때 비워집니다. 화면 표시용이며 보상·과금 판단에 쓰지 마세요 |
+| `load(placementId)` | 지면 ID 로 지면을 불러옵니다. 성공하면 자동으로 표시됩니다. 메인 스레드에서 호출하세요 |
+| `refresh()` | 요청하는 동안 접지 않고 서버에서 목록을 다시 받아 바꿉니다. 받은 목록이 화면에 있는 목록과 같으면 보던 페이지와 가로 스크롤 위치가 그대로 유지되고, 달라졌으면 목록을 1페이지부터 새로 그립니다. 새 목록이 0건이면 접히고, 0건이던 지면에 광고가 생기면 다시 펼쳐집니다. 불러온 적이 없거나 불러오는 중이면 무시하고, 실패한 상태이면 `load` 와 같습니다. 메인 스레드에서 호출하세요 |
+| `clickItem(appId, onResult)` | (Java 는 `TnkPlacementClickCallback` 을 넘깁니다) 사용자가 그 광고 행을 누른 것과 같게 처리합니다. 결과는 `onResult(success, code)` 로 정확히 1번 옵니다. `code`: `0` 화면 열기 시작 · `1003` 목록에 없는 `appId` · `1004` 앞선 요청 처리 중 · `-1` 그 밖의 실패 · `-2` 3초 안에 응답 없음. 동작은 `success` 로 나누고 `code` 는 기록·진단용으로 쓰세요. 성공은 화면 열기를 시작했다는 뜻이며 참여·보상 완료가 아닙니다. 사용자의 동작(버튼 탭 등)에 대한 응답으로만 호출하세요. 메인 스레드에서 호출하세요 |
+| `CODE_TIMEOUT` (`-2`) | `onFailed` 의 코드. `load` 뒤 5초 안에 결과가 없을 때 |
+| `CODE_UNKNOWN` (`-1`) | `onFailed` 의 코드. 네트워크 오류·에뮬레이터·빈 지면 ID 등 기타 실패 |
+
+| `layout_height` | 동작 |
+|---|---|
+| `wrap_content` | 불러온 뒤 내용 높이(+ padding)에 맞춰집니다. 불러오기 전·0건·실패면 0 |
+| 고정 dp | 불러오기 성공 뒤 그 높이를 유지합니다(불러오기 전·0건·실패면 `wrap_content` 와 같이 0). 넘치는 부분은 잘리고, `verticalScrollEnabled` 가 `true` 이거나 `maxHeight` 가 0 보다 크면 지면 안에서 스크롤됩니다 |
+| `wrap_content` + `maxHeight` | 내용 높이에 맞춰지다가 `maxHeight` 에서 멈추고, 내용이 더 크면 지면 안에서 스크롤됩니다 |
+
+---
+
 ## 콜백 타입과 값 객체
 
 ```kotlin
@@ -245,6 +308,53 @@ data class RewardInfo(
 ```
 
 필드 의미와 코드값은 [5. 보상 지급 수신](reward.md)을 참고하세요.
+
+```kotlin
+interface TnkPlacementListener {
+    fun onLoaded(placementId: String, count: Int, customData: String)
+    fun onFailed(placementId: String, code: Int)
+    fun onItemClicked(placementId: String, appId: Long, appName: String)
+    fun onItemClosed(placementId: String, appId: Long) {}
+    fun onMoreClicked(placementId: String): Boolean
+    fun onHeightChanged(placementId: String, heightCssPx: Int) {}
+}
+
+open class TnkPlacementListenerAdapter : TnkPlacementListener
+
+fun interface TnkPlacementClickCallback {
+    fun onResult(success: Boolean, code: Int)   // Java 에서 clickItem 의 결과를 받을 때
+}
+
+data class TnkPlacementPubInfo(
+    val placementId: String,
+    val adType: Int,          // 0 일반 · 1 쇼핑 · 2 제휴몰 · 3 뉴스 · 4 이벤트 · 5 퀴즈, 값이 없으면 -1
+    val title: String,
+    val moreLabel: String,
+    val customData: String,
+    val pointUnit: String,
+    val layoutKey: String,    // 실제로 그려진 레이아웃의 키. 알 수 없으면 ""
+)
+
+data class TnkPlacementAdItem(
+    val appId: Long, val actionId: Int, val appName: String,
+    val imageUrl: String, val iconUrl: String,
+    val point: Long, val originalPoint: Long, val pointUnit: String, val pointText: String,
+    val price: Long, val originalPrice: Long, val discountRate: Int,
+    val isMultiMission: Boolean, val campaignType: Int, val campaignTypeName: String,
+    val likeYn: String, val filterId: Int, val isLink: Boolean, val actionDesc: String,
+)
+```
+
+`TnkPlacementListener` 의 콜백은 모두 메인 스레드에서 호출됩니다. `TnkPlacementListenerAdapter` 는 모든 콜백이 빈 구현이고 `onMoreClicked` 는 `false` 를 돌려줍니다. Java 에서는 `TnkPlacementListenerAdapter` 를 상속하세요.
+
+| 콜백 | 설명 |
+|---|---|
+| `onLoaded` | 불러오기 성공. `pubInfo` · `adList` 가 먼저 설정된 뒤 이 콜백이 오고, 그다음에 `onHeightChanged` 가 옵니다. `count` 는 불러온 광고 수(레이아웃에 따라 화면에 보이는 개수보다 많을 수 있음, 0 이면 광고 없음, 뷰는 접힘), `customData` 는 지면에 설정된 값(없으면 빈 문자열) |
+| `onFailed` | 불러오기 실패. 뷰는 접힙니다. `-2`: 5초 안에 응답 없음, `-1`: 기타 실패, 그 밖의 값은 서버가 알려 준 코드 — 계속되면 담당자에게 문의 |
+| `onItemClicked` | 지면 안의 광고를 누른 즉시 1번(오퍼월을 열기 전). 일반 광고는 이후 SDK 가 광고 상세를 전체 화면 오퍼월로 엽니다. 지면이나 항목에 따라 다른 화면이 열릴 수 있고, 이때 `appId` 는 광고 ID 가 아닐 수 있습니다. `appName` 은 누른 행의 이름(없으면 빈 문자열)입니다. 화면 통지용이므로 보상·과금 판단에 쓰지 마세요 |
+| `onItemClosed` | 항목을 눌러 SDK 가 연 화면(전체 화면 오퍼월 또는 앱 안에서 열린 페이지)이 닫혔을 때 1번. 외부 브라우저로 연 링크·더보기·정리된 뒤에는 호출하지 않습니다. 기본 구현은 빈 함수입니다 |
+| `onMoreClicked` | 지면의 '더보기'(레이아웃에 따라 머리글 또는 아래쪽 버튼)를 눌렀을 때. `true` 면 앱이 직접 처리, `false` 면 SDK 가 오퍼월 첫 화면을 엽니다 |
+| `onHeightChanged` | 지면 내용 높이(dp, 0 이상 5000 이하)가 바뀌었을 때. `maxHeight` 를 쓰면 내용 높이와 `maxHeight` 중 작은 값입니다. `dataOnly` 일 때는 오지 않습니다. Android 는 접힐 때 0 을 보내지 않으므로(iOS 는 보냅니다) 접힘은 `onLoaded`(`count` 0) 또는 `onFailed` 로 판단하세요 |
 
 ```kotlin
 data class TotalPointInfo(
@@ -280,3 +390,11 @@ object TnkCode {
 | 상단 안전 영역 전달 | `setSafeAreaTopPx(cssPx)` | 없음 |
 | 뷰 정리 | 생명주기 자동 처리 | `cleanup()` 수동 호출 |
 | `onCloseRequested` 미등록 시 닫기 | 뷰가 들어 있는 Activity 종료 | 아무 동작 없음 — 닫기 처리를 직접 등록 |
+| 플레이스먼트 뷰 리스너 | `listener: TnkPlacementListener?` | `delegate: TnkPlacementViewDelegate?` (weak 참조, 모든 메서드 선택 구현) |
+| 플레이스먼트 뷰 `onHeightChanged` 인자 | `heightCssPx: Int` (dp) | `height: Double` (pt) |
+| 플레이스먼트 뷰 `maxHeight` | `Int` (dp) | `CGFloat` (pt) |
+| 플레이스먼트 뷰 접힘 알림 | `onHeightChanged(0)` 을 보내지 않음 | 광고 없음으로 바뀜·실패·새 `load`·`cleanup()` 때 `onHeightChanged(0)` 을 보냄 |
+| 플레이스먼트 뷰 정리 | 화면 생명주기에 따라 자동 | 뷰 해제 때 자동, 먼저 정리하려면 `cleanup()` |
+| 플레이스먼트 뷰 실패 코드 상수 | `TnkPlacementView.CODE_TIMEOUT`(-2) · `CODE_UNKNOWN`(-1) | 상수 없이 `-2`·`-1` 숫자 사용 |
+| 플레이스먼트 뷰 읽기 전용 속성 | `pubInfo` · `placementId` · `adList` · `getAdListJson()` | `pubInfo` · `placementId` · `contentHeight` · `adList` · `adListJson` |
+| 플레이스먼트 뷰 `clickItem` | `clickItem(appId: Long, onResult)` | `clickItem(appId: Int64, completion:)` |

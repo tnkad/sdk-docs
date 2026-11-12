@@ -15,6 +15,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 |------|:-------:|:---:|------|
 | 전체 화면 오퍼월 | ✅ | ✅ | `openOfferwall` |
 | 화면 안에 오퍼월 삽입 | ✅ | ✅ | `TnkOfferwallView` |
+| 플레이스먼트 뷰 (지면 광고를 앱 화면 일부에 표시) | ✅ (1.0.17 이상) | ✅ (1.0.7 이상) | `TnkPlacementView` — 기존 네이티브 SDK 의 `AdPlacementView` 를 대신합니다. 지면 ID 는 담당자에게 받습니다 — [Android](../android/placement.md) · [iOS](../ios/placement.md) |
 | 특정 광고 바로 진입 | ✅ (1.0.10 이상) | ✅ (1.0.0 이상) | `adDetail` / `adJoin` / `adAction` — Android 는 기존 네이티브 SDK 와 같은 이름, iOS 는 네이티브 `presentAdDetailView` 가 `adDetail` 로 바뀌었습니다(자세한 내용은 [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)) |
 | 오퍼월 화면 옵션 | ✅ | ✅ | `hideHeader` · `hideBack` · `theme` — 화면 구성에 따라 적용되지 않는 옵션이 있을 수 있습니다 |
 | 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` (일반·구매형을 각각 조회). 둘의 합계를 한 번에 받는 `getTotalPoint` 는 Android 1.0.16 이상 / iOS 1.0.6 이상 |
@@ -40,8 +41,7 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 
 | 기능 | 안내 |
 |------|------|
-| 플레이스먼트 뷰 (네이티브 SDK 의 `AdPlacementView`) | 특정 광고·카테고리만 앱 화면 일부에 노출하는 플레이스먼트 뷰는 추후 제공될 예정입니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 사용 중이시면 담당자에게 알려 주세요 |
-| 광고 목록·상세 데이터 | 광고 목록과 상세는 오퍼월 화면이 직접 보여 주며, 앱으로 데이터를 넘기지 않습니다. 적립 가능 포인트 합계만 조회할 수 있습니다 — [Android](../android/total-point.md) · [iOS](../ios/total-point.md) |
+| 광고 목록·상세·지면 데이터 | 오퍼월의 광고 목록과 상세는 오퍼월 화면이 직접 보여 주며, 앱으로 데이터를 넘기지 않습니다. 플레이스먼트 뷰는 `dataOnly` 로 지면의 광고 목록(`adList`)을 앱에 넘길 수 있습니다. 오퍼월 전체의 적립 가능 포인트 합계는 따로 조회할 수 있습니다 — [Android](../android/total-point.md) · [iOS](../ios/total-point.md) |
 | 포인트 잔액 조회 · 아이템 구매 · 인출 | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 사용자 포인트는 [서버 보상 콜백](server-callback.md)으로 받은 값을 개발사 서버에서 직접 관리합니다. 사용자의 적립 내역은 오퍼월 화면의 '문의/내역' 메뉴에서 볼 수 있습니다 |
 | 화면 디자인 커스터마이징 (`TnkAdConfig` · `TnkStyle` 등) | 앱 코드로 오퍼월 디자인을 바꾸는 설정은 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
 | 뉴스·피드 삽입 (Android 네이티브 SDK 의 `loadWithNewsData` · `getEmbedAdList` · `getEmbedNewsList` · `getFeedPopup`) | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
@@ -68,6 +68,9 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 삽입형 `loadOfferwall` | 주소 없이 `loadOfferwall()` 만 호출해도 오퍼월을 불러옵니다 | 주소를 넘겨야 합니다. `loadOfferwall(buildOfferwallURL())` 처럼 호출하세요. `nil` 을 넘기면 오퍼월이 열리지 않고 다른 화면이 표시됩니다 |
 | 삽입형 `onCloseRequested` 미등록 | 닫기를 누르면 오퍼월을 담은 화면(Activity)이 종료됩니다 | 닫기를 눌러도 아무 일도 일어나지 않습니다 (전체 화면은 SDK 가 닫습니다) |
 | 삽입형 뷰 정리 | 화면 수명에 맞춰 자동으로 정리됩니다 | `cleanup()` 을 화면이 사라질 때(`deinit`) 한 번 호출합니다 |
+| 플레이스먼트 뷰 리스너 | `listener` (`TnkPlacementListener`) | `delegate` (`TnkPlacementViewDelegate`) — weak 참조 |
+| 플레이스먼트 뷰 접힘 알림 | `onHeightChanged(0)` 을 보내지 않음 | 광고 없음으로 바뀜·실패·새 `load`·`cleanup()` 때 `onHeightChanged(0)` 을 보냄. 두 플랫폼 모두 접힘은 `onLoaded`(`count` 0) 또는 `onFailed` 로 판단 |
+| 플레이스먼트 뷰 정리 | 화면 수명에 맞춰 자동 | 뷰 해제 때 자동, 먼저 정리하려면 `cleanup()` |
 
 시그니처 차이는 [Android 공개 API 목록](../android/api.md)의 'iOS 와 다른 점', [iOS 공개 API 목록](../ios/api.md)의 'Android 와 다른 점' 절을 참고하세요.
 
