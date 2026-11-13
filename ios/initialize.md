@@ -173,7 +173,7 @@ sdk.applicationStarted()
 
 현재 버전에서는 호출하지 않아도 오퍼월 표시와 보상 지급에 영향이 없습니다. 기존 코드를 옮기는 경우가 아니라면 생략해도 됩니다.
 
-기존 네이티브 SDK(`TnkRwdSdk2`)에서 `TnkSession.sharedInstance()?.applicationStarted()` 를 쓰셨다면,
+기존 네이티브(V3) SDK(`TnkRwdSdk2`)에서 `TnkSession.sharedInstance()?.applicationStarted()` 를 쓰셨다면,
 `TnkPpiHybSdk.shared.applicationStarted()` 로 바꿔 같은 위치에 두셔도 됩니다. `start()` 와 같은 메서드입니다.
 
 ---

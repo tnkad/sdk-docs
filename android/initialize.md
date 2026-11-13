@@ -190,7 +190,7 @@ TnkPpiHybSdk.start(applicationContext)
 현재 버전에서는 호출하지 않아도 오퍼월 표시와 보상 지급에 영향이 없습니다. 기존 코드를 옮기는 경우가 아니라면 생략해도 됩니다.
 다만 `start` 를 처음 호출하면 SDK 가 초기화되므로, 앱 ID 를 `init` 으로 넣는 앱은 `init` 다음에 호출하세요.
 
-기존 네이티브 SDK(`com.tnkfactory:rwd`)에서 `TnkSession.applicationStarted(context)` 를 쓰셨다면,
+기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)에서 `TnkSession.applicationStarted(context)` 를 쓰셨다면,
 `TnkPpiHybSdk.applicationStarted(context)` 로 클래스 이름만 바꿔 같은 위치에 두셔도 됩니다. `start(context)` 와 같은 메서드입니다.
 
 ```kotlin

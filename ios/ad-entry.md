@@ -76,9 +76,9 @@ sdk.adDetail(from: self, appId: 123456, actionId: 5)   // 구매형 광고
 
 ---
 
-## 기존 네이티브 SDK 와 다른 점
+## 기존 네이티브(V3) SDK 와 다른 점
 
-기존 네이티브 SDK(`TnkRwdSdk2`)의 `presentAdDetailView` / `adJoin` / `adAction` 에 대응합니다. 다음이 다릅니다.
+기존 네이티브(V3) SDK(`TnkRwdSdk2`)의 `presentAdDetailView` / `adJoin` / `adAction` 에 대응합니다. 다음이 다릅니다.
 
 - **호출 대상** — `TnkSession.sharedInstance()` 가 아니라 `TnkPpiHybSdk.shared` 에서 호출합니다. 상세 호출 이름은 `presentAdDetailView` 에서 `adDetail` 로 바뀌었습니다.
 - **결과 콜백 없음** — 성공·실패를 받는 `completion` 이 없습니다. 실패 안내는 오퍼월 화면이 직접 보여 줍니다.

@@ -1,6 +1,6 @@
 $schema: https://api.gitbook.com/gitbook-docs.yaml
 site:
-  title: 하이브리드 오퍼월 개발자센터
+  title: 하이브리드(V4) 오퍼월 개발자센터
   structure:
     - type: space
       key: sdk-docs

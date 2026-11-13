@@ -1,5 +1,5 @@
 ---
-description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(iOS)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 값 객체를 다룹니다.
+description: 개발사가 앱에서 직접 호출하는 하이브리드(V4) 오퍼월 SDK(iOS)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 값 객체를 다룹니다.
 ---
 
 # 공개 API 목록 (개발사 사용 API)
@@ -10,7 +10,7 @@ description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼�
 
 연동 중에 특정 메서드의 정확한 시그니처나 설정값별 동작을 확인할 때 찾아보는 참고 페이지입니다.
 처음 연동한다면 [3. 초기화](initialize.md)와 [4. 오퍼월 띄우기](offerwall.md)부터 읽으세요.
-기존 네이티브 SDK(`TnkRwdSdk2`)에서 옮기는 경우에는 [네이티브 SDK 에서 이관](migration.md)을 함께 참고하세요.
+기존 네이티브(V3) SDK(`TnkRwdSdk2`)에서 옮기는 경우에는 [네이티브(V3) SDK 에서 이관](migration.md)을 함께 참고하세요.
 
 이 페이지에 없는 클래스와 메서드는 개발사가 사용하도록 안내하는 대상이 아닙니다.
 필요한 기능이 목록에 없다면 담당자에게 문의해 주세요.
@@ -52,7 +52,7 @@ import TnkPpiHyb
 | `configure(appId: String)` | 앱 ID 로 초기화합니다(선택). `Info.plist` 에 `tnkad_app_id` 가 있으면 생략할 수 있습니다. **처음 한 번만, 다른 SDK 호출보다 먼저** 호출해야 적용됩니다. `Info.plist` 에 값이 있는데 다른 SDK 호출 뒤에 호출하면 무시됩니다 ([3. 초기화](initialize.md)) |
 | `configure(_ config: TnkPpiHybConfig)` | `TnkPpiHybConfig(appId: "발급받은-앱-아이디")` 를 넘기는 형태로, `configure(appId:)` 와 같은 동작입니다. 일반 연동에서는 `configure(appId:)` 를 사용하세요 |
 | `start()` | 앱 실행 신호(선택). 호출하지 않아도 오퍼월 표시와 보상 지급에는 영향이 없습니다 |
-| `applicationStarted()` | `start()` 와 같은 메서드입니다 (기존 네이티브 SDK 의 이름) |
+| `applicationStarted()` | `start()` 와 같은 메서드입니다 (기존 네이티브(V3) SDK 의 이름) |
 | `var isInitialized: Bool` | 초기화가 끝났으면 `true`. 이 호출은 초기화를 시작하지 않으므로, `Info.plist` 방식에서는 다른 SDK 호출 전에 `false` 일 수 있습니다 |
 | `enableLogging(_ enabled: Bool)` | 로그 켜기/끄기. 기본값은 `false` 입니다 |
 
@@ -68,7 +68,7 @@ import TnkPpiHyb
 | `revokePrivacyConsent()` | 개인정보 동의를 철회합니다. 파라미터·반환값이 없습니다. 호출 즉시 동의가 해제되고, 열려 있는 오퍼월은 첫 화면부터 다시 열려 동의 팝업을 보여 줍니다. 사용자가 철회하는 동작에서만 호출하세요. 반복·자동 호출은 금지입니다 (SDK 1.0.5 이상, [7. 개인정보 설정](privacy.md)의 '동의 철회' 항목) |
 | `setCOPPA(_ coppa: Int)` | 만 13세 미만 사용자 여부. 값별 동작은 아래 표 |
 | `setGDPR(_ gdpr: Int)` | GDPR 동의 여부. `Bool` 이 아니라 `Int` 를 받습니다. 값별 동작은 아래 표 |
-| `setUserAge(_ age: Int)` | 기존 네이티브 SDK 코드와의 호환을 위해 남겨 둔 메서드입니다. 호출해도 오류는 나지 않지만, 현재 버전에서는 오퍼월에 반영되지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| `setUserAge(_ age: Int)` | 기존 네이티브(V3) SDK 코드와의 호환을 위해 남겨 둔 메서드입니다. 호출해도 오류는 나지 않지만, 현재 버전에서는 오퍼월에 반영되지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
 | `setUserGender(_ gender: Int)` | 위와 같습니다. `TnkCode.MALE`(1) 또는 `TnkCode.FEMALE`(2) 를 넘깁니다 |
 
 #### 값별 동작
@@ -80,7 +80,7 @@ import TnkPpiHyb
 | `setAgreePrivacy` 를 호출하지 않음 | 오퍼월에 처음 들어갈 때 동의 팝업이 나오고, 사용자가 동의하면 이후에는 나오지 않습니다 |
 | `setCOPPA(1)` | 이 사용자를 만 13세 미만으로 서버에 알립니다. 다음에 여는 오퍼월부터 적용됩니다 |
 | `setCOPPA(0)` 또는 호출하지 않음 | 해당 없음으로 처리됩니다 (기본값) |
-| `setGDPR(1)` | 사용자가 GDPR 에 동의한 것으로 서버에 알립니다 (기존 네이티브 SDK 의 `setGDPRConsent(true)` 와 같은 값) |
+| `setGDPR(1)` | 사용자가 GDPR 에 동의한 것으로 서버에 알립니다 (기존 네이티브(V3) SDK 의 `setGDPRConsent(true)` 와 같은 값) |
 | `setGDPR(0)` | 사용자가 GDPR 에 동의하지 않은 것으로 알립니다 (기존 `setGDPRConsent(false)` 와 같은 값) |
 | `setGDPR` 를 호출하지 않음 | `0` 으로 전달됩니다. 즉 동의하지 않은 것으로 알립니다 |
 
@@ -106,7 +106,7 @@ import TnkPpiHyb
 
 ### 특정 광고 진입
 
-기존 네이티브 SDK 의 `presentAdDetailView` / `adJoin` / `adAction` 에 대응합니다 (Android 하이브리드와 같은 이름).
+기존 네이티브(V3) SDK 의 `presentAdDetailView` / `adJoin` / `adAction` 에 대응합니다 (Android 하이브리드(V4)와 같은 이름).
 `actionId` 는 기본 0, CPS(쇼핑) 광고만 5 를 지정합니다.
 결과 콜백은 없습니다. 광고 조회·참여와 오류 안내는 오퍼월 화면이 처리합니다.
 
@@ -118,7 +118,7 @@ import TnkPpiHyb
 
 ### 적립 가능 포인트 조회 (SDK 1.0.1 이상)
 
-기존 네이티브 SDK 의 `queryAdvertiseCount`(일반·구매형 합계)는 `getTotalPoint` 로 바꿀 수 있습니다 (SDK 1.0.6 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.1 이상에서 쓸 수 있습니다.
+기존 네이티브(V3) SDK 의 `queryAdvertiseCount`(일반·구매형 합계)는 `getTotalPoint` 로 바꿀 수 있습니다 (SDK 1.0.6 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.1 이상에서 쓸 수 있습니다.
 콜백은 **메인 스레드**로 옵니다. Android 에서도 같은 기능을 제공합니다 (`getTotalPoint` 는 Android SDK 1.0.16 이상, 나머지는 1.0.10 이상).
 
 | 시그니처 | 설명 |
@@ -355,8 +355,8 @@ public enum TnkCode {
 }
 ```
 
-> 기존 네이티브 SDK 의 호출 이름(`TnkSession`, `initInstance(appId:)` 등)으로 코드를 작성하면 컴파일 오류와 함께 새 이름이 안내됩니다.
-> 자세한 내용은 [네이티브 SDK 에서 이관](migration.md)을 참고하세요.
+> 기존 네이티브(V3) SDK 의 호출 이름(`TnkSession`, `initInstance(appId:)` 등)으로 코드를 작성하면 컴파일 오류와 함께 새 이름이 안내됩니다.
+> 자세한 내용은 [네이티브(V3) SDK 에서 이관](migration.md)을 참고하세요.
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-description: 하이브리드 오퍼월 SDK(Android) 버전별 변경 사항입니다. 개발사가 직접 보게 되는 동작 변화와 추가된 API 를 정리했습니다.
+description: 하이브리드(V4) 오퍼월 SDK(Android) 버전별 변경 사항입니다. 개발사가 직접 보게 되는 동작 변화와 추가된 API 를 정리했습니다.
 ---
 
 # 릴리스 노트
@@ -12,14 +12,14 @@ description: 하이브리드 오퍼월 SDK(Android) 버전별 변경 사항입�
 
 ## 1.0.17 — 2026-11-11
 
-- 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 플레이스먼트 뷰 `TnkPlacementView` · `TnkPlacementListener` 를 추가했습니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 이 뷰로 바꿀 수 있습니다 — [10. 플레이스먼트 뷰](placement.md). 기존 앱이 옮길 때 달라지는 점(추가·변경·빠진 것과 이유)은 그 페이지의 '기존 네이티브 SDK 에서 옮겨 오기'에 있습니다
+- 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 플레이스먼트 뷰 `TnkPlacementView` · `TnkPlacementListener` 를 추가했습니다. 기존 네이티브(V3) SDK 의 `AdPlacementView` 를 이 뷰로 바꿀 수 있습니다 — [10. 플레이스먼트 뷰](placement.md). 기존 앱이 옮길 때 달라지는 점(추가·변경·빠진 것과 이유)은 그 페이지의 '기존 네이티브(V3) SDK 에서 옮겨 오기'에 있습니다
 - 기존 `AdPlacementView` 에 있던 기능을 함께 제공합니다 — 클릭한 항목 이름(`onItemClicked` 의 `appName`), 접지 않고 다시 불러오기(`refresh()`, 기존 `update()` 대응), 지면 정보(`pubInfo`). 기존 iOS SDK 에만 있던 닫힘 알림(`onItemClosed`)과 항목 고르기(`filterIds`)도 추가했습니다
 - 지면 높이에 상한을 두는 `maxHeight`(dp)를 추가했습니다. 지면은 내용에 맞춰 늘어나다가 이 높이에서 멈추고 넘치면 지면 안에서 스크롤됩니다 — [10. 플레이스먼트 뷰](placement.md)의 '최대 높이'
 - 지면 테마를 고정하는 `theme`, 광고를 그리지 않고 목록만 받는 `dataOnly` · `adList`(참여 방식 설명 `actionDesc` 포함) · `getAdListJson()`, 코드로 항목 클릭을 실행하는 `clickItem(appId, onResult)` 를 추가했습니다 (기존 `getAdList()` · `onItemClick` 대응). 기존 `getAdListJson()` 을 쓰던 앱은 JSON 키 일부가, `onItemClick` 을 쓰던 앱은 결과 형식이 바뀝니다.
 
 ## 1.0.16 — 2026-10-28
 
-- 적립 가능 포인트 합계를 한 번에 받는 `getTotalPoint` 를 추가했습니다. 기존 네이티브 SDK `getEarnPoint` 를 이 함수 하나로 바꿀 수 있습니다. 기존 두 함수(`getAdvertiseTotalPoint` · `getProductTotalPoint`)는 그대로 쓸 수 있습니다 — [9. 적립 가능 포인트 조회](total-point.md)
+- 적립 가능 포인트 합계를 한 번에 받는 `getTotalPoint` 를 추가했습니다. 기존 네이티브(V3) SDK `getEarnPoint` 를 이 함수 하나로 바꿀 수 있습니다. 기존 두 함수(`getAdvertiseTotalPoint` · `getProductTotalPoint`)는 그대로 쓸 수 있습니다 — [9. 적립 가능 포인트 조회](total-point.md)
 
 ## 1.0.15 — 2026-10-20
 
@@ -41,7 +41,7 @@ description: 하이브리드 오퍼월 SDK(Android) 버전별 변경 사항입�
 
 ## 1.0.12 — 2026-10-06
 
-- SDK 1.0.10 이하와 기존 네이티브 SDK(`com.tnkfactory:rwd`)에서 저장된 동의는 동의로 유지되며, 오퍼월의 "개인 정보 수집 동의 해제" 메뉴로 철회할 수 있습니다 — [7. 개인정보 설정](privacy.md)
+- SDK 1.0.10 이하와 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)에서 저장된 동의는 동의로 유지되며, 오퍼월의 "개인 정보 수집 동의 해제" 메뉴로 철회할 수 있습니다 — [7. 개인정보 설정](privacy.md)
 - 앱을 재설치하거나 데이터를 복원한 뒤에도, 오퍼월의 동의 팝업 표시 여부가 앱의 동의 상태(`isAgreePrivacy`)와 일치하도록 개선했습니다 — [7. 개인정보 설정](privacy.md)
 - `setAgreePrivacy(context, true)` 로 설정한 경우에만 오퍼월의 동의 팝업과 "동의 해제" 메뉴가 노출되지 않습니다. 이 버전에서는 앱 시작 시마다 `setUserName` 다음에 호출하도록 안내했습니다. **현재 기준:** 앱에서 동의를 직접 받은 사용자에게만 `true` 로 설정하세요. 동의를 철회한 사용자에게 다시 `true` 로 설정하면 철회가 취소됩니다(SDK 1.0.14 이상) — [7. 개인정보 설정](privacy.md)의 '동의 철회' 항목
 
@@ -70,4 +70,4 @@ description: 하이브리드 오퍼월 SDK(Android) 버전별 변경 사항입�
 - 보상 지급 완료 알림(`setRewardListener`) · 범용 이벤트 수신(`setEventListener`)
 - `tnkscheme://` 딥링크(`handleScheme`)
 - 개인정보 동의 · COPPA · GDPR 설정
-- 기존 네이티브 SDK(`com.tnkfactory:rwd`)의 `TnkSession` 과 같은 이름의 메서드를 `TnkPpiHybSdk` 로 제공 — [네이티브 SDK 에서 이관](migration.md)
+- 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)의 `TnkSession` 과 같은 이름의 메서드를 `TnkPpiHybSdk` 로 제공 — [네이티브(V3) SDK 에서 이관](migration.md)

@@ -12,7 +12,7 @@ description: 매니페스트에 넣을 tnkad_app_id 와 딥링크 인텐트 필�
 
 - **앱 ID** — 모든 Android 개발사에게 필요합니다(필수).
 - **딥링크 인텐트 필터** — `tnkscheme://` 링크를 앱 밖(웹 페이지 등)에서 받을 때만 필요합니다(선택).
-- **`AdWallActivity` 선언 제거** — 기존 네이티브 SDK(`com.tnkfactory:rwd`)를 쓰던 개발사에게만 해당합니다.
+- **`AdWallActivity` 선언 제거** — 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)를 쓰던 개발사에게만 해당합니다.
 
 ---
 
@@ -108,17 +108,17 @@ class MyApplication : Application() {
 | 권한 | `com.google.android.gms.permission.AD_ID` | 광고 ID 조회 (`targetSdk` 33 이상 앱에 필요) |
 | `<queries>` | `ACTION_MAIN` / `CATEGORY_LAUNCHER` | 광고 앱 설치 여부 확인 (Android 11+ 패키지 가시성) |
 | Activity | `com.tnkfactory.ad.hrwd.webview.TnkOfferwallActivity` | 전체 화면으로 여는 오퍼월 화면 |
-| activity-alias | `com.tnkfactory.ad.AdWallActivity` | 기존 네이티브 SDK 에서 쓰던 화면 이름을 받아 주는 연결 항목 |
+| activity-alias | `com.tnkfactory.ad.AdWallActivity` | 기존 네이티브(V3) SDK 에서 쓰던 화면 이름을 받아 주는 연결 항목 |
 
 > ⚠️ 위 Activity 를 앱 매니페스트에서 같은 이름으로 **다른 속성값**으로 다시 선언하지 마세요. 속성값이 서로 다르면 병합 충돌로 빌드가 실패할 수 있습니다.
 
 > ✅ **`QUERY_ALL_PACKAGES` 는 사용하지 않습니다.**
 > 설치앱 확인은 `<queries>` 의 런처 인텐트 가시성만으로 처리하므로 Google Play 의 민감 권한 심사 대상이 아닙니다.
 
-> ⚠️ **기존 네이티브 SDK 를 사용 중인 개발사는** 매니페스트에 직접 선언해 둔
+> ⚠️ **기존 네이티브(V3) SDK 를 사용 중인 개발사는** 매니페스트에 직접 선언해 둔
 > `<activity android:name="com.tnkfactory.ad.AdWallActivity" ... />` 를 **제거해 주세요.**
 > 해당 화면은 이제 SDK 가 자동으로 연결하므로, 기존 선언이 남아 있으면 빌드 오류나 화면 충돌이 생길 수 있습니다.
-> 자세한 내용은 [네이티브 SDK 에서 이관](migration.md)을 참고하세요.
+> 자세한 내용은 [네이티브(V3) SDK 에서 이관](migration.md)을 참고하세요.
 
 ### Google Play 에 앱을 제출할 때
 

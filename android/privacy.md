@@ -155,14 +155,14 @@ Android SDK 1.0.14 이상입니다. `context` 외에 넘길 값은 없고, 반�
 
 기존 방식인 `TnkOfferwall(context).setUserName(...)` 도 같습니다.
 
-**기존 네이티브 SDK(`com.tnkfactory:rwd`)에서 받은 동의**는 사용자 식별값이 같을 때만 이어집니다.
+**기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)에서 받은 동의**는 사용자 식별값이 같을 때만 이어집니다.
 
-| 하이브리드 SDK 의 `setUserName` 에 넘긴 값 | 기존 동의 | 사용자가 보는 것 |
+| 하이브리드(V4) SDK 의 `setUserName` 에 넘긴 값 | 기존 동의 | 사용자가 보는 것 |
 |---|---|---|
 | 기존 SDK 에서 쓰던 **같은 사용자 식별값** | 유지 | 동의 팝업이 다시 나오지 않습니다 |
 | 다른 식별값, 또는 기존 SDK 에서 식별값을 지정하지 않았던 경우 | 첫 `setUserName` 에서 초기화 | 다음에 오퍼월에 들어갈 때 동의 팝업이 나옵니다 |
 
-> ⚠️ 기존 SDK 에서 앱이 직접 동의를 받아 `setAgreePrivacy` 를 썼다면, 하이브리드 SDK 에서도 `setUserName` 다음에 `setAgreePrivacy(context, true)` 를 호출하세요. 호출하지 않으면 동의는 유지되지만 오퍼월에 '개인 정보 수집 동의 해제' 메뉴가 나타납니다.
+> ⚠️ 기존 SDK 에서 앱이 직접 동의를 받아 `setAgreePrivacy` 를 썼다면, 하이브리드(V4) SDK 에서도 `setUserName` 다음에 `setAgreePrivacy(context, true)` 를 호출하세요. 호출하지 않으면 동의는 유지되지만 오퍼월에 '개인 정보 수집 동의 해제' 메뉴가 나타납니다.
 
 ---
 
@@ -192,7 +192,7 @@ TnkPpiHybSdk.setGDPR(context, 1)    // 1 = 동의함
 
 | 값 | 의미 |
 |---|---|
-| `1` | 동의함. 기존 네이티브 SDK 의 `setGdprConsent(context, true)` 와 같은 값입니다 |
+| `1` | 동의함. 기존 네이티브(V3) SDK 의 `setGdprConsent(context, true)` 와 같은 값입니다 |
 | `0` | 동의하지 않음. 기존 `setGdprConsent(context, false)` 와 같은 값입니다 |
 | `-1` | 지정하지 않음 |
 | 호출하지 않음 | Android 는 `-1`(지정하지 않음)로 처리됩니다 |
@@ -210,7 +210,7 @@ TnkPpiHybSdk.setGDPR(context, 1)    // 1 = 동의함
 | Android SDK | 달라지는 점 |
 |---|---|
 | 1.0.13 이하 | `revokePrivacyConsent` 가 없습니다. 철회는 `setAgreePrivacy(context, false)` 로 저장만 하며, 열려 있는 오퍼월에는 반영되지 않습니다 |
-| 1.0.11 이하 | SDK 에 저장된 동의를 기준으로 팝업 여부를 정하는 동작이 1.0.12 부터라서, `setAgreePrivacy(context, false)` 와 기존 네이티브 SDK 에서 받은 동의의 화면 표시가 위 표와 다를 수 있습니다 |
+| 1.0.11 이하 | SDK 에 저장된 동의를 기준으로 팝업 여부를 정하는 동작이 1.0.12 부터라서, `setAgreePrivacy(context, false)` 와 기존 네이티브(V3) SDK 에서 받은 동의의 화면 표시가 위 표와 다를 수 있습니다 |
 | 1.0.10 이하 | 오퍼월에서 한 동의·거부가 `isAgreePrivacy` 에 반영되지 않고, `setUserName` 값이 바뀌어도 동의 상태가 초기화되지 않습니다 |
 
 가능하면 최신 버전을 사용하세요.

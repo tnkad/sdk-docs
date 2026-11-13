@@ -218,9 +218,9 @@ TnkPpiHybSdk.openOfferwall(this, extraParams = mapOf("theme" to "light"))   // "
 
 ---
 
-## 기존 네이티브 SDK 코드로 여는 경우
+## 기존 네이티브(V3) SDK 코드로 여는 경우
 
-기존 네이티브 SDK(`com.tnkfactory:rwd`)의 `TnkOfferwall` 인스턴스 방식 가운데 `setUserName`·`setCOPPA`·`startOfferwallActivity` 는 그대로 쓸 수 있습니다. `import` 를 바꾸세요.
+기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)의 `TnkOfferwall` 인스턴스 방식 가운데 `setUserName`·`setCOPPA`·`startOfferwallActivity` 는 그대로 쓸 수 있습니다. `import` 를 바꾸세요.
 
 ```diff
 - import com.tnkfactory.ad.TnkOfferwall
@@ -245,7 +245,7 @@ offerwall.setCOPPA(false);
 offerwall.startOfferwallActivity(this);
 ```
 
-`startOfferwallActivity` 는 전체 화면으로 열기(`openOfferwall`)와 같습니다. 새로 연동한다면 `openOfferwall` 을 권장합니다. 오퍼월 목록 화면을 직접 그리던 기능(`getAdListView` 등)은 오퍼월 화면으로 대체되었습니다 — [네이티브 SDK 에서 이관](migration.md)
+`startOfferwallActivity` 는 전체 화면으로 열기(`openOfferwall`)와 같습니다. 새로 연동한다면 `openOfferwall` 을 권장합니다. 오퍼월 목록 화면을 직접 그리던 기능(`getAdListView` 등)은 오퍼월 화면으로 대체되었습니다 — [네이티브(V3) SDK 에서 이관](migration.md)
 
 ---
 

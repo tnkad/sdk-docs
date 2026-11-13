@@ -1,14 +1,14 @@
 ---
-description: 기존 네이티브 오퍼월 SDK(com.tnkfactory:rwd)에서 하이브리드 SDK 로 옮기는 방법을 의존성·초기화·화면 안에 넣기·포인트 조회·개인정보 동의·특정 광고 진입 패턴별 전/후 코드와 전체 API 대조표로 안내합니다.
+description: 기존 네이티브(V3) 오퍼월 SDK(com.tnkfactory:rwd)에서 하이브리드(V4) SDK 로 옮기는 방법을 의존성·초기화·화면 안에 넣기·포인트 조회·개인정보 동의·특정 광고 진입 패턴별 전/후 코드와 전체 API 대조표로 안내합니다.
 ---
 
-# 네이티브 SDK 에서 이관
+# 네이티브(V3) SDK 에서 이관
 
-이 페이지에서 하는 일: 기존 네이티브 SDK(`com.tnkfactory:rwd`)를 쓰는 앱을 하이브리드 SDK(`com.tnkfactory.ad:hrwd`)로 옮깁니다. 바꿀 코드를 전/후 비교로 보여 드립니다.
+이 페이지에서 하는 일: 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)를 쓰는 앱을 하이브리드(V4) SDK(`com.tnkfactory.ad:hrwd`)로 옮깁니다. 바꿀 코드를 전/후 비교로 보여 드립니다.
 
 ## 언제 필요한가
 
-기존 네이티브 SDK 를 이미 쓰고 있는 개발사에게만 필요합니다. 신규 연동이라면 이 페이지는 건너뛰고 [연동 가이드](README.md)부터 시작하세요.
+기존 네이티브(V3) SDK 를 이미 쓰고 있는 개발사에게만 필요합니다. 신규 연동이라면 이 페이지는 건너뛰고 [연동 가이드](README.md)부터 시작하세요.
 
 iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보세요. 오퍼월 화면은 Android·iOS 가 같습니다.
 
@@ -22,7 +22,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
 | **바뀜** | 라이브러리 좌표와 import 경로, 호출 대상(`TnkSession`·`TnkOfferwall` → `TnkPpiHybSdk`), 화면 안에 넣기(`getAdListView` → `TnkOfferwallView`), 플레이스먼트 뷰(`AdPlacementView` → `TnkPlacementView`, SDK 1.0.17 이상. `update()` → `refresh()`, `onItemClick` → `clickItem` 등), 적립 가능 포인트 조회, 개인정보 동의 호출, 특정 광고 진입(결과 콜백 없음) |
 | **빠짐** | 오퍼월 디자인 설정(`TnkAdConfig`·`TnkStyle`), 오퍼월 광고 목록 데이터 직접 조회, 사용자 포인트 잔액 조회·구매·인출 등 (지면의 광고 목록은 `dataOnly` · `adList` 로 받을 수 있습니다. 패턴 10) |
 
-> ⚠️ **TNK 서버에 사용자 포인트 관리를 맡긴 앱**(`queryPoint`·`purchaseItem`·`withdrawPoints` 사용)은 이관 전에 담당자에게 문의해 주세요. 하이브리드 오퍼월에는 잔액 조회·구매·인출 화면이 없어 현재 미제공입니다. 하이브리드 SDK 에서는 [서버 보상 콜백](../common/server-callback.md)으로 받은 포인트를 개발사 서버에서 관리합니다.
+> ⚠️ **TNK 서버에 사용자 포인트 관리를 맡긴 앱**(`queryPoint`·`purchaseItem`·`withdrawPoints` 사용)은 이관 전에 담당자에게 문의해 주세요. 하이브리드(V4) 오퍼월에는 잔액 조회·구매·인출 화면이 없어 현재 미제공입니다. 하이브리드(V4) SDK 에서는 [서버 보상 콜백](../common/server-callback.md)으로 받은 포인트를 개발사 서버에서 관리합니다.
 
 ### 이관 순서
 
@@ -46,13 +46,13 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
 
 ## 패턴별 전/후
 
-각 패턴은 "무엇이 바뀌나" 한 줄과 전/후 코드로 되어 있습니다. `-` 줄은 기존 네이티브 SDK 코드, `+` 줄은 하이브리드 SDK 코드입니다.
+각 패턴은 "무엇이 바뀌나" 한 줄과 전/후 코드로 되어 있습니다. `-` 줄은 기존 네이티브(V3) SDK 코드, `+` 줄은 하이브리드(V4) SDK 코드입니다.
 
 ### 패턴 1. 의존성·빌드 설정
 
 **무엇이 바뀌나:** 라이브러리 좌표가 바뀝니다. Maven 저장소 주소는 그대로 쓰면 됩니다. 빌드 요구사항(`minSdk` 21 이상, `compileSdk` 35 이상 등)은 [1. 설치](install.md)를 확인하세요.
 
-> ⚠️ 의존성은 추가가 아니라 **교체**입니다. 기존 `com.tnkfactory:rwd` 는 지우세요. 기존 SDK 와 하이브리드 SDK 를 한 앱에 함께 두는 구성은 확인되지 않았습니다. 일부 화면을 기존 SDK 로 유지해야 한다면 이관 전에 담당자에게 문의해 주세요. (`AdPlacementView` 는 `TnkPlacementView` 로 바꿀 수 있습니다. 패턴 9) 지운 뒤 컴파일 오류가 나는 곳은 아래 패턴과 '전체 API 대조표'로 바꾸면 됩니다.
+> ⚠️ 의존성은 추가가 아니라 **교체**입니다. 기존 `com.tnkfactory:rwd` 는 지우세요. 기존 SDK 와 하이브리드(V4) SDK 를 한 앱에 함께 두는 구성은 확인되지 않았습니다. 일부 화면을 기존 SDK 로 유지해야 한다면 이관 전에 담당자에게 문의해 주세요. (`AdPlacementView` 는 `TnkPlacementView` 로 바꿀 수 있습니다. 패턴 9) 지운 뒤 컴파일 오류가 나는 곳은 아래 패턴과 '전체 API 대조표'로 바꾸면 됩니다.
 
 ```diff
  // settings.gradle.kts — 저장소는 그대로 사용합니다
@@ -73,11 +73,11 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
 ```
 
 - `-` 줄의 버전 숫자는 예시입니다. 쓰고 계신 값과 달라도 같은 줄을 지우면 됩니다. `+` 줄에는 최신 버전을 쓰세요. 최신 버전은 [릴리스 노트](changelog.md)에서 확인할 수 있습니다.
-- 포인트 스토어(`com.tnkfactory:rwd_store`)와 그 밖의 보조 라이브러리(`com.tnkfactory:tnk_rwd_toss` 등)는 현재 하이브리드 SDK 에서 제공하지 않습니다. 쓰고 있다면 지우기 전에 담당자에게 문의해 주세요.
+- 포인트 스토어(`com.tnkfactory:rwd_store`)와 그 밖의 보조 라이브러리(`com.tnkfactory:tnk_rwd_toss` 등)는 현재 하이브리드(V4) SDK 에서 제공하지 않습니다. 쓰고 있다면 지우기 전에 담당자에게 문의해 주세요.
 
 ### 패턴 2. 매니페스트
 
-**무엇이 바뀌나:** 네이티브 SDK 가이드에 따라 직접 선언했던 오퍼월 화면(`AdWallActivity`)이 필요 없어집니다. 선언을 삭제하세요. 앱 ID 선언은 그대로 둡니다.
+**무엇이 바뀌나:** 네이티브(V3) SDK 가이드에 따라 직접 선언했던 오퍼월 화면(`AdWallActivity`)이 필요 없어집니다. 선언을 삭제하세요. 앱 ID 선언은 그대로 둡니다.
 
 ```diff
  <application ...>
@@ -97,9 +97,9 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
  </application>
 ```
 
-- 하이브리드 SDK 는 오퍼월 화면을 직접 등록합니다. `INTERNET` 같은 권한도 SDK 가 포함하므로 따로 선언하지 않아도 되고, 이미 선언돼 있어도 문제없습니다. 자세한 내용은 [2. AndroidManifest 설정](manifest.md)을 보세요.
-- 기존 매니페스트에 `tnkad_tracking` meta-data 가 있다면 남겨두셔도 무해합니다. 하이브리드 SDK 에서는 이 값이 동작에 반영되지 않습니다. 이 값으로 분석 리포트를 쓰셨다면 담당자에게 문의해 주세요.
-- 코드에서 `AdWallActivity.start(context)` 나 `AdWallActivity::class.java` 로 오퍼월을 열었다면 `TnkPpiHybSdk.openOfferwall(context)` 로 바꿔야 합니다. 하이브리드 SDK 에는 `AdWallActivity` 클래스가 없어서 이런 코드는 컴파일되지 않습니다.
+- 하이브리드(V4) SDK 는 오퍼월 화면을 직접 등록합니다. `INTERNET` 같은 권한도 SDK 가 포함하므로 따로 선언하지 않아도 되고, 이미 선언돼 있어도 문제없습니다. 자세한 내용은 [2. AndroidManifest 설정](manifest.md)을 보세요.
+- 기존 매니페스트에 `tnkad_tracking` meta-data 가 있다면 남겨두셔도 무해합니다. 하이브리드(V4) SDK 에서는 이 값이 동작에 반영되지 않습니다. 이 값으로 분석 리포트를 쓰셨다면 담당자에게 문의해 주세요.
+- 코드에서 `AdWallActivity.start(context)` 나 `AdWallActivity::class.java` 로 오퍼월을 열었다면 `TnkPpiHybSdk.openOfferwall(context)` 로 바꿔야 합니다. 하이브리드(V4) SDK 에는 `AdWallActivity` 클래스가 없어서 이런 코드는 컴파일되지 않습니다.
 
 ### 패턴 3. 초기화 + 사용자 + 오퍼월 열기
 
@@ -146,7 +146,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
 - 사용자 식별값 설정은 필수입니다. 로그인 후처럼 사용자를 알 수 있는 시점에 호출하세요.
 - `TnkAdConfig.*`·`TnkStyle.*` 같은 오퍼월 디자인 설정 줄은 import 와 함께 지웁니다 (위 diff 의 `pointEffectType` 은 예시입니다). 오퍼월 안의 포인트 표시(아이콘·단위)는 앱 코드로 정하지 않고 오퍼월 화면이 표시합니다. 기존과 같은 표시가 필요하면 담당자에게 요청해 주세요 — 아래 '디자인 설정' 표.
 - `openOfferwall` 은 버튼 처리처럼 메인 스레드에서 호출하세요. 코루틴 안에서 열던 기존 코드의 `withContext(Dispatchers.Main) { … }` 는 그대로 두면 됩니다. `context` 에는 지금 보이는 화면의 Activity 를 넘기는 것을 권장하며, `applicationContext` 처럼 Activity 가 아닌 `Context` 를 넘겨도 열립니다.
-- 광고 ID 는 오퍼월을 열 때 SDK 가 알아서 준비하므로 따로 조회하지 않아도 됩니다. 네이티브 샘플처럼 광고 ID 를 사용자 식별값으로 쓰셨다면 회원 ID 같은 고정 값으로 바꿔 주세요. 광고 ID 를 삭제했거나 Google Play 서비스가 없는 기기에서는 광고 ID 를 받을 수 없어, 사용자 식별값이 설정되지 않고 보상을 구분할 수 없습니다. 바꾸기 어렵다면 담당자에게 문의해 주세요.
+- 광고 ID 는 오퍼월을 열 때 SDK 가 알아서 준비하므로 따로 조회하지 않아도 됩니다. 네이티브(V3) 샘플처럼 광고 ID 를 사용자 식별값으로 쓰셨다면 회원 ID 같은 고정 값으로 바꿔 주세요. 광고 ID 를 삭제했거나 Google Play 서비스가 없는 기기에서는 광고 ID 를 받을 수 없어, 사용자 식별값이 설정되지 않고 보상을 구분할 수 없습니다. 바꾸기 어렵다면 담당자에게 문의해 주세요.
 
 **빠른 이관:** `TnkOfferwall(this)` 코드를 그대로 두고 싶다면 import 만 `com.tnkfactory.ad.hrwd.TnkOfferwall` 로 바꿔도 `setUserName`·`setCOPPA`·`startOfferwallActivity` 는 동작합니다. 이때 `startOfferwallActivity` 에는 Activity 를 넘겨야 합니다(Fragment 에서는 `requireActivity()`). 그 밖의 인스턴스 메서드(`applicationStarted`·`setUserAge`·`getEarnPoint`·`adDetail` 등)는 없으므로 `TnkPpiHybSdk` 로 옮기는 것을 권장합니다.
 
@@ -205,7 +205,7 @@ offerwallView.loadOfferwall(extraParams = mapOf("hideHeader" to "1"))
 
 ### 패턴 5. 포인트 조회
 
-**무엇이 바뀌나:** 기존 `getEarnPoint` 는 일반 광고와 구매형 광고의 합계를 한 숫자로 돌려줬습니다. 하이브리드 SDK 1.0.16 이상에서는 `getTotalPoint` 하나로 같은 합계를 한 번에 받습니다.
+**무엇이 바뀌나:** 기존 `getEarnPoint` 는 일반 광고와 구매형 광고의 합계를 한 숫자로 돌려줬습니다. 하이브리드(V4) SDK 1.0.16 이상에서는 `getTotalPoint` 하나로 같은 합계를 한 번에 받습니다.
 
 ```diff
 -tnkOfferwall.getEarnPoint { point ->
@@ -259,7 +259,7 @@ TnkPpiHybSdk.getAdvertiseTotalPoint(this) { ppi ->
 - 호출 방법과 결과 값별 동작은 [9. 적립 가능 포인트 조회](total-point.md)에 정리되어 있습니다.
 - 합계 계산 방식은 SDK 마다 다를 수 있으니, 이관 후 화면에 표시된 값을 한 번 확인해 주세요.
 - 로그아웃 후 다른 계정으로 로그인하는 앱은 `setUserName` 다음에 `clearApiSession()` 을 호출하세요 — [3. 초기화](initialize.md)
-- 사용자가 이미 적립한 **잔액** 조회(`queryPoint`)·아이템 구매(`purchaseItem`)·전체 인출(`withdrawPoints`)은 현재 하이브리드 SDK 에서 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요.
+- 사용자가 이미 적립한 **잔액** 조회(`queryPoint`)·아이템 구매(`purchaseItem`)·전체 인출(`withdrawPoints`)은 현재 하이브리드(V4) SDK 에서 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요.
 
 ```diff
 -TnkSession.queryPoint(this, object : ServiceCallback() {
@@ -293,26 +293,26 @@ TnkPpiHybSdk.getAdvertiseTotalPoint(this) { ppi ->
 +TnkPpiHybSdk.revokePrivacyConsent(applicationContext)   // 사용자가 앱에서 '동의 철회' 를 눌렀을 때만 호출
 ```
 
-기존에는 `setAgreePrivacy(…, false)` 로 철회까지 처리했지만, 하이브리드에서는 열려 있는 오퍼월까지 갱신하는 `revokePrivacyConsent` 를 씁니다.
+기존에는 `setAgreePrivacy(…, false)` 로 철회까지 처리했지만, 하이브리드(V4)에서는 열려 있는 오퍼월까지 갱신하는 `revokePrivacyConsent` 를 씁니다.
 
 값별 동작(`setAgreePrivacy` 의 `true`·`false`·호출하지 않음, `revokePrivacyConsent` 호출 전·후, `setUserName` 과 동의 상태)과 화면 예시는 [7. 개인정보 설정](privacy.md)의 '값별 동작' 항목에 있습니다. 이관할 때는 아래 세 가지를 지켜 주세요.
 
-- **`setUserName` → `setAgreePrivacy` 순서로 호출하세요.** 사용자 식별값이 바뀌면(최초 지정 포함) 동의 상태가 초기화됩니다. 기존 네이티브 SDK 와 같은 규칙입니다.
+- **`setUserName` → `setAgreePrivacy` 순서로 호출하세요.** 사용자 식별값이 바뀌면(최초 지정 포함) 동의 상태가 초기화됩니다. 기존 네이티브(V3) SDK 와 같은 규칙입니다.
 - **철회에는 `setAgreePrivacy(context, false)` 를 쓰지 마세요.** 저장된 값만 바뀌고 이미 열려 있는 오퍼월은 그대로입니다. 열려 있는 오퍼월까지 첫 화면부터 다시 열어 동의 팝업을 보여 주는 것은 `revokePrivacyConsent` 입니다.
 - **`revokePrivacyConsent` 는 사용자의 철회 동작에서만 호출하세요.** 앱 시작이나 `onResume` 에서 호출하면 오퍼월이 그때마다 첫 화면으로 돌아갑니다. 철회한 뒤 `setAgreePrivacy(context, true)` 를 다시 호출하면 철회가 취소됩니다.
 
-**기존 네이티브 SDK 에서 받은 동의** (Android SDK 1.0.12 이상)
+**기존 네이티브(V3) SDK 에서 받은 동의** (Android SDK 1.0.12 이상)
 
-| 하이브리드 SDK 의 `setUserName` 에 넘긴 값 | 기존 동의 | 사용자가 보는 것 |
+| 하이브리드(V4) SDK 의 `setUserName` 에 넘긴 값 | 기존 동의 | 사용자가 보는 것 |
 |---|---|---|
 | 기존 SDK 에서 쓰던 **같은 사용자 식별값** | 유지 | 동의 팝업이 다시 나오지 않습니다 |
 | 다른 값, 또는 기존 SDK 에서 식별값을 지정하지 않았던 경우 | 첫 `setUserName` 에서 초기화 | 다음에 오퍼월에 들어갈 때 동의 팝업이 나옵니다 |
 
-> ⚠️ 기존 SDK 에서 앱이 직접 동의를 받아 `setAgreePrivacy` 를 썼다면, 하이브리드 SDK 에서도 `setUserName` 다음에 `setAgreePrivacy(context, true)` 를 호출하세요. 호출하지 않으면 동의는 유지되지만 오퍼월에 "개인 정보 수집 동의 해제" 메뉴가 나타납니다.
+> ⚠️ 기존 SDK 에서 앱이 직접 동의를 받아 `setAgreePrivacy` 를 썼다면, 하이브리드(V4) SDK 에서도 `setUserName` 다음에 `setAgreePrivacy(context, true)` 를 호출하세요. 호출하지 않으면 동의는 유지되지만 오퍼월에 "개인 정보 수집 동의 해제" 메뉴가 나타납니다.
 
 **COPPA·GDPR 값 대응**
 
-| 기존 네이티브 SDK | 하이브리드 SDK |
+| 기존 네이티브(V3) SDK | 하이브리드(V4) SDK |
 |---|---|
 | `setCOPPA(true)` / `setCOPPA(false)` | `TnkPpiHybSdk.setCOPPA(context, true)` / `setCOPPA(context, false)` — 값은 그대로입니다 |
 | `setGdprConsent(context, true)` / `(context, false)` | `TnkPpiHybSdk.setGDPR(context, 1)` / `setGDPR(context, 0)` |
@@ -337,7 +337,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 세 호출 모두 오퍼월을 전체 화면으로 엽니다. 동의 전이면 동의 팝업이 먼저 나오고, 동의하면 해당 광고로 진입합니다(거부하면 진입하지 않습니다). 닫았을 때 사용자가 보는 화면이 다릅니다.
 
-| 메서드 | 기존 네이티브 SDK 에서 닫으면 | 하이브리드 SDK 에서 닫으면 |
+| 메서드 | 기존 네이티브(V3) SDK 에서 닫으면 | 하이브리드(V4) SDK 에서 닫으면 |
 |---|---|---|
 | `adDetail` | 개발사 화면으로 돌아옵니다. | 개발사 화면으로 돌아옵니다 (같음) |
 | `adJoin` | 광고 페이지에서 돌아오면 개발사 화면이 보입니다. | 광고 페이지에서 돌아오면 **오퍼월 첫 화면**이 보입니다 (달라짐) |
@@ -410,7 +410,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
  }
 ```
 
-| 기존 네이티브 SDK | 하이브리드 SDK |
+| 기존 네이티브(V3) SDK | 하이브리드(V4) SDK |
 |---|---|
 | `PlacementEventListener` | `TnkPlacementListener` (Java 는 `TnkPlacementListenerAdapter`) |
 | `didAdDataLoaded(placementId, customData)` | `onLoaded(placementId, count, customData)` — `count` 가 추가되었고 `customData` 는 null 이 아니며 없으면 빈 문자열입니다. 이 콜백에서 `showAdList()` 를 부를 필요가 없습니다 |
@@ -426,7 +426,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 옮길 때 자주 놓치는 것은 다음과 같습니다.
 
-- **높이를 고정했던 컨테이너**: 기존 예제처럼 컨테이너에 맞춰 크기를 고정하거나 기본 LayoutParams 로 추가하면 하이브리드 SDK 에서는 고정 높이로 동작해 내용이 잘리거나 빈 공간이 생깁니다. 높이를 `wrap_content` 로 바꾸세요.
+- **높이를 고정했던 컨테이너**: 기존 예제처럼 컨테이너에 맞춰 크기를 고정하거나 기본 LayoutParams 로 추가하면 하이브리드(V4) SDK 에서는 고정 높이로 동작해 내용이 잘리거나 빈 공간이 생깁니다. 높이를 `wrap_content` 로 바꾸세요.
 - **미리 불러 두고 나중에 보여 주던 코드**: `load` 는 불러오기와 표시를 함께 하고, 뷰 자체를 숨겨도 SDK 가 다시 펼칩니다. 감싼 뷰를 숨겨 두었다가 보여 주세요. 데이터만 필요하면 패턴 10 을 보세요.
 - **`customData` 로 레이아웃을 고르던 코드**: 같은 `load` 안에서는 레이아웃을 바꿀 수 없습니다. `onLoaded` 의 `customData` 를 저장해 두었다가 다음 `load` 전에 `layoutKey` 로 쓰세요. (`onLoaded` 에서 `layoutKey` 를 바꾸고 `load` 를 다시 부르면 지면이 접혔다 펼쳐지고 서버 조회와 노출 기록이 한 번 더 생깁니다.)
 - **지면 ID**: 같은 앱에 등록된 지면 ID 는 그대로 씁니다. 오래 전에 만든 지면이 보이지 않으면 담당자에게 확인해 주세요.
@@ -435,11 +435,11 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 - **숨긴 채 불러오던 코드**: 감싼 뷰를 숨긴 채 `load` 했다면 `onLoaded` 가 오는지, 보여 준 뒤 높이가 내용에 맞는지를 실기기에서 확인하세요. 노출 수가 중요하면 보여 주기 직전에 `load` 를 호출하세요.
 - **설치 보상 시점**: 광고를 설치한 뒤 받는 보상은 지면이 아니라 오퍼월에 들어갈 때 처리됩니다. 오퍼월로 들어가는 길(더보기 등)을 남겨 두세요.
 
-모든 대응(추가·변경·빠진 것과 이유)은 [10. 플레이스먼트 뷰](placement.md)의 '기존 네이티브 SDK 에서 옮겨 오기' 표에 있습니다. 사용 방법과 높이·실패 코드·화면 종료 처리도 그 페이지를 보세요.
+모든 대응(추가·변경·빠진 것과 이유)은 [10. 플레이스먼트 뷰](placement.md)의 '기존 네이티브(V3) SDK 에서 옮겨 오기' 표에 있습니다. 사용 방법과 높이·실패 코드·화면 종료 처리도 그 페이지를 보세요.
 
 ### 패턴 10. 지면 광고 목록으로 직접 화면을 그리던 앱
 
-**무엇이 바뀌나:** 기존 네이티브 SDK 의 `getAdList()` · `adList` · `getAdListJson()` · `onItemClick(appId, onResult)` 로 지면 광고를 받아 직접 UI 를 그리던 앱은 `dataOnly` 로 데이터만 받고 `adList` 와 `clickItem` 을 씁니다. Android SDK 1.0.17 이상에서 사용할 수 있습니다.
+**무엇이 바뀌나:** 기존 네이티브(V3) SDK 의 `getAdList()` · `adList` · `getAdListJson()` · `onItemClick(appId, onResult)` 로 지면 광고를 받아 직접 UI 를 그리던 앱은 `dataOnly` 로 데이터만 받고 `adList` 와 `clickItem` 을 씁니다. Android SDK 1.0.17 이상에서 사용할 수 있습니다.
 
 ```diff
 -adPlacementView.placementEventListener = object : PlacementEventListener {
@@ -467,7 +467,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 +}
 ```
 
-| 기존 네이티브 SDK | 하이브리드 SDK |
+| 기존 네이티브(V3) SDK | 하이브리드(V4) SDK |
 |---|---|
 | `loadAdList(placementId)` 만 부르고 `showAdList()` 는 부르지 않음 | `dataOnly = true` 로 `load` 합니다. 뷰는 `load` 시작부터 `GONE` 으로 유지되고 `onHeightChanged` 는 오지 않으며, **뷰는 화면 계층 안에 있어야** 합니다 |
 | `getAdList()` · `adList` | `adList` — 기존 `adList` 속성은 항목 타입이 달랐고 필드 이름도 camelCase 와 snake_case 가 섞여 있었습니다. 기존 `TnkPlacementAdItem` 목록은 필드 이름이 바뀌었습니다([10. 플레이스먼트 뷰](placement.md)의 '기존 광고 목록과 비교' 표와 '기존 `adList` 속성의 필드 대응' 표) |
@@ -483,22 +483,22 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ## 전체 API 대조표
 
-기존 네이티브 SDK 의 공개 API(`TnkSession` · `TnkOfferwall` · `TnkAdConfig` 등)를 하나씩 대조한 표입니다. **구분** 열의 뜻은 다음과 같습니다.
+기존 네이티브(V3) SDK 의 공개 API(`TnkSession` · `TnkOfferwall` · `TnkAdConfig` 등)를 하나씩 대조한 표입니다. **구분** 열의 뜻은 다음과 같습니다.
 
 | 구분 | 뜻 |
 |---|---|
 | **그대로** | 이름과 인자가 같습니다. 호출 대상과 import 만 바꾸면 됩니다. |
 | **치환** | 대응하는 호출이 있습니다. 이름·인자·결과 형태가 다르니 표의 설명대로 바꿉니다. |
-| **제거** | 하이브리드 SDK 에서는 필요 없는 호출입니다. 호출을 삭제하세요. |
-| **현재 미제공(문의)** | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요. |
+| **제거** | 하이브리드(V4) SDK 에서는 필요 없는 호출입니다. 호출을 삭제하세요. |
+| **현재 미제공(문의)** | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요. |
 
 ### 초기화 · 앱 실행
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `TnkOfferwall(context)` 생성 시 자동 초기화 (매니페스트 `tnkad_app_id` 사용) | 별도 초기화 호출 없이 `setUserName`·`openOfferwall` 이 초기화합니다. `tnkad_app_id` 는 그대로 둡니다. | **그대로** |
 | `TnkSession.enableLogging(flag)` | `TnkPpiHybSdk.enableLogging(flag)` (`enableLogging(context, flag)` 도 됩니다) | **그대로** |
-| `TnkSession.applicationStarted(context)` | `TnkPpiHybSdk.applicationStarted(context)` — 호출은 그대로 두거나 생략해도 오퍼월 동작에 영향이 없습니다. 이 앱을 TNK 에 광고로 등록해 실행 보상 확인이나 분석 리포트를 쓰셨다면, 현재 하이브리드 SDK 는 그 요청을 보내지 않으니 담당자에게 문의해 주세요. | **그대로** |
+| `TnkSession.applicationStarted(context)` | `TnkPpiHybSdk.applicationStarted(context)` — 호출은 그대로 두거나 생략해도 오퍼월 동작에 영향이 없습니다. 이 앱을 TNK 에 광고로 등록해 실행 보상 확인이나 분석 리포트를 쓰셨다면, 현재 하이브리드(V4) SDK 는 그 요청을 보내지 않으니 담당자에게 문의해 주세요. | **그대로** |
 | `tnkOfferwall.applicationStarted()` (인스턴스에서 인자 없이 호출) | `TnkPpiHybSdk.applicationStarted(context)` — `import com.tnkfactory.ad.hrwd.TnkOfferwall` 로 바꿔도 이 메서드는 없으므로, 호출 대상을 `TnkPpiHybSdk` 로 바꾸고 `Context` 를 넘깁니다. 생략해도 오퍼월 동작에 영향이 없습니다. | **치환** |
 | `appStartedOnceAMonth(context)` · `TnkSession.actionCompleted(context, actionName)` · `buyCompleted(context, itemName)` | 이 앱을 TNK 에 광고로 등록해 실행·액션·구매 완료를 알리던 호출입니다. 현재 미제공 — 담당자 문의. 오퍼월만 쓰신다면 오퍼월 동작과 관계가 없으니 호출을 삭제하세요. | **현재 미제공(문의)** |
 | `TnkSession.getReferrer(context)` | 필요 없습니다. 반환값을 앱에서 직접 쓰셨다면 담당자에게 문의해 주세요. | **제거** |
@@ -509,7 +509,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ### 사용자 · 기기 식별
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `TnkSession.setUserName(context, userName)` · `tnkOfferwall.setUserName(userName)` | `TnkPpiHybSdk.setUserName(context, userName)` | **그대로** |
 | `TnkSession.getUserName(context)` | `TnkPpiHybSdk.getUserName(context)` | **그대로** |
@@ -518,7 +518,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ### 개인정보 동의
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `TnkSession.setAgreePrivacy(activity, true)` | `TnkPpiHybSdk.setAgreePrivacy(context, true)` — 앱에서 직접 동의를 받은 경우에만, `setUserName` 다음에 호출합니다. | **그대로** |
 | `TnkAdConfig.useTermsPopup = false` | `TnkPpiHybSdk.setAgreePrivacy(context, true)` — 앱에서 직접 동의를 받은 경우에만 | **치환** |
@@ -532,7 +532,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ### 오퍼월 열기 · 화면 안에 넣기
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `TnkOfferwall(context)` + `startOfferwallActivity(context)` | `TnkPpiHybSdk.openOfferwall(context)`. 기존 코드를 두려면 import 를 `com.tnkfactory.ad.hrwd.TnkOfferwall` 로 바꾸고 `startOfferwallActivity` 에 Activity 를 넘깁니다. | **치환** |
 | `startOfferwallActivity(context, adId)` | `TnkPpiHybSdk.adAction(context, adId)` | **치환** |
@@ -546,7 +546,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | `getAdList()` · `adList` · `getAdListJson()` · `onItemClick(appId, onResult)` (지면 광고 목록 직접 조회) | `TnkPlacementView` 에 `dataOnly = true` 를 설정하고 `adList` · `getAdListJson()` · `clickItem(appId, onResult)` 를 씁니다. 옛 필드·JSON 키 일부가 바뀌고 `onItemClick` 의 결과는 문자열에서 코드로 바뀝니다. (패턴 10, SDK 1.0.17 이상) | **치환** |
 | `getPubInfo()` · `pubInfo` · `getPubInfoJson()` | `TnkPlacementView.pubInfo` (`TnkPlacementPubInfo`). `getPubInfoJson()` 은 필드로 대신합니다. (패턴 9) | **치환** |
 | `didAdItemClicked(appId, appName)` (지면 클릭) | `TnkPlacementListener.onItemClicked(placementId, appId, appName)` (패턴 9) | **치환** |
-| `showMyMenu(activity)` | 마이메뉴 화면을 바로 여는 기능은 현재 하이브리드 SDK 에서 제공하지 않습니다. 버튼을 그대로 두려면 `openOfferwall(context)` 으로 오퍼월을 여세요. 오퍼월 첫 화면이 열리고, 참여·적립 내역과 도움말·문의는 상단 "문의/내역"에서 볼 수 있습니다. 마이메뉴로 바로 보내야 한다면 담당자에게 문의해 주세요. | **현재 미제공(문의)** |
+| `showMyMenu(activity)` | 마이메뉴 화면을 바로 여는 기능은 현재 하이브리드(V4) SDK 에서 제공하지 않습니다. 버튼을 그대로 두려면 `openOfferwall(context)` 으로 오퍼월을 여세요. 오퍼월 첫 화면이 열리고, 참여·적립 내역과 도움말·문의는 상단 "문의/내역"에서 볼 수 있습니다. 마이메뉴로 바로 보내야 한다면 담당자에게 문의해 주세요. | **현재 미제공(문의)** |
 | `getHelpdeskUrl(context)` · `getRewardUrl(context)` · `geFaqUrl(context)` · `getHelpUrl(context)` | 같은 내용이 오퍼월의 "문의/내역" 메뉴에 있습니다. 주소를 앱에서 얻는 기능은 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 | `dataChanged()` · `getAdlistJson(context, ...)` | 광고 목록·상세는 오퍼월 화면이 직접 보여 주며, 목록 데이터를 앱으로 넘기는 기능은 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 | `showDialog(flag)` | 필요 없습니다. 로딩 표시는 오퍼월 화면이 처리하니 호출을 삭제하세요. | **제거** |
@@ -556,7 +556,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ### 특정 광고 진입
 
-| 네이티브 (`TnkOfferwall` 인스턴스) | 하이브리드 (`TnkPpiHybSdk`) | 구분 |
+| 네이티브(V3) (`TnkOfferwall` 인스턴스) | 하이브리드(V4) (`TnkPpiHybSdk`) | 구분 |
 |---|---|---|
 | `adDetail(context, appId, actionId) { ok, err -> }` | `adDetail(context, appId, actionId = 0)` — 호출 대상이 바뀌고 결과 콜백이 없어집니다. | **치환** |
 | `adJoin(context, appId, actionId) { ok, err -> }` | `adJoin(context, appId, actionId = 0)` | **치환** |
@@ -565,7 +565,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 
 ### 포인트 · 상태 조회
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `tnkOfferwall.getEarnPoint { }` · `getEarnPointSync()` · `suspend getEarnPoint()` | `getTotalPoint`(1.0.16 이상)의 `pointAmount` 를 씁니다. 1.0.15 이하에서는 `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `pointAmount` 를 더합니다. (패턴 5) | **치환** |
 | `TnkSession.queryAdvertiseCount(context, callback)` | `getTotalPoint`(1.0.16 이상) 결과(`TotalPointInfo`)의 `adCount`·`pointAmount` 를 씁니다. 1.0.15 이하에서는 `getAdvertiseTotalPoint` 와 `getProductTotalPoint` 결과의 `adCount`·`pointAmount` 를 각각 더합니다. (패턴 5) | **치환** |
@@ -573,20 +573,20 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | `TnkSession.queryPoint(...)` (동기·비동기) | 사용자 포인트 잔액 조회는 현재 미제공 — 담당자 문의. TNK 서버에 포인트 관리를 맡기신 앱은 이관 전에 꼭 문의해 주세요. | **현재 미제공(문의)** |
 | `TnkSession.purchaseItem(...)` · `withdrawPoints(...)` (각 2종) | 아이템 구매·전체 인출은 현재 미제공 — 담당자 문의. 위와 같이 이관 전에 문의해 주세요. | **현재 미제공(문의)** |
 | `TnkSession.queryPublishState(...)` · `queryAdvertiseState(...)` · `STATE_*` 상수 | 게시 상태 조회는 현재 미제공 — 담당자 문의. 게시 상태에 따라 오퍼월 진입 버튼을 숨기던 앱은 문의해 주세요. | **현재 미제공(문의)** |
-| `ServiceCallback` · `TnkResultListener` · `TnkError` | 하이브리드 SDK 에는 없습니다. 위 호출들의 결과는 `TotalPointInfo?` 로 바뀌었고, 보상 지급 완료는 `TnkRewardListener` 로 받습니다. | **제거** |
+| `ServiceCallback` · `TnkResultListener` · `TnkError` | 하이브리드(V4) SDK 에는 없습니다. 위 호출들의 결과는 `TotalPointInfo?` 로 바뀌었고, 보상 지급 완료는 `TnkRewardListener` 로 받습니다. | **제거** |
 
 ### 오퍼월 이벤트
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
-| `TnkAdAnalytics.setEventListener(listener)` (카테고리·필터·광고 클릭 같은 오퍼월 이벤트) | 네이티브와 같은 종류의 이벤트는 현재 미제공 — 담당자 문의. 오퍼월에서 일어난 이벤트를 이름과 JSON 문자열 그대로 받는 `setEventListener` 가 있지만 이벤트 종류가 달라 1:1 로 대응하지 않습니다 ([5. 보상 지급 수신](reward.md)). 보상 지급 완료는 `setRewardListener` 로 받습니다. | **현재 미제공(문의)** |
+| `TnkAdAnalytics.setEventListener(listener)` (카테고리·필터·광고 클릭 같은 오퍼월 이벤트) | 네이티브(V3)와 같은 종류의 이벤트는 현재 미제공 — 담당자 문의. 오퍼월에서 일어난 이벤트를 이름과 JSON 문자열 그대로 받는 `setEventListener` 가 있지만 이벤트 종류가 달라 1:1 로 대응하지 않습니다 ([5. 보상 지급 수신](reward.md)). 보상 지급 완료는 `setRewardListener` 로 받습니다. | **현재 미제공(문의)** |
 | `TnkAdHideUtil` · `TnkOnBackPressListener` · `TnkAdListModel` | 목록 화면용 보조 클래스(광고 숨기기 등)는 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 
 ### 디자인 설정
 
 오퍼월 화면의 구성(탭·필터 등)은 TnkFactory 가 개발사별로 설정합니다. 앱 코드에서 바꾸는 방식이 아니므로, 바꾸고 싶은 부분은 담당자에게 요청해 주세요.
 
-| 네이티브 | 하이브리드 | 구분 |
+| 네이티브(V3) | 하이브리드(V4) | 구분 |
 |---|---|---|
 | `TnkAdConfig.*` (`pointEffectType`, `useCuration`, `detailViewImageType`, `layoutConfig`, `setLayoutInfo` 등) | 앱 코드에서 설정하지 않습니다. 호출을 삭제하세요. 바꾸고 싶은 화면 구성은 담당자에게 요청해 주세요. | **제거** |
 | `TnkAdConfig.setPlacementLayout(...)` | `TnkPlacementView.layoutKey` 에 레이아웃 키(`"BOX"` 등 9종 중 하나)를 `load` 전에 설정합니다. 셀 종류는 따로 지정할 수 없습니다. 대체되는 키는 [10. 플레이스먼트 뷰](placement.md)를 보세요. (패턴 9) | **치환** |
@@ -598,7 +598,7 @@ COPPA·GDPR 값의 의미는 [7. 개인정보 설정](privacy.md)을 보세요.
 | `TnkAdLayoutConfig` · `TnkHeaderConfig` 의 그 밖의 설정 · 커스텀 툴바·헤더 클래스 | 앱 코드에서 설정하지 않습니다. 호출을 삭제하세요. | **제거** |
 | 포인트 스토어(`com.tnkfactory:rwd_store` 의 `RwdPlusStore*` 화면) | 현재 미제공 — 담당자 문의. | **현재 미제공(문의)** |
 
-**다크 모드 고정:** 네이티브에서 `TnkAdConfig.setOfferwallTheme(DARK)` 나 `(LIGHT)` 로 고정했다면 오퍼월을 열 때 `theme` 를 넘깁니다. 넘기지 않으면 오퍼월은 기기(앱)의 다크 모드 설정을 따릅니다. 라이트로 고정했던 앱이 `theme` 를 빠뜨리면 다크 모드 기기에서 오퍼월이 어둡게 보입니다. 플레이스먼트 뷰(`TnkPlacementView`)를 쓰면 지면과 지면에서 연 오퍼월에도 같은 값을 `theme` 속성으로 따로 지정하세요.
+**다크 모드 고정:** 네이티브(V3)에서 `TnkAdConfig.setOfferwallTheme(DARK)` 나 `(LIGHT)` 로 고정했다면 오퍼월을 열 때 `theme` 를 넘깁니다. 넘기지 않으면 오퍼월은 기기(앱)의 다크 모드 설정을 따릅니다. 라이트로 고정했던 앱이 `theme` 를 빠뜨리면 다크 모드 기기에서 오퍼월이 어둡게 보입니다. 플레이스먼트 뷰(`TnkPlacementView`)를 쓰면 지면과 지면에서 연 오퍼월에도 같은 값을 `theme` 속성으로 따로 지정하세요.
 
 ```diff
 -TnkAdConfig.setOfferwallTheme(TnkOfferwallTheme.DARK)

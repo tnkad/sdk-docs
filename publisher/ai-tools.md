@@ -1,5 +1,5 @@
 ---
-description: Claude Code · Cursor 등 AI 개발 도구에 이 가이드를 연결해 연동 중 궁금한 점을 바로 묻는 방법과, 네이티브 SDK 이관 코드를 AI 도구에 맡길 때 쓰는 프롬프트를 안내합니다.
+description: Claude Code · Cursor 등 AI 개발 도구에 이 가이드를 연결해 연동 중 궁금한 점을 바로 묻는 방법과, 네이티브(V3) SDK 이관 코드를 AI 도구에 맡길 때 쓰는 프롬프트를 안내합니다.
 ---
 
 # AI 도구에 문서 연결하기
@@ -8,7 +8,7 @@ description: Claude Code · Cursor 등 AI 개발 도구에 이 가이드를 연�
 
 ## 언제 필요한가
 
-선택 사항입니다. AI 도구로 연동 코드를 작성하거나, 기존 네이티브 SDK 에서 이관하는 작업을 AI 도구에 맡기려는 개발사에게 유용합니다.
+선택 사항입니다. AI 도구로 연동 코드를 작성하거나, 기존 네이티브(V3) SDK 에서 이관하는 작업을 AI 도구에 맡기려는 개발사에게 유용합니다.
 
 이 문서는 **AI 개발 도구가 직접 읽을 수 있는 형태**로도 제공됩니다. 별도 신청이나 비용이 없고, 공개 문서라 인증도 필요하지 않습니다.
 
@@ -67,20 +67,20 @@ AI 가 이 가이드를 근거로 답하고, 확인할 페이지를 링크로 �
 
 ---
 
-## 네이티브 SDK 이관에 쓰기
+## 네이티브(V3) SDK 이관에 쓰기
 
-기존 네이티브 오퍼월 SDK 에서 이관하신다면, [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)에 **패턴별 전/후 코드**와 **전체 API 대조표**가 있습니다. AI 도구가 이 문서를 기준으로 코드 치환을 도울 수 있습니다.
+기존 네이티브(V3) 오퍼월 SDK 에서 이관하신다면, [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)에 **패턴별 전/후 코드**와 **전체 API 대조표**가 있습니다. AI 도구가 이 문서를 기준으로 코드 치환을 도울 수 있습니다.
 
-다만 일부 호출은 대체할 API 가 없거나 동작이 달라집니다. 대조표의 '현재 미제공(문의)' 항목과 주의 문구가 붙은 항목은 AI 가 마음대로 바꾸지 않고 보고하게 하는 것이 안전합니다. 이런 호출은 하이브리드 SDK 에 없으므로 담당자에게 문의하기 전까지는 빌드 오류로 남습니다. 아래 프롬프트는 AI 가 그 오류를 임의로 지우지 않고 보고하도록 쓴 예시입니다.
+다만 일부 호출은 대체할 API 가 없거나 동작이 달라집니다. 대조표의 '현재 미제공(문의)' 항목과 주의 문구가 붙은 항목은 AI 가 마음대로 바꾸지 않고 보고하게 하는 것이 안전합니다. 이런 호출은 하이브리드(V4) SDK 에 없으므로 담당자에게 문의하기 전까지는 빌드 오류로 남습니다. 아래 프롬프트는 AI 가 그 오류를 임의로 지우지 않고 보고하도록 쓴 예시입니다.
 
 MCP 를 연결한 뒤 프로젝트 루트에서 아래 프롬프트를 붙여넣으세요.
 
 ```text
-TNK 네이티브 오퍼월 SDK 를 하이브리드 SDK 로 마이그레이션하려고 해.
-tnk-docs MCP 에서 "네이티브 SDK 에서 이관" 문서(android 또는 ios migration.md)를 읽고,
+TNK 네이티브(V3) 오퍼월 SDK 를 하이브리드(V4) SDK 로 마이그레이션하려고 해.
+tnk-docs MCP 에서 "네이티브(V3) SDK 에서 이관" 문서(android 또는 ios migration.md)를 읽고,
 그 안의 '패턴별 전/후' 와 '전체 API 대조표'를 기준으로 다음을 수행해줘.
 
-1. 이 코드베이스에서 TNK 네이티브 SDK 호출을 모두 찾는다.
+1. 이 코드베이스에서 TNK 네이티브(V3) SDK 호출을 모두 찾는다.
    - Android: TnkSession / TnkOfferwall / TnkApi / TnkAdConfig / TnkStyle / TnkAdAnalytics / AdWallActivity
    - iOS: TnkSession / TnkAlerts / AdOfferwallViewController / AdOfferwallView / OfferwallEventListener / TnkStyles / TnkLayout / TnkPrivacyAgreementListener
 2. 대조표에서 "그대로"·"치환"인 항목은 문서의 전/후 코드를 따라 수정하고, "제거"인 항목은 호출부를 삭제한다.

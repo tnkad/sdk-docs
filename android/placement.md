@@ -1,5 +1,5 @@
 ---
-description: 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 TnkPlacementView(플레이스먼트 뷰)의 배치 방법과 load · 레이아웃 키(일반·쇼핑) · 지면 유형 · 머리글 · 높이 · 테마 · 리스너 콜백 6종 · 지면 정보 · 다시 불러오기 · 광고 목록 직접 받기 · 기존 네이티브 SDK 에서 옮겨 오는 방법을 설명합니다.
+description: 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 TnkPlacementView(플레이스먼트 뷰)의 배치 방법과 load · 레이아웃 키(일반·쇼핑) · 지면 유형 · 머리글 · 높이 · 테마 · 리스너 콜백 6종 · 지면 정보 · 다시 불러오기 · 광고 목록 직접 받기 · 기존 네이티브(V3) SDK 에서 옮겨 오는 방법을 설명합니다.
 ---
 
 # 10. 플레이스먼트 뷰
@@ -12,9 +12,9 @@ description: 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 �
 
 ## 언제 필요한가
 
-**선택 사항**입니다. 오퍼월 전체가 아니라 **지면(플레이스먼트) 하나의 광고 묶음만** 앱 화면 일부에 보여 주고 싶은 개발사에 필요합니다. 기존 네이티브 SDK 의 `AdPlacementView` 를 쓰던 앱은 이 뷰로 바꿀 수 있습니다. Android SDK 1.0.17 이상에서 사용할 수 있습니다.
+**선택 사항**입니다. 오퍼월 전체가 아니라 **지면(플레이스먼트) 하나의 광고 묶음만** 앱 화면 일부에 보여 주고 싶은 개발사에 필요합니다. 기존 네이티브(V3) SDK 의 `AdPlacementView` 를 쓰던 앱은 이 뷰로 바꿀 수 있습니다. Android SDK 1.0.17 이상에서 사용할 수 있습니다.
 
-- 기존 네이티브 SDK 에서 옮기는 경우 이 페이지 끝의 '기존 네이티브 SDK 에서 옮겨 오기'와 [네이티브 SDK 에서 이관](migration.md)의 해당 패턴을 먼저 보세요. 같은 앱에 등록된 지면 ID 는 그대로 씁니다. 오래 전에 만든 지면이 보이지 않으면 담당자에게 확인해 주세요.
+- 기존 네이티브(V3) SDK 에서 옮기는 경우 이 페이지 끝의 '기존 네이티브(V3) SDK 에서 옮겨 오기'와 [네이티브(V3) SDK 에서 이관](migration.md)의 해당 패턴을 먼저 보세요. 같은 앱에 등록된 지면 ID 는 그대로 씁니다. 오래 전에 만든 지면이 보이지 않으면 담당자에게 확인해 주세요.
 - 지면은 앱 ID 마다 등록됩니다. Android·iOS 또는 디버그용 앱 ID 가 다르면 앱 ID 별로 지면 ID 를 받아 주세요.
 - 지면 ID 는 TnkFactory 담당자에게 받은 값을 그대로 넣으세요. 지면 ID 와 지면 설정(제목·더보기 문구 등)은 앱 코드로 바꿀 수 없으니 담당자에게 요청해 주세요.
 - 앱 ID 설정과 `setUserName` 호출을 마친 뒤에 불러오세요. ([3. 초기화](initialize.md) 참고)
@@ -162,7 +162,7 @@ placementView.load("담당자에게 받은 지면 ID");
 | `onHeightChanged` | `placementId: String`, `heightCssPx: Int` | 불러오기에 성공한 뒤 지면 내용의 높이가 바뀌었을 때. 값은 dp 이고 0 이상 5000 이하이며 뷰의 padding 은 들어가지 않습니다. `maxHeight` 를 쓰면 내용 높이와 `maxHeight` 중 작은 값을 알립니다. Kotlin 에서는 재정의하지 않아도 됩니다 |
 
 - 콜백의 `placementId` 는 `load` 에 넘긴 문자열 그대로입니다.
-- **`onItemClicked` 는 동의 여부와 관계없이 탭 즉시 1번 호출됩니다.** 사용자가 열린 오퍼월에서 개인정보 동의를 거절해도 이미 호출된 뒤입니다. 기존 네이티브 SDK 는 iOS 가 동의 뒤에만, Android 가 동의 전후로 두 번 호출했으므로 클릭 수를 집계하던 앱은 수치가 달라질 수 있습니다.
+- **`onItemClicked` 는 동의 여부와 관계없이 탭 즉시 1번 호출됩니다.** 사용자가 열린 오퍼월에서 개인정보 동의를 거절해도 이미 호출된 뒤입니다. 기존 네이티브(V3) SDK 는 iOS 가 동의 뒤에만, Android 가 동의 전후로 두 번 호출했으므로 클릭 수를 집계하던 앱은 수치가 달라질 수 있습니다.
 - 성공할 때는 `pubInfo` · `adList` 가 먼저 설정되고, `onLoaded` 가 오고, 그다음에 `onHeightChanged` 가 옵니다. iOS 도 같은 순서이며, `onLoaded` 안에서 `pubInfo` 와 `adList` 를 읽을 수 있습니다. 다만 `onLoaded` 와 `onHeightChanged` 의 호출 순서에 기대는 코드는 만들지 마세요.
 - `dataOnly` 일 때는 `onHeightChanged` 가 오지 않습니다.
 - 자동 높이(`wrap_content`)에서는 뷰가 스스로 다시 배치되므로 대부분의 앱은 `onHeightChanged` 를 구현하지 않아도 됩니다.
@@ -277,22 +277,22 @@ override fun onFailed(placementId: String, code: Int) {
 
 ### 기존 레이아웃에서 옮길 때 고르는 키
 
-기존 네이티브 SDK 에서는 앱이 셀 클래스·열 수·페이지당 행 수를 정했습니다. 하이브리드 SDK 의 지면은 TnkFactory 가 제공하는 화면이 그리므로(이 페이지 끝의 '지면을 그리는 방식' 참고) 모양을 키로만 고릅니다. 대체되는 키는 다음과 같습니다.
+기존 네이티브(V3) SDK 에서는 앱이 셀 클래스·열 수·페이지당 행 수를 정했습니다. 하이브리드(V4) SDK 의 지면은 TnkFactory 가 제공하는 화면이 그리므로(이 페이지 끝의 '지면을 그리는 방식' 참고) 모양을 키로만 고릅니다. 대체되는 키는 다음과 같습니다.
 
 | 기존에 쓰던 모양 (클래스) | 대체되는 모양 (클래스) | 달라지는 점 |
 |---|---|---|
-| `TnkAdPlacementFeedItem` + `PlacementFeedViewLayout` (피드) | `FEED_SWIPE` (일반 지면) · `ING_CAMPAIGN` · `ADAPTIVE` (쇼핑 지면) | 카드가 화면 폭보다 작아 옆 카드가 보이고, 한 장씩 멈추지 않고 넘어갑니다. 전체 폭으로 한 장씩 넘기는 모양은 현재 지원하지 않습니다(이 페이지 끝의 '하이브리드에서 빠진 것'). 쇼핑 지면의 `FEED_SWIPE` 는 가로로 넘기지 않고 2개씩 페이지를 넘기므로, 쇼핑 지면에서는 `ING_CAMPAIGN` · `ADAPTIVE` 를 쓰세요 |
+| `TnkAdPlacementFeedItem` + `PlacementFeedViewLayout` (피드) | `FEED_SWIPE` (일반 지면) · `ING_CAMPAIGN` · `ADAPTIVE` (쇼핑 지면) | 카드가 화면 폭보다 작아 옆 카드가 보이고, 한 장씩 멈추지 않고 넘어갑니다. 전체 폭으로 한 장씩 넘기는 모양은 현재 지원하지 않습니다(이 페이지 끝의 '하이브리드(V4)에서 빠진 것'). 쇼핑 지면의 `FEED_SWIPE` 는 가로로 넘기지 않고 2개씩 페이지를 넘기므로, 쇼핑 지면에서는 `ING_CAMPAIGN` · `ADAPTIVE` 를 쓰세요 |
 | 큰 카드를 세로로 나열 | `FEED` | 광고 수만큼 길어집니다(최대 10개). 넓은 화면에서는 `maxHeight` 를 함께 설정하세요 |
 | 2열 그리드 | `FEED_DOUBLE` | 6개씩 페이지로 넘깁니다 |
 | `TnkAdPlacementIconItem` + `PlacementScrollViewLayout` (아이콘 가로 스크롤) | `ING_CAMPAIGN` (일반 지면) | 아이콘만 보입니다. **쇼핑 지면에는 작은 아이콘 띠가 없고**, `ING_CAMPAIGN` 이 큰 상품 카드로 그려집니다 |
 | `TnkAdPlacementListItem` + `PlacementViewPagerLayout` (리스트 + 이전·다음 화살표) | `DEFAULT` 또는 `BOX` | 5개씩 페이지로 넘깁니다. 썸네일을 오른쪽에 두려면 `BOX` |
-| `TnkAdPlacementFeedImageItem` (이미지만 보여 주는 카드 · 전체 폭 한 장씩 넘기는 캐러셀) | 현재 지원하지 않음 | `FEED` 를 쓰면 큰 카드를 세로로 나열하며 이미지 아래에 광고 이름·포인트가 함께 보이고(최대 10개) 한 장씩 넘기지 않습니다. 한 줄로 가로로 넘기려면 `FEED_SWIPE`(작은 가로형 카드)를 쓰세요 (이 페이지 끝의 '하이브리드에서 빠진 것') |
+| `TnkAdPlacementFeedImageItem` (이미지만 보여 주는 카드 · 전체 폭 한 장씩 넘기는 캐러셀) | 현재 지원하지 않음 | `FEED` 를 쓰면 큰 카드를 세로로 나열하며 이미지 아래에 광고 이름·포인트가 함께 보이고(최대 10개) 한 장씩 넘기지 않습니다. 한 줄로 가로로 넘기려면 `FEED_SWIPE`(작은 가로형 카드)를 쓰세요 (이 페이지 끝의 '하이브리드(V4)에서 빠진 것') |
 | `TnkAdListItemNormal` + `PlacementFeedViewLayout` (앱이 셀 모양을 정하던 조합. 레이아웃을 등록하지 않은 지면의 기본 모양) | `DEFAULT` | 일반 행을 세로 목록으로 보여 주고 5개씩 이전·다음 페이지로 넘깁니다. 기존처럼 한 장씩 넘기지 않습니다 |
 | `TnkAdListItemFeed` + `PlacementFeedViewLayout` (앱이 셀 모양을 정하던 조합) | `FEED_SWIPE` (일반 지면) · `ING_CAMPAIGN` · `ADAPTIVE` (쇼핑 지면) | 위 피드 행과 같습니다 |
 | `TnkAdListItemNormal` + `PlacementScrollViewLayout` (일반 행을 가로로 넘기던 조합) | `FEED_SWIPE` · `ADAPTIVE` (일반 지면, 가로로 넘기는 카드) · `DEFAULT` · `BOX` (일반 행) | 가로로 넘기는 키는 일반 지면의 `FEED_SWIPE` · `ADAPTIVE`, 쇼핑 지면의 `ING_CAMPAIGN` · `ADAPTIVE` 이고 모두 카드 모양입니다. 일반 행 모양은 `DEFAULT` · `BOX` 입니다 |
 | 페이지당 행 수 · 열 수 지정 (`spanCount` · `pageRowCount`) | 현재 지원하지 않음 | 열·행 수는 레이아웃 키마다 정해져 있습니다. 세로 1열 5개씩 `DEFAULT` · `BOX`, 2열 6개씩 `FEED_DOUBLE` 중에서 고르세요 |
 
-기존 Android 는 레이아웃을 등록하지 않으면 일반 행 셀을 한 장씩 넘기는 모양으로 그렸고, 대체되는 키는 `DEFAULT`(세로 목록, 5개씩 페이지 이동)입니다. 하이브리드 SDK 는 `layoutKey` 를 정하지 않아도 `DEFAULT` 로 그립니다. 한 장씩 넘기지는 않고 5개씩 페이지로 넘깁니다.
+기존 Android 는 레이아웃을 등록하지 않으면 일반 행 셀을 한 장씩 넘기는 모양으로 그렸고, 대체되는 키는 `DEFAULT`(세로 목록, 5개씩 페이지 이동)입니다. 하이브리드(V4) SDK 는 `layoutKey` 를 정하지 않아도 `DEFAULT` 로 그립니다. 한 장씩 넘기지는 않고 5개씩 페이지로 넘깁니다.
 
 ---
 
@@ -343,7 +343,7 @@ override fun onFailed(placementId: String, code: Int) {
 <figure><img src="../assets/common/placement-header-variants.png" alt="머리글 세 가지 비교. 왼쪽은 제목 '간편'과 더보기가 보이는 지면, 가운데는 더보기만 보이는 지면, 오른쪽은 머리글이 없는 지면" width="600"><figcaption><p>머리글 비교. 왼쪽부터 제목 + 더보기, 더보기만, 머리글 없음(그림의 '헤더 없음'과 같은 뜻)입니다. 그림의 회색 테두리는 지면 범위를 보여 주려고 그린 것이며 실제 화면에는 없습니다. 광고 이름·포인트는 예시 값이고 광고 이미지는 흐리게 처리했습니다.</p></figcaption></figure>
 
 - 일부 레이아웃은 더보기를 머리글이 아니라 아래쪽 버튼으로 보여 줍니다(쇼핑 지면의 `FEED_SWIPE_DOUBLE`).
-- 머리글을 없애고 싶다면 담당자에게 제목·더보기 문구를 비워 달라고 요청하거나 `SIMPLE_LIST` 를 쓰세요(일반 지면·쇼핑 지면 모두 가능). 기존 네이티브 SDK 의 iOS 는 제목이 비어도 머리글 영역이 남았지만, 하이브리드 SDK 는 머리글 줄 자체를 그리지 않습니다. 이렇게 머리글을 없애면 `pubInfo` 의 `title`·`moreLabel` 도 빈 문자열이 됩니다. 머리글을 숨기고 앱이 제목을 직접 그리려면 제목 문구를 앱에 두세요.
+- 머리글을 없애고 싶다면 담당자에게 제목·더보기 문구를 비워 달라고 요청하거나 `SIMPLE_LIST` 를 쓰세요(일반 지면·쇼핑 지면 모두 가능). 기존 네이티브(V3) SDK 의 iOS 는 제목이 비어도 머리글 영역이 남았지만, 하이브리드(V4) SDK 는 머리글 줄 자체를 그리지 않습니다. 이렇게 머리글을 없애면 `pubInfo` 의 `title`·`moreLabel` 도 빈 문자열이 됩니다. 머리글을 숨기고 앱이 제목을 직접 그리려면 제목 문구를 앱에 두세요.
 - 더보기를 눌렀을 때 동작은 `onMoreClicked` 로 정합니다. (위 '더보기를 앱이 직접 처리하기' 참고)
 
 ---
@@ -364,7 +364,7 @@ override fun onFailed(placementId: String, code: Int) {
 
 ### 고정 높이였던 컨테이너는 자동 높이로 바꾸세요
 
-> ⚠️ 기존 네이티브 SDK 예제처럼 지면을 **높이가 정해진 컨테이너**(네 변을 고정한 영역, 기본 LayoutParams 로 추가한 `FrameLayout` 등)에 넣었다면 하이브리드 SDK 에서는 **고정 높이**로 동작합니다. 내용이 컨테이너보다 크면 아래쪽이 잘리고, 작으면 남는 영역이 비어 보입니다. 하이브리드 SDK 는 주어진 높이에 맞춰 내용을 줄이지 않습니다.
+> ⚠️ 기존 네이티브(V3) SDK 예제처럼 지면을 **높이가 정해진 컨테이너**(네 변을 고정한 영역, 기본 LayoutParams 로 추가한 `FrameLayout` 등)에 넣었다면 하이브리드(V4) SDK 에서는 **고정 높이**로 동작합니다. 내용이 컨테이너보다 크면 아래쪽이 잘리고, 작으면 남는 영역이 비어 보입니다. 하이브리드(V4) SDK 는 주어진 높이에 맞춰 내용을 줄이지 않습니다.
 >
 > 옮길 때는 높이를 정하는 코드·제약을 지우고 **자동 높이**를 쓰세요. 일정 높이 안에서 스크롤해야 한다면 고정 높이와 `verticalScrollEnabled` 를 함께 쓰거나, 내용에 맞춰 늘어나다가 일정 높이에서 멈추게 하려면 높이를 고정하지 말고 `maxHeight` 를 쓰세요.
 
@@ -399,12 +399,12 @@ Java 에서는 `placementView.setMaxHeight(400);` 으로 설정합니다.
 
 ### 표시 시점 정하기
 
-기존 네이티브 SDK 는 `loadAdList`(`loadData`) 와 `showAdList` 가 나뉘어 있어서, 미리 불러 두고 원하는 때(바텀시트를 열 때, 조건을 채웠을 때)에만 보여 줄 수 있었습니다. 하이브리드 SDK 는 `load` 가 불러오기와 표시를 함께 하고, 성공하면 뷰가 스스로 펼쳐집니다. 접힘·펼침은 SDK 가 관리하므로 **뷰 자체를 숨겨 두는 방식은 동작하지 않습니다.**
+기존 네이티브(V3) SDK 는 `loadAdList`(`loadData`) 와 `showAdList` 가 나뉘어 있어서, 미리 불러 두고 원하는 때(바텀시트를 열 때, 조건을 채웠을 때)에만 보여 줄 수 있었습니다. 하이브리드(V4) SDK 는 `load` 가 불러오기와 표시를 함께 하고, 성공하면 뷰가 스스로 펼쳐집니다. 접힘·펼침은 SDK 가 관리하므로 **뷰 자체를 숨겨 두는 방식은 동작하지 않습니다.**
 
 - 표시 시점을 늦추려면 지면을 **감싼 뷰(컨테이너)를 숨겨 두었다가**, 보여 줄 때 보이게 하세요. 광고가 있는지는 `onLoaded` 의 `count` 로 확인합니다.
 - 화면에 광고를 그리지 않고 데이터만 받고 싶다면 아래 '광고 목록 직접 받기'의 `dataOnly` 를 쓰세요.
 - 노출 수가 중요하면 보여 주기 직전에 `load` 를 호출하세요.
-- 숨긴 채 불러올 때는 `onLoaded` 가 숨긴 상태에서도 오는지, 보여 준 뒤 높이가 내용에 맞는지를 실기기에서 확인한 뒤 쓰세요. ([네이티브 SDK 에서 이관](migration.md)의 '이관 뒤 확인할 것')
+- 숨긴 채 불러올 때는 `onLoaded` 가 숨긴 상태에서도 오는지, 보여 준 뒤 높이가 내용에 맞는지를 실기기에서 확인한 뒤 쓰세요. ([네이티브(V3) SDK 에서 이관](migration.md)의 '이관 뒤 확인할 것')
 
 ```kotlin
 // 화면(Activity / Fragment)의 저장 프로퍼티
@@ -477,7 +477,7 @@ binding.placementView.load("담당자에게 받은 지면 ID")
 
 ## 10. 지면 정보 · 앱 이름 · 다시 불러오기 · 항목 고르기
 
-대부분 기존 네이티브 SDK 에 있던 기능입니다(`onItemClosed` · `filterIds` 는 기존 iOS 에만 있었고 Android 에서는 새로 생겼습니다). 모두 **선택 사항**입니다.
+대부분 기존 네이티브(V3) SDK 에 있던 기능입니다(`onItemClosed` · `filterIds` 는 기존 iOS 에만 있었고 Android 에서는 새로 생겼습니다). 모두 **선택 사항**입니다.
 
 ### 지면 정보 (`pubInfo`)
 
@@ -528,7 +528,7 @@ binding.placementView.listener = object : TnkPlacementListenerAdapter() {
 
 ### 다시 불러오기 (`refresh`)
 
-같은 지면을 **접지 않고** 다시 불러옵니다. 기존 네이티브 SDK 의 `update()` 에 해당하지만, 이쪽은 서버에서 목록을 다시 받아 옵니다. 참여를 마친 광고처럼 서버 목록이 바뀐 것을 지면에 반영하고 싶을 때 쓰세요. 메인 스레드에서 호출합니다.
+같은 지면을 **접지 않고** 다시 불러옵니다. 기존 네이티브(V3) SDK 의 `update()` 에 해당하지만, 이쪽은 서버에서 목록을 다시 받아 옵니다. 참여를 마친 광고처럼 서버 목록이 바뀐 것을 지면에 반영하고 싶을 때 쓰세요. 메인 스레드에서 호출합니다.
 
 | 상태 | `refresh()` 를 부르면 |
 |---|---|
@@ -544,7 +544,7 @@ binding.placementView.listener = object : TnkPlacementListenerAdapter() {
 
 ### 항목 고르기 (`filterIds`)
 
-보여 줄 항목을 `filter_id` 로 고릅니다. `filter_id` 는 항목에 붙은 번호이며 담당자에게 받거나 `adList` 의 `filterId` 로 확인합니다. `adList` 는 불러온 뒤에야 알 수 있으므로 번호는 앱에 저장해 두었다가 다음 `load` 전에 `filterIds` 로 넘기세요. 기존 네이티브 SDK iOS 의 `setFilteringIDs` 에 해당합니다. **`load` 전에** 설정하며 다음 `load` 부터 적용됩니다.
+보여 줄 항목을 `filter_id` 로 고릅니다. `filter_id` 는 항목에 붙은 번호이며 담당자에게 받거나 `adList` 의 `filterId` 로 확인합니다. `adList` 는 불러온 뒤에야 알 수 있으므로 번호는 앱에 저장해 두었다가 다음 `load` 전에 `filterIds` 로 넘기세요. 기존 네이티브(V3) SDK iOS 의 `setFilteringIDs` 에 해당합니다. **`load` 전에** 설정하며 다음 `load` 부터 적용됩니다.
 
 ```kotlin
 binding.placementView.filterIds = listOf(11, 12, 13)   // load 전에. 이 순서로 보여 줍니다
@@ -558,7 +558,7 @@ placementView.setFilterIds(java.util.Arrays.asList(11, 12, 13));
 placementView.load("담당자에게 받은 지면 ID");
 ```
 
-- 목록 순서대로 각 id 마다 `filter_id` 가 같은 **첫 항목 1건**을 골라 그 순서로 보여 줍니다. 없는 id 는 건너뜁니다. 기존 SDK 는 같은 `filter_id` 중 어느 항목이 나올지 정해져 있지 않았지만, 하이브리드 SDK 는 서버가 준 순서의 첫 항목입니다.
+- 목록 순서대로 각 id 마다 `filter_id` 가 같은 **첫 항목 1건**을 골라 그 순서로 보여 줍니다. 없는 id 는 건너뜁니다. 기존 SDK 는 같은 `filter_id` 중 어느 항목이 나올지 정해져 있지 않았지만, 하이브리드(V4) SDK 는 서버가 준 순서의 첫 항목입니다.
 - 1~999999999 범위의 정수만 쓰이고 그 밖의 값은 버립니다. 중복은 처음 값만, 최대 50개까지입니다.
 - 고른 뒤의 개수가 `onLoaded` 의 `count` 입니다. 하나도 남지 않으면 `count` 가 0 이고 뷰는 접힙니다.
 - `null`/빈 목록이거나 쓸 수 있는 값이 없으면 고르지 않고 모든 광고를 보여 줍니다.
@@ -567,7 +567,7 @@ placementView.load("담당자에게 받은 지면 ID");
 
 ## 11. 광고 목록 직접 받기 (`dataOnly` · `adList` · `clickItem`)
 
-앱이 광고 목록을 받아 **자기 화면을 직접 그리고 싶을 때** 쓰는 기능입니다. 기존 네이티브 SDK 의 `getAdList()` · `getAdListJson()` · `onItemClick` 에 해당합니다. 선택 사항입니다.
+앱이 광고 목록을 받아 **자기 화면을 직접 그리고 싶을 때** 쓰는 기능입니다. 기존 네이티브(V3) SDK 의 `getAdList()` · `getAdListJson()` · `onItemClick` 에 해당합니다. 선택 사항입니다.
 
 ### 데이터만 받기 (`dataOnly`)
 
@@ -698,7 +698,7 @@ fun getAdListJson(): String            // 같은 목록의 JSON 배열 문자열
 
 > ⚠️ `adList` 는 **화면 표시용**입니다. 보상 지급이나 과금 판단에 쓰지 마세요. 문자열을 앱 화면(HTML 등)에 넣을 때는 이스케이프하세요.
 >
-> 기존 네이티브 SDK 의 `getADInfo(appId:)`(iOS)처럼 한 건만 조회하는 함수는 없습니다. `adList` 에서 `appId` 가 같은 항목을 찾으세요. 기존 `getPubInfoJson()` 은 `pubInfo` 로 대신합니다.
+> 기존 네이티브(V3) SDK 의 `getADInfo(appId:)`(iOS)처럼 한 건만 조회하는 함수는 없습니다. `adList` 에서 `appId` 가 같은 항목을 찾으세요. 기존 `getPubInfoJson()` 은 `pubInfo` 로 대신합니다.
 
 ### 코드로 클릭 실행 (`clickItem`)
 
@@ -779,19 +779,19 @@ placementView.clickItem(ad.getAppId()); // 결과가 필요 없을 때
 
 ---
 
-## 기존 네이티브 SDK 에서 옮겨 오기
+## 기존 네이티브(V3) SDK 에서 옮겨 오기
 
-기존 네이티브 SDK(`com.tnkfactory:rwd`)의 `AdPlacementView` 를 쓰던 앱은 아래 표로 무엇이 **같고, 바뀌고, 추가되고, 빠졌는지** 확인하세요. 코드 전/후 비교는 [네이티브 SDK 에서 이관](migration.md)의 '패턴 9' 와 '패턴 10' 에 있습니다.
+기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)의 `AdPlacementView` 를 쓰던 앱은 아래 표로 무엇이 **같고, 바뀌고, 추가되고, 빠졌는지** 확인하세요. 코드 전/후 비교는 [네이티브(V3) SDK 에서 이관](migration.md)의 '패턴 9' 와 '패턴 10' 에 있습니다.
 
 ### 먼저 알아둘 것: 지면을 그리는 방식
 
-기존 네이티브 SDK 는 앱이 셀 클래스와 열·행 수를 정해 지면을 앱 코드로 그렸습니다. 하이브리드 SDK 의 지면은 **TnkFactory 가 제공하는 화면을 앱 안에 띄워 그립니다.** 그래서 앱은 모양을 `layoutKey` 로 고르기만 하고, 셀 클래스를 끼우거나 열·행 수를 지정하는 코드는 없습니다. 아래 표의 '제공하는 화면'은 이것을 뜻합니다.
+기존 네이티브(V3) SDK 는 앱이 셀 클래스와 열·행 수를 정해 지면을 앱 코드로 그렸습니다. 하이브리드(V4) SDK 의 지면은 **TnkFactory 가 제공하는 화면을 앱 안에 띄워 그립니다.** 그래서 앱은 모양을 `layoutKey` 로 고르기만 하고, 셀 클래스를 끼우거나 열·행 수를 지정하는 코드는 없습니다. 아래 표의 '제공하는 화면'은 이것을 뜻합니다.
 
 ### 기존 API 와 대응
 
 구분: **같음** · **이름 바뀜**(이름만 바꾸면 됨) · **바뀜**(동작이나 인자가 다름) · **추가** · **빠짐**
 
-| 기존 네이티브 SDK | 하이브리드 SDK | 구분 | 이유 | 바꾸는 방법 |
+| 기존 네이티브(V3) SDK | 하이브리드(V4) SDK | 구분 | 이유 | 바꾸는 방법 |
 |---|---|---|---|---|
 | 지면 등록 · 기존 지면 ID | 담당자에게 받은 지면 ID | 바뀜 | 지면 등록은 담당자를 통해 진행합니다 | 같은 앱에 등록된 지면 ID 는 그대로 씁니다. 오래 전에 만든 지면이 보이지 않으면 담당자에게 확인해 주세요. |
 | `getAdPlacementView(activity)` · `AdPlacementView(activity)` | `TnkPlacementView` (XML 태그 또는 `TnkPlacementView(activity)`) | 바뀜 | 화면(Activity·Fragment)의 수명에 맞춰 SDK 가 정리하므로 `TnkOfferwall` 인스턴스가 필요 없습니다 | XML 에 `TnkPlacementView` 를 넣고 `wrap_content` 로 둡니다 |
@@ -823,7 +823,7 @@ placementView.clickItem(ad.getAppId()); // 결과가 필요 없을 때
 | 뉴스 읽기 타이머 보상 | 현재 지원하지 않음 | 빠짐 | 현재 지원하지 않습니다. 뉴스 행은 페이지를 여는 것까지만 처리하며 행에 포인트가 보일 수 있지만 읽어도 적립되지 않습니다 | 뉴스 지면을 쓰던 앱은 이관 전에 담당자에게 확인하세요 |
 | 에뮬레이터에서 지면 확인 | 에뮬레이터·가상 기기에서는 표시되지 않고 `onFailed` 로 끝남 | 바뀜 | 가상 환경에서는 지면을 차단합니다 | 실기기에서 확인합니다 |
 
-### 하이브리드에서 빠진 것
+### 하이브리드(V4)에서 빠진 것
 
 | 빠진 기능 | 이유 | 대신 쓸 것 |
 |---|---|---|
@@ -840,7 +840,7 @@ placementView.clickItem(ad.getAppId()); // 결과가 필요 없을 때
 
 이미지만 피드나 전체 폭 캐러셀이 필요하면 담당자에게 문의해 주세요.
 
-### 하이브리드에서 새로 생긴 것
+### 하이브리드(V4)에서 새로 생긴 것
 
 | 새로 생긴 것 | 설명 | 쓰는 법 |
 |---|---|---|

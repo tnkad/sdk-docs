@@ -1,5 +1,5 @@
 ---
-description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼월 SDK(Android)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 콜백 타입을 다룹니다.
+description: 개발사가 앱에서 직접 호출하는 하이브리드(V4) 오퍼월 SDK(Android)의 공개 API 시그니처와 동작을 정리했습니다. TnkPpiHybSdk, TnkOfferwall, TnkOfferwallView, TnkPlacementView 와 콜백 타입을 다룹니다.
 ---
 
 # 공개 API 목록 (개발사 사용 API)
@@ -10,7 +10,7 @@ description: 개발사가 앱에서 직접 호출하는 하이브리드 오퍼�
 
 연동 중에 특정 메서드의 정확한 시그니처나 설정값별 동작을 확인할 때 찾아보는 참고 페이지입니다.
 처음 연동한다면 [3. 초기화](initialize.md)와 [4. 오퍼월 띄우기](offerwall.md)부터 읽으세요.
-기존 네이티브 SDK(`com.tnkfactory:rwd`)에서 옮기는 경우에는 [네이티브 SDK 에서 이관](migration.md)을 함께 참고하세요.
+기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)에서 옮기는 경우에는 [네이티브(V3) SDK 에서 이관](migration.md)을 함께 참고하세요.
 
 이 페이지에 없는 클래스와 메서드는 개발사가 사용하도록 안내하는 대상이 아닙니다.
 필요한 기능이 목록에 없다면 담당자에게 문의해 주세요.
@@ -58,10 +58,10 @@ offerwallView.setOnCloseRequested(() -> {
 |---|---|
 | `init(context: Context, appId: String? = null)` | 명시 초기화(선택). 앱 ID 를 매니페스트 대신 코드로 넣을 때 사용합니다. **다른 SDK 호출보다 먼저** 호출해야 적용되며, 이후에 호출하면 무시됩니다. `appId` 를 생략하면 매니페스트의 `tnkad_app_id` 를 사용합니다 ([3. 초기화](initialize.md)) |
 | `start(context: Context)` | 앱 실행 신호(선택). 호출하지 않아도 오퍼월 표시와 보상 지급에는 영향이 없습니다 |
-| `applicationStarted(context: Context)` | `start()` 와 같은 메서드입니다 (기존 네이티브 SDK 의 이름) |
+| `applicationStarted(context: Context)` | `start()` 와 같은 메서드입니다 (기존 네이티브(V3) SDK 의 이름) |
 | `isInitialized(): Boolean` | 초기화가 끝났으면 `true`. 이 호출은 초기화를 시작하지 않으므로 다른 SDK 호출 전에는 `false` 일 수 있습니다 |
 | `enableLogging(enabled: Boolean)` | 로그 켜기/끄기. 기본값은 `false` 입니다 |
-| `enableLogging(context: Context, enabled: Boolean)` | 위와 같습니다 (기존 네이티브 SDK 와 같은 시그니처) |
+| `enableLogging(context: Context, enabled: Boolean)` | 위와 같습니다 (기존 네이티브(V3) SDK 와 같은 시그니처) |
 | `VERSION: String` | SDK 버전 문자열 |
 
 ### 사용자 · 개인정보
@@ -76,7 +76,7 @@ offerwallView.setOnCloseRequested(() -> {
 | `revokePrivacyConsent(context: Context)` | 개인정보 동의를 철회합니다. `context` 외에 넘길 값과 반환값이 없습니다. 호출 즉시 동의가 해제되고, 열려 있는 오퍼월은 첫 화면부터 다시 열려 동의 팝업을 보여 줍니다. 사용자가 철회하는 동작에서만 호출하세요. 반복·자동 호출은 금지입니다 (SDK 1.0.14 이상, [7. 개인정보 설정](privacy.md)의 '동의 철회' 항목) |
 | `setCOPPA(context: Context, enabled: Boolean)` | 만 13세 미만 사용자 여부. 값별 동작은 아래 표 |
 | `setGDPR(context: Context, gdpr: Int)` | GDPR 동의 여부. `Boolean` 이 아니라 `Int` 를 받습니다. 값별 동작은 아래 표 |
-| `setUserAge(context: Context, age: Int)` | 기존 네이티브 SDK 코드와의 호환을 위해 남겨 둔 메서드입니다. 호출해도 오류는 나지 않지만, 현재 버전에서는 오퍼월에 반영되지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| `setUserAge(context: Context, age: Int)` | 기존 네이티브(V3) SDK 코드와의 호환을 위해 남겨 둔 메서드입니다. 호출해도 오류는 나지 않지만, 현재 버전에서는 오퍼월에 반영되지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
 | `setUserGender(context: Context, gender: Int)` | 위와 같습니다. `TnkCode.MALE`(1) 또는 `TnkCode.FEMALE`(2) 를 넘깁니다 |
 | `setUserGender(context: Context, gender: String)` | 위와 같습니다. `"M"` 또는 `"F"` 를 넘깁니다 |
 
@@ -89,7 +89,7 @@ offerwallView.setOnCloseRequested(() -> {
 | `setAgreePrivacy` 를 호출하지 않음 | 오퍼월에 처음 들어갈 때 동의 팝업이 나오고, 사용자가 동의하면 이후에는 나오지 않습니다 |
 | `setCOPPA(context, true)` | 이 사용자를 만 13세 미만으로 서버에 알립니다. 다음에 여는 오퍼월부터 적용됩니다 |
 | `setCOPPA(context, false)` 또는 호출하지 않음 | 해당 없음으로 처리됩니다 (기본값) |
-| `setGDPR(context, 1)` | 사용자가 GDPR 에 동의한 것으로 서버에 알립니다 (기존 네이티브 SDK 의 `setGdprConsent(context, true)` 와 같은 값) |
+| `setGDPR(context, 1)` | 사용자가 GDPR 에 동의한 것으로 서버에 알립니다 (기존 네이티브(V3) SDK 의 `setGdprConsent(context, true)` 와 같은 값) |
 | `setGDPR(context, 0)` | 사용자가 GDPR 에 동의하지 않은 것으로 알립니다 (기존 `setGdprConsent(context, false)` 와 같은 값) |
 | `setGDPR` 를 호출하지 않음 | 지정하지 않은 상태(`-1`)로 전달됩니다 |
 
@@ -116,7 +116,7 @@ offerwallView.setOnCloseRequested(() -> {
 
 ### 특정 광고 진입
 
-기존 네이티브 SDK 의 `adDetail` / `adJoin` / `adAction` 과 같은 이름·의미입니다.
+기존 네이티브(V3) SDK 의 `adDetail` / `adJoin` / `adAction` 과 같은 이름·의미입니다.
 `actionId` 는 기본 0, CPS(쇼핑) 광고만 5 를 지정합니다.
 결과 콜백은 없습니다. 광고 조회·참여와 오류 안내는 오퍼월 화면이 처리합니다.
 
@@ -128,7 +128,7 @@ offerwallView.setOnCloseRequested(() -> {
 
 ### 적립 가능 포인트 조회 (SDK 1.0.10 이상)
 
-기존 네이티브 SDK 의 `getEarnPoint` · `queryAdvertiseCount` 는 `getTotalPoint` 하나로 바꿀 수 있습니다 (SDK 1.0.16 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.10 이상에서 쓸 수 있습니다.
+기존 네이티브(V3) SDK 의 `getEarnPoint` · `queryAdvertiseCount` 는 `getTotalPoint` 하나로 바꿀 수 있습니다 (SDK 1.0.16 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.10 이상에서 쓸 수 있습니다.
 통신은 백그라운드에서 하고, 콜백은 메인 스레드로 옵니다. iOS 에서도 같은 기능을 제공합니다 (`getTotalPoint` 는 iOS SDK 1.0.6 이상, 나머지는 1.0.1 이상).
 
 | 시그니처 | 설명 |
@@ -167,7 +167,7 @@ offerwallView.setOnCloseRequested(() -> {
 
 ## `TnkOfferwall`
 
-기존 네이티브 SDK 의 인스턴스 방식을 그대로 쓸 수 있도록 제공합니다. 새로 연동한다면 `TnkPpiHybSdk.openOfferwall` 을 사용하세요.
+기존 네이티브(V3) SDK 의 인스턴스 방식을 그대로 쓸 수 있도록 제공합니다. 새로 연동한다면 `TnkPpiHybSdk.openOfferwall` 을 사용하세요.
 
 ```kotlin
 class TnkOfferwall(context: Context) {

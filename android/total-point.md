@@ -58,7 +58,7 @@ TnkPpiHybSdk.getTotalPoint(context, info -> {
 - 두 조회가 모두 실패하면 `info` 가 `null` 이거나 `isSuccess` 가 `false` 입니다. 앱 처리는 아래 두 함수와 같습니다(문구를 숨깁니다).
 - 앱에 보여 줄 포인트 단위(예: `P`)는 앱에서 붙입니다.
 
-> SDK 1.0.15 이하에서는 `getTotalPoint` 가 없습니다. 아래 두 함수를 각각 호출해 `pointAmount` · `adCount` 를 더하세요 ([네이티브 SDK 에서 이관](migration.md)의 '포인트 조회' 항목에 예제가 있습니다).
+> SDK 1.0.15 이하에서는 `getTotalPoint` 가 없습니다. 아래 두 함수를 각각 호출해 `pointAmount` · `adCount` 를 더하세요 ([네이티브(V3) SDK 에서 이관](migration.md)의 '포인트 조회' 항목에 예제가 있습니다).
 
 ### 일반·구매형을 나눠 보기 (`getAdvertiseTotalPoint` · `getProductTotalPoint`)
 
@@ -139,15 +139,15 @@ TnkPpiHybSdk.getAdvertiseTotalPoint(context, info -> {
 
 ---
 
-## 기존 네이티브 SDK 와 다른 점
+## 기존 네이티브(V3) SDK 와 다른 점
 
-| 기존 네이티브 SDK (`com.tnkfactory:rwd`) | 하이브리드 SDK |
+| 기존 네이티브(V3) SDK (`com.tnkfactory:rwd`) | 하이브리드(V4) SDK |
 |---|---|
 | `getEarnPoint` — 일반 광고와 구매형 광고의 합계를 **한 숫자**로 돌려줌 | `getTotalPoint`(1.0.16 이상) 하나로 바꿀 수 있습니다. 일반·구매형 합계를 `pointAmount` 로 한 번에 돌려주고, 한쪽 조회만 실패하면 성공한 쪽 값만 담아 돌려주는 것도 `getEarnPoint` 와 같습니다. 1.0.15 이하에서는 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 **각각 호출**해 두 결과의 `pointAmount` 를 더하세요 |
-| `getEarnPointByFilter` — 필터별 합계 | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
-| `queryPoint` — 사용자 보유 포인트(잔액) 조회 | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 잔액은 서버 보상 콜백으로 받은 값을 개발사에서 관리해 주세요. TNK 서버에서 포인트를 관리하던 앱은 담당자에게 문의해 주세요 |
+| `getEarnPointByFilter` — 필터별 합계 | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| `queryPoint` — 사용자 보유 포인트(잔액) 조회 | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 잔액은 서버 보상 콜백으로 받은 값을 개발사에서 관리해 주세요. TNK 서버에서 포인트를 관리하던 앱은 담당자에게 문의해 주세요 |
 
-기존 `getEarnPoint` 코드를 옮기는 방법은 [네이티브 SDK 에서 이관](migration.md)을 참고하세요.
+기존 `getEarnPoint` 코드를 옮기는 방법은 [네이티브(V3) SDK 에서 이관](migration.md)을 참고하세요.
 
 ---
 

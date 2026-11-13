@@ -87,9 +87,9 @@ TnkPpiHybSdk.adDetail(this, 123456L, 5);   // 구매형 광고
 
 ---
 
-## 기존 네이티브 SDK 와 다른 점
+## 기존 네이티브(V3) SDK 와 다른 점
 
-기존 네이티브 SDK(`com.tnkfactory:rwd`)의 `adDetail` / `adJoin` / `adAction` 과 이름·인자(`appId`, `actionId`)는 같습니다. 다음이 다릅니다.
+기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)의 `adDetail` / `adJoin` / `adAction` 과 이름·인자(`appId`, `actionId`)는 같습니다. 다음이 다릅니다.
 
 - **호출 대상** — `TnkOfferwall` 인스턴스가 아니라 `TnkPpiHybSdk` 에서 호출합니다.
 - **결과 콜백 없음** — 성공·실패를 받는 콜백이 없습니다. 실패 안내는 오퍼월 화면이 직접 보여 줍니다.

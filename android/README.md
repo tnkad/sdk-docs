@@ -1,8 +1,8 @@
 ---
-description: TnkFactory 하이브리드 오퍼월 SDK(Android) 빠른 시작. 설치, 앱 ID, 초기화, 사용자 식별값, 동의 전달, 오퍼월 열기까지 6단계 최소 연동을 안내합니다.
+description: TnkFactory 하이브리드(V4) 오퍼월 SDK(Android) 빠른 시작. 설치, 앱 ID, 초기화, 사용자 식별값, 동의 전달, 오퍼월 열기까지 6단계 최소 연동을 안내합니다.
 ---
 
-# TnkPpiHyb — 하이브리드 오퍼월 SDK 연동 가이드 (Android)
+# TnkPpiHyb — 하이브리드(V4) 오퍼월 SDK 연동 가이드 (Android)
 
 이 페이지에서 하는 일: 6단계로 Android 앱에 오퍼월을 붙입니다. 마지막 단계까지 마치면 버튼을 눌러 오퍼월을 열 수 있습니다.
 
@@ -14,7 +14,7 @@ Android 와 iOS 는 같은 오퍼월 화면을 사용하므로 사용자가 보�
 ## 언제 필요한가
 
 Android 앱에 오퍼월을 처음 붙이는 모든 개발사에게 필요합니다(필수).
-이미 기존 네이티브 SDK(`com.tnkfactory:rwd`)를 쓰고 있다면 [네이티브 SDK 에서 이관](migration.md)을 먼저 보세요(의존성은 추가가 아니라 교체합니다).
+이미 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)를 쓰고 있다면 [네이티브(V3) SDK 에서 이관](migration.md)을 먼저 보세요(의존성은 추가가 아니라 교체합니다).
 
 시작하기 전에 [퍼블리셔 페이지](../publisher/app-id.md)에서 앱을 등록하고 아래 두 가지를 발급받아야 합니다.
 
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity() {
 | [9. 적립 가능 포인트 조회](total-point.md) | "최대 N포인트 적립 가능" 표시용 |
 | [10. 플레이스먼트 뷰](placement.md) | 지면 하나의 광고 묶음을 앱 화면 일부에 표시 (기존 `AdPlacementView` 대체) |
 | [공개 API 목록](api.md) | 전체 시그니처 |
-| [네이티브 SDK 에서 이관](migration.md) | 기존 네이티브 SDK(`com.tnkfactory:rwd`)를 사용 중이라면 |
+| [네이티브(V3) SDK 에서 이관](migration.md) | 기존 네이티브(V3) SDK(`com.tnkfactory:rwd`)를 사용 중이라면 |
 | [서버 보상 콜백 URL](../common/server-callback.md) | **실제 포인트 지급 경로** (개발사 백엔드) |
 | [지원 범위](../common/support-matrix.md) | 제공 기능 한눈에 보기 |
 | [문제 해결](troubleshooting.md) | 자주 겪는 증상과 원인 |

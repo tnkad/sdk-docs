@@ -1,11 +1,11 @@
 ---
-description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하는 기능, 현재 제공하지 않는 기능, 플랫폼별 차이를 정리한 표입니다.
+description: 하이브리드(V4) 오퍼월 SDK 가 Android · iOS 에서 제공하는 기능, 현재 제공하지 않는 기능, 플랫폼별 차이를 정리한 표입니다.
 ---
 
 # 지원 범위
 
-하이브리드 오퍼월 SDK 의 **제공 기능**, **현재 제공하지 않는 기능**, **플랫폼별 차이**를 한눈에 확인하는 페이지입니다.
-연동 범위를 정할 때, 그리고 기존 네이티브 SDK 에서 옮기기 전에 빠지는 기능이 없는지 볼 때 먼저 확인하세요.
+하이브리드(V4) 오퍼월 SDK 의 **제공 기능**, **현재 제공하지 않는 기능**, **플랫폼별 차이**를 한눈에 확인하는 페이지입니다.
+연동 범위를 정할 때, 그리고 기존 네이티브(V3) SDK 에서 옮기기 전에 빠지는 기능이 없는지 볼 때 먼저 확인하세요.
 
 ---
 
@@ -15,8 +15,8 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 |------|:-------:|:---:|------|
 | 전체 화면 오퍼월 | ✅ | ✅ | `openOfferwall` |
 | 화면 안에 오퍼월 삽입 | ✅ | ✅ | `TnkOfferwallView` |
-| 플레이스먼트 뷰 (지면 광고를 앱 화면 일부에 표시) | ✅ (1.0.17 이상) | ✅ (1.0.7 이상) | `TnkPlacementView` — 기존 네이티브 SDK 의 `AdPlacementView` 를 대신합니다. 지면 ID 는 담당자에게 받습니다 — [Android](../android/placement.md) · [iOS](../ios/placement.md) |
-| 특정 광고 바로 진입 | ✅ (1.0.10 이상) | ✅ (1.0.0 이상) | `adDetail` / `adJoin` / `adAction` — Android 는 기존 네이티브 SDK 와 같은 이름, iOS 는 네이티브 `presentAdDetailView` 가 `adDetail` 로 바뀌었습니다(자세한 내용은 [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)) |
+| 플레이스먼트 뷰 (지면 광고를 앱 화면 일부에 표시) | ✅ (1.0.17 이상) | ✅ (1.0.7 이상) | `TnkPlacementView` — 기존 네이티브(V3) SDK 의 `AdPlacementView` 를 대신합니다. 지면 ID 는 담당자에게 받습니다 — [Android](../android/placement.md) · [iOS](../ios/placement.md) |
+| 특정 광고 바로 진입 | ✅ (1.0.10 이상) | ✅ (1.0.0 이상) | `adDetail` / `adJoin` / `adAction` — Android 는 기존 네이티브(V3) SDK 와 같은 이름, iOS 는 네이티브(V3) `presentAdDetailView` 가 `adDetail` 로 바뀌었습니다(자세한 내용은 [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)) |
 | 오퍼월 화면 옵션 | ✅ | ✅ | `hideHeader` · `hideBack` · `theme` — 화면 구성에 따라 적용되지 않는 옵션이 있을 수 있습니다 |
 | 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` (일반·구매형을 각각 조회). 둘의 합계를 한 번에 받는 `getTotalPoint` 는 Android 1.0.16 이상 / iOS 1.0.6 이상 |
 | 딥링크 (`tnkscheme://`) | ✅ | ✅ | `handleScheme` |
@@ -30,23 +30,23 @@ description: 하이브리드 오퍼월 SDK 가 Android · iOS 에서 제공하�
 | 광고 식별자 수집 | ✅ | ✅ | Android 광고 ID(ADID) / iOS IDFA |
 | ATT 동의 요청 | — | ✅ | iOS 전용 `requestTrackingAuthorization` |
 
-> 네이티브 오퍼월 SDK 에서 옮겨오시는 경우, 어떤 호출을 그대로 쓸 수 있고 무엇을 걷어내야 하는지는
+> 네이티브(V3) 오퍼월 SDK 에서 옮겨오시는 경우, 어떤 호출을 그대로 쓸 수 있고 무엇을 걷어내야 하는지는
 > [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)에 정리되어 있습니다.
 
 ---
 
 ## 현재 제공하지 않는 기능
 
-아래 기능은 현재 하이브리드 SDK 에서 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요.
+아래 기능은 현재 하이브리드(V4) SDK 에서 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요.
 
 | 기능 | 안내 |
 |------|------|
 | 광고 목록·상세·지면 데이터 | 오퍼월의 광고 목록과 상세는 오퍼월 화면이 직접 보여 주며, 앱으로 데이터를 넘기지 않습니다. 플레이스먼트 뷰는 `dataOnly` 로 지면의 광고 목록(`adList`)을 앱에 넘길 수 있습니다. 오퍼월 전체의 적립 가능 포인트 합계는 따로 조회할 수 있습니다 — [Android](../android/total-point.md) · [iOS](../ios/total-point.md) |
-| 포인트 잔액 조회 · 아이템 구매 · 인출 | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 사용자 포인트는 [서버 보상 콜백](server-callback.md)으로 받은 값을 개발사 서버에서 직접 관리합니다. 사용자의 적립 내역은 오퍼월 화면의 '문의/내역' 메뉴에서 볼 수 있습니다 |
-| 화면 디자인 커스터마이징 (`TnkAdConfig` · `TnkStyle` 등) | 앱 코드로 오퍼월 디자인을 바꾸는 설정은 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
-| 뉴스·피드 삽입 (Android 네이티브 SDK 의 `loadWithNewsData` · `getEmbedAdList` · `getEmbedNewsList` · `getFeedPopup`) | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
-| 이벤트·Plus 계열, 커스텀 탭 화면 (iOS 네이티브 SDK 의 `plusInstance` · `showCustomTapViewController` 등) | 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
-| 그 밖에 네이티브 SDK 에만 있던 부가 기능 | 이관 문서의 대조표에서 '현재 미제공(문의)' 로 표시된 항목입니다. 현재 하이브리드 SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 — [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md) |
+| 포인트 잔액 조회 · 아이템 구매 · 인출 | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 사용자 포인트는 [서버 보상 콜백](server-callback.md)으로 받은 값을 개발사 서버에서 직접 관리합니다. 사용자의 적립 내역은 오퍼월 화면의 '문의/내역' 메뉴에서 볼 수 있습니다 |
+| 화면 디자인 커스터마이징 (`TnkAdConfig` · `TnkStyle` 등) | 앱 코드로 오퍼월 디자인을 바꾸는 설정은 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| 뉴스·피드 삽입 (Android 네이티브(V3) SDK 의 `loadWithNewsData` · `getEmbedAdList` · `getEmbedNewsList` · `getFeedPopup`) | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| 이벤트·Plus 계열, 커스텀 탭 화면 (iOS 네이티브(V3) SDK 의 `plusInstance` · `showCustomTapViewController` 등) | 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 |
+| 그 밖에 네이티브(V3) SDK 에만 있던 부가 기능 | 이관 문서의 대조표에서 '현재 미제공(문의)' 로 표시된 항목입니다. 현재 하이브리드(V4) SDK 에서는 제공하지 않습니다. 필요하신 경우 담당자에게 문의해 주세요 — [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md) |
 
 지원 기능은 순차적으로 확대하고 있습니다.
 
