@@ -1,5 +1,5 @@
 ---
-description: TnkFactory 하이브리드(V4) 오퍼월 SDK 연동 가이드입니다. Android · iOS 설치부터 오퍼월 열기, 서버 보상 콜백까지 순서대로 안내합니다.
+description: TnkFactory 하이브리드(V4) 오퍼월 SDK 연동 가이드입니다. Android · iOS · Flutter 설치부터 오퍼월 열기, 서버 보상 콜백까지 순서대로 안내합니다.
 ---
 
 # TnkFactory SDK 연동 가이드
@@ -19,6 +19,7 @@ Android 와 iOS 는 같은 오퍼월 화면을 사용하므로 사용자가 보�
 |--------|----------|------|--------|
 | **Android** | Android 5.0 (API 21) | Maven (AAR) | [연동 가이드 (Android)](android/README.md) |
 | **iOS** | iOS 15.0 | SPM · CocoaPods | [연동 가이드 (iOS)](ios/README.md) |
+| **Flutter** | Flutter 3.41 (Android 5.0 · iOS 15.0) | pub.dev (`tnk_ppi_hyb`) | [연동 가이드 (Flutter)](flutter/README.md) |
 
 플랫폼과 무관한 내용은 공통 문서에 있습니다.
 
@@ -48,7 +49,7 @@ Android 와 iOS 는 같은 오퍼월 화면을 사용하므로 사용자가 보�
 
 1. **퍼블리셔 페이지** — [앱 등록 후 APP ID 발급](publisher/app-id.md)
 2. **앱** — SDK 설치 → 앱 ID 설정 → 초기화 → 사용자 식별값 설정 → (앱에서 동의를 받는 경우) 동의 전달 → 오퍼월 열기
-   단계별 코드는 [Android 빠른 시작](android/README.md) · [iOS 빠른 시작](ios/README.md)에 있습니다.
+   단계별 코드는 [Android 빠른 시작](android/README.md) · [iOS 빠른 시작](ios/README.md) · [Flutter 빠른 시작](flutter/README.md)에 있습니다.
 3. **서버** — 보상 콜백 URL 구현 → 등록 (등록·변경은 담당자에게 요청)
 4. **검증** — 실제 광고에 참여해 콜백이 도착하고 포인트가 지급되는지 확인
 
