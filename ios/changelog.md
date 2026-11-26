@@ -13,6 +13,10 @@ description: 하이브리드(V4) 오퍼월 SDK(iOS) 버전별 변경 사항입�
 
 ---
 
+## 1.0.8 — 2026-11-26
+
+- 개인정보 보호 매니페스트(`PrivacyInfo.xcprivacy`)에 SDK 가 수집하는 정보, 추적 여부, 사용하는 API 를 선언했습니다. App Store 개인정보 답변을 작성할 때 Xcode 개인정보 보고서(Organizer → Generate Privacy Report)에서 확인할 수 있습니다. 연동 코드 변경은 필요 없습니다 — [1. 설치](install.md)의 'App Store 제출 때 — 개인정보 항목'
+
 ## 1.0.7 — 2026-11-11
 
 - 담당자에게 받은 지면 ID 로 광고 묶음 하나를 앱 화면 일부에 보여 주는 플레이스먼트 뷰 `TnkPlacementView` · `TnkPlacementViewDelegate` 를 추가했습니다. 기존 네이티브(V3) SDK 의 `AdPlacementView` 를 이 뷰로 바꿀 수 있습니다 — [10. 플레이스먼트 뷰](placement.md). 기존 앱이 옮길 때 달라지는 점(추가·변경·빠진 것과 이유)은 그 페이지의 '기존 네이티브(V3) SDK 에서 옮겨 오기'에 있습니다

@@ -68,7 +68,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
  dependencies {
 -    implementation("com.tnkfactory:rwd:8.09.30")
 -    implementation("com.tnkfactory:rwd_store:8.08.81")   // 포인트 스토어를 쓰던 경우
-+    implementation("com.tnkfactory.ad:hrwd:1.0.17")
++    implementation("com.tnkfactory.ad:hrwd:1.0.18")
  }
 ```
 

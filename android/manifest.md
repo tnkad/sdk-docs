@@ -108,7 +108,6 @@ class MyApplication : Application() {
 | 권한 | `com.google.android.gms.permission.AD_ID` | 광고 ID 조회 (`targetSdk` 33 이상 앱에 필요) |
 | `<queries>` | `ACTION_MAIN` / `CATEGORY_LAUNCHER` | 광고 앱 설치 여부 확인 (Android 11+ 패키지 가시성) |
 | Activity | `com.tnkfactory.ad.hrwd.webview.TnkOfferwallActivity` | 전체 화면으로 여는 오퍼월 화면 |
-| activity-alias | `com.tnkfactory.ad.AdWallActivity` | 기존 네이티브(V3) SDK 에서 쓰던 화면 이름을 받아 주는 연결 항목 |
 
 > ⚠️ 위 Activity 를 앱 매니페스트에서 같은 이름으로 **다른 속성값**으로 다시 선언하지 마세요. 속성값이 서로 다르면 병합 충돌로 빌드가 실패할 수 있습니다.
 
@@ -117,7 +116,6 @@ class MyApplication : Application() {
 
 > ⚠️ **기존 네이티브(V3) SDK 를 사용 중인 개발사는** 매니페스트에 직접 선언해 둔
 > `<activity android:name="com.tnkfactory.ad.AdWallActivity" ... />` 를 **제거해 주세요.**
-> 해당 화면은 이제 SDK 가 자동으로 연결하므로, 기존 선언이 남아 있으면 빌드 오류나 화면 충돌이 생길 수 있습니다.
 > 자세한 내용은 [네이티브(V3) SDK 에서 이관](migration.md)을 참고하세요.
 
 ### Google Play 에 앱을 제출할 때

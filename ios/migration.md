@@ -63,7 +63,7 @@ Swift Package Manager 로 설치하는 경우입니다. Xcode 에서는 **File �
  // Package.swift 를 직접 쓰는 경우
  dependencies: [
 -    .package(url: "https://github.com/tnkfactory/tnk-rwd2-spm.git", from: "5.94.0")
-+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.7")
++    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.8")
  ],
  targets: [
      .target(

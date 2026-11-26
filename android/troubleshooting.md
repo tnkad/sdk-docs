@@ -103,12 +103,6 @@ maven("https://repository.tnkad.net:8443/repository/public/")
 | `PREFER_SETTINGS` | 무시됩니다 |
 | `FAIL_ON_PROJECT_REPOS` | 빌드 오류가 납니다 |
 
-### `AdWallActivity` 선언 충돌 (매니페스트 병합 오류)
-
-- **증상**: 기존 네이티브(V3) SDK 에서 이관한 뒤 매니페스트 병합 단계에서 `com.tnkfactory.ad.AdWallActivity` 와 관련한 충돌 오류가 납니다. 오류 문구는 빌드 도구에 따라 다를 수 있습니다.
-- **원인**: 앱 매니페스트에 `com.tnkfactory.ad.AdWallActivity` 를 직접 선언해 두었습니다. 하이브리드(V4) SDK 가 같은 이름을 함께 제공합니다.
-- **해결**: 앱 매니페스트의 그 `<activity>` 선언을 **제거**하세요. 자세한 내용은 [네이티브(V3) SDK 에서 이관](migration.md)을 참고하세요.
-
 ---
 
 ## 오퍼월이 뜨지 않거나 빈 화면입니다
