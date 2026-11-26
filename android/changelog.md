@@ -10,6 +10,10 @@ description: 하이브리드(V4) 오퍼월 SDK(Android) 버전별 변경 사항�
 
 ---
 
+## 1.0.19 — 2026-11-26
+
+- 적립 가능 포인트 조회(`getTotalPoint` · `getAdvertiseTotalPoint` · `getProductTotalPoint`)가 개인정보 수집 동의 전에는 TNK 서버를 호출하지 않고 `isSuccess` 가 `false`, `retCode` 가 `-3` 인 실패 결과를 돌려줍니다. 상수 `TotalPointInfo.RET_CODE_PRIVACY_NOT_AGREED` 로 구분할 수 있고, 앱은 기존 실패와 같이 포인트 문구를 숨기면 됩니다. 동의는 앱의 `setAgreePrivacy(context, true)` 또는 오퍼월의 동의 팝업으로 이뤄집니다 — [9. 적립 가능 포인트 조회](total-point.md)의 '동의 전에는 조회하지 않습니다'
+
 ## 1.0.18 — 2026-11-26
 
 - 앱 화면 안에 넣은 오퍼월(`TnkOfferwallView`)이 시스템 내비게이션 바와 겹치지 않는 자리에 있는데도, 오퍼월 안의 하단 팝업·목록 끝에 내비게이션 바 높이만큼 빈 공간이 생기던 문제를 수정했습니다. 예: 화면을 끝까지 그리는(edge-to-edge) 앱에서 하단 탭 위에 오퍼월을 넣은 경우. 오퍼월이 화면 맨 아래까지 닿는 배치는 이전처럼 내비게이션 바 위로 여백을 둡니다. 연동 코드 변경은 필요 없습니다 — [4. 오퍼월 띄우기](offerwall.md)의 '앱 화면 안에 넣기(삽입)'

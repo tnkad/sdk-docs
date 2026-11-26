@@ -20,7 +20,7 @@ Flutter 앱은 `tnk_ppi_hyb` 플러그인으로 오퍼월을 사용합니다. Fl
 | 플레이스먼트 뷰 (지면 광고를 앱 화면 일부에 표시) | ✅ (1.0.17 이상) | ✅ (1.0.7 이상) | `TnkPlacementView` — 기존 네이티브(V3) SDK 의 `AdPlacementView` 를 대신합니다. 지면 ID 는 담당자에게 받습니다 — [Android](../android/placement.md) · [iOS](../ios/placement.md) |
 | 특정 광고 바로 진입 | ✅ (1.0.10 이상) | ✅ (1.0.0 이상) | `adDetail` / `adJoin` / `adAction` — Android 는 기존 네이티브(V3) SDK 와 같은 이름, iOS 는 네이티브(V3) `presentAdDetailView` 가 `adDetail` 로 바뀌었습니다(자세한 내용은 [Android 이관](../android/migration.md) · [iOS 이관](../ios/migration.md)) |
 | 오퍼월 화면 옵션 | ✅ | ✅ | `hideHeader` · `hideBack` · `theme` — 화면 구성에 따라 적용되지 않는 옵션이 있을 수 있습니다 |
-| 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` (일반·구매형을 각각 조회). 둘의 합계를 한 번에 받는 `getTotalPoint` 는 Android 1.0.16 이상 / iOS 1.0.6 이상 |
+| 적립 가능 포인트 조회 | ✅ (1.0.10 이상) | ✅ (1.0.1 이상) | `getAdvertiseTotalPoint` / `getProductTotalPoint` (일반·구매형을 각각 조회). 둘의 합계를 한 번에 받는 `getTotalPoint` 는 Android 1.0.16 이상 / iOS 1.0.6 이상. 개인정보 동의 전에는 조회하지 않음(Android 1.0.19 / iOS 1.0.9 이상) |
 | 딥링크 (`tnkscheme://`) | ✅ | ✅ | `handleScheme` |
 | 보상 지급 완료 알림 | ✅ | ✅ | `setRewardListener` — 화면 갱신용 |
 | 범용 이벤트 수신 | ✅ | ✅ | `setEventListener` |

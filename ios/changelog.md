@@ -13,6 +13,10 @@ description: 하이브리드(V4) 오퍼월 SDK(iOS) 버전별 변경 사항입�
 
 ---
 
+## 1.0.9 — 2026-11-26
+
+- 적립 가능 포인트 조회(`getTotalPoint` · `getAdvertiseTotalPoint` · `getProductTotalPoint`)가 개인정보 수집 동의 전에는 TNK 서버를 호출하지 않고 `isSuccess` 가 `false`, `retCode` 가 `-3` 인 실패 결과를 돌려줍니다. 상수 `TotalPointInfo.retCodePrivacyNotAgreed` 로 구분할 수 있고, 앱은 기존 실패와 같이 포인트 문구를 숨기면 됩니다. 동의는 앱의 `setAgreePrivacy(true)` 또는 오퍼월의 동의 팝업으로 이뤄집니다 — [9. 적립 가능 포인트 조회](total-point.md)의 '동의 전에는 조회하지 않습니다'
+
 ## 1.0.8 — 2026-11-26
 
 - 개인정보 보호 매니페스트(`PrivacyInfo.xcprivacy`)에 SDK 가 수집하는 정보, 추적 여부, 사용하는 API 를 선언했습니다. App Store 개인정보 답변을 작성할 때 Xcode 개인정보 보고서(Organizer → Generate Privacy Report)에서 확인할 수 있습니다. 연동 코드 변경은 필요 없습니다 — [1. 설치](install.md)의 'App Store 제출 때 — 개인정보 항목'

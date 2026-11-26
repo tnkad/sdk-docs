@@ -129,7 +129,7 @@ offerwallView.setOnCloseRequested(() -> {
 ### 적립 가능 포인트 조회 (SDK 1.0.10 이상)
 
 기존 네이티브(V3) SDK 의 `getEarnPoint` · `queryAdvertiseCount` 는 `getTotalPoint` 하나로 바꿀 수 있습니다 (SDK 1.0.16 이상). 일반·구매형을 나눠 받는 `getAdvertiseTotalPoint` / `getProductTotalPoint` 는 1.0.10 이상에서 쓸 수 있습니다.
-통신은 백그라운드에서 하고, 콜백은 메인 스레드로 옵니다. iOS 에서도 같은 기능을 제공합니다 (`getTotalPoint` 는 iOS SDK 1.0.6 이상, 나머지는 1.0.1 이상).
+통신은 백그라운드에서 하고, 콜백은 메인 스레드로 옵니다. 개인정보 수집 동의 전에는 서버를 호출하지 않고 `retCode` `-3` 인 실패 결과를 돌려줍니다 (SDK 1.0.19 이상, [9. 적립 가능 포인트 조회](total-point.md)의 '동의 전에는 조회하지 않습니다'). iOS 에서도 같은 기능을 제공합니다 (`getTotalPoint` 는 iOS SDK 1.0.6 이상, 나머지는 1.0.1 이상).
 
 | 시그니처 | 설명 |
 |---|---|
@@ -360,10 +360,14 @@ data class TnkPlacementAdItem(
 data class TotalPointInfo(
     val pointAmount: Long,   // 적립 가능 포인트 총합
     val adCount: Int,        // 적립 가능 광고 수
-    val retCode: Int,        // 0 이면 성공, 응답 코드가 없으면 -1
+    val retCode: Int,        // 0 이면 성공, 응답 코드가 없으면 -1, 개인정보 동의 전이라 서버를 호출하지 않았으면 -3 (SDK 1.0.19 이상)
     val retMessage: String?, // 서버가 오류로 응답했을 때의 사유 (없으면 null)
 ) {
     val isSuccess: Boolean   // retCode == 0
+
+    companion object {
+        const val RET_CODE_PRIVACY_NOT_AGREED: Int = -3   // 개인정보 동의 전 (SDK 1.0.19 이상)
+    }
 }
 ```
 

@@ -63,7 +63,7 @@ Swift Package Manager 로 설치하는 경우입니다. Xcode 에서는 **File �
  // Package.swift 를 직접 쓰는 경우
  dependencies: [
 -    .package(url: "https://github.com/tnkfactory/tnk-rwd2-spm.git", from: "5.94.0")
-+    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.8")
++    .package(url: "https://github.com/tnkad/ios-ppi-hyb-sdk", from: "1.0.9")
  ],
  targets: [
      .target(
@@ -297,6 +297,8 @@ SwiftUI 에서 전체 화면으로 열려면 `openOfferwall(from:)` 에 오퍼�
 | `nil` | 네트워크 오류 등으로 조회에 실패했습니다. | 표시하지 않거나 이전 값을 유지합니다. |
 | `isSuccess` 가 `false` | 서버가 실패로 응답했습니다. `retCode`·`retMessage` 로 사유를 볼 수 있습니다. 이때의 `pointAmount` 는 쓰지 마세요. | `nil` 과 같이 처리합니다. |
 | `isSuccess` 가 `true` | `pointAmount`(포인트 합계, `Int64`)와 `adCount`(광고 수)가 들어 있습니다. 일반·구매형 중 한쪽 조회만 실패한 경우에도 성공한 쪽의 값만 담아 이 값으로 옵니다. | 화면에 표시합니다. 값이 평소보다 작을 수 있습니다. |
+
+**동의 전에는 조회하지 않습니다:** V4 SDK(iOS 1.0.9 이상)는 개인정보 동의 전에는 조회하지 않고 `retCode` `-3`(`TotalPointInfo.retCodePrivacyNotAgreed`)을 돌려줍니다. 기존 코드를 옮긴 앱은 동의 전에는 포인트 문구가 보이지 않을 수 있습니다. 위 예제처럼 실패일 때 표시하지 않으면 됩니다 — [9. 적립 가능 포인트 조회](total-point.md)의 '동의 전에는 조회하지 않습니다'.
 
 **SDK 1.0.5 이하를 쓰는 경우:** `getTotalPoint` 가 없으므로 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 각각 호출해 결과를 더합니다.
 

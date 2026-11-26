@@ -68,7 +68,7 @@ iOS 앱도 함께 옮긴다면 [iOS 이관](../ios/migration.md)을 같이 보�
  dependencies {
 -    implementation("com.tnkfactory:rwd:8.09.30")
 -    implementation("com.tnkfactory:rwd_store:8.08.81")   // 포인트 스토어를 쓰던 경우
-+    implementation("com.tnkfactory.ad:hrwd:1.0.18")
++    implementation("com.tnkfactory.ad:hrwd:1.0.19")
  }
 ```
 
@@ -240,6 +240,8 @@ offerwallView.loadOfferwall(extraParams = mapOf("hideHeader" to "1"))
 | `null` | 네트워크 오류 등으로 조회에 실패했습니다. | 표시하지 않거나 이전 값을 유지합니다. |
 | `isSuccess` 가 `false` | 서버가 실패로 응답했습니다. `retCode`·`retMessage` 로 사유를 볼 수 있습니다. 이때의 `pointAmount` 는 쓰지 마세요. | `null` 과 같이 처리합니다. |
 | `isSuccess` 가 `true` | `pointAmount`(포인트 합계)와 `adCount`(광고 수)가 들어 있습니다. 일반·구매형 중 한쪽 조회만 실패한 경우에도 성공한 쪽의 값만 담아 이 값으로 옵니다(기존 `getEarnPoint` 와 같은 방식). | 화면에 표시합니다. 값이 평소보다 작을 수 있습니다. |
+
+**동의 전에는 조회하지 않습니다:** V4 SDK(Android 1.0.19 이상)는 개인정보 동의 전에는 조회하지 않고 `retCode` `-3`(`TotalPointInfo.RET_CODE_PRIVACY_NOT_AGREED`)을 돌려줍니다. 기존 코드를 옮긴 앱은 동의 전에는 포인트 문구가 보이지 않을 수 있습니다. 위 예제처럼 실패일 때 표시하지 않으면 됩니다 — [9. 적립 가능 포인트 조회](total-point.md)의 '동의 전에는 조회하지 않습니다'.
 
 **SDK 1.0.15 이하를 쓰는 경우:** `getTotalPoint` 가 없으므로 `getAdvertiseTotalPoint`(일반 광고)와 `getProductTotalPoint`(구매형 광고)를 각각 호출해 결과를 더합니다. `queryAdvertiseCount` 도 두 결과의 `adCount`·`pointAmount` 를 각각 더해 바꿉니다.
 
