@@ -1,5 +1,5 @@
 ---
-description: 오퍼월 전체를 Flutter 앱 화면 안(예: 하단 탭)에 넣는 TnkOfferwallView 위젯의 사용법. 닫기 요청, Android 뒤로가기, 딥링크, 크기·제스처·SafeArea 주의사항을 안내합니다.
+description: 오퍼월 전체를 Flutter 앱 화면 안(예를 들어 하단 탭)에 넣는 TnkOfferwallView 위젯의 사용법. 닫기 요청, Android 뒤로가기, 딥링크, 크기·제스처·SafeArea 주의사항을 안내합니다.
 ---
 
 # 5. 화면 안에 오퍼월 넣기
