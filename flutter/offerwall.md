@@ -107,7 +107,7 @@ final info = await TnkPpiHybSdk.getTotalPoint();
 if (info != null && info.isSuccess && info.adCount > 0) {
   // '최대 ${info.pointAmount}P 적립 가능 (${info.adCount}개)' 표시
 } else {
-  // 조회에 실패했거나 참여할 광고가 없으면 문구를 숨깁니다
+  // 조회에 실패했거나 동의 전이거나 참여할 광고가 없으면 문구를 숨깁니다
 }
 ```
 
@@ -117,17 +117,17 @@ if (info != null && info.isSuccess && info.adCount > 0) {
 | `getAdvertiseTotalPoint()` | 일반(비구매형, PPI) 광고만 |
 | `getProductTotalPoint()` | 구매형(CPS) 광고만 |
 
-세 호출 모두 `Future<TotalPointInfo?>` 를 돌려주며, 조회에 실패하면 `null` 입니다.
+세 호출 모두 `Future<TotalPointInfo?>` 를 돌려줍니다. `null` 은 통신 오류, 인증 실패, 응답을 읽지 못한 경우입니다. 서버가 실패로 응답한 경우와 개인정보 동의 전인 경우는 `null` 이 아니라 `isSuccess` 가 `false` 인 결과입니다.
 
 | `TotalPointInfo` 필드 | 타입 | 설명 |
 |---|---|---|
 | `pointAmount` | `int` | 적립 가능 포인트 총합 |
 | `adCount` | `int` | 적립 가능 광고 수 |
-| `retCode` | `int` | 서버 응답 코드. `0` 이면 성공 |
-| `retMessage` | `String?` | 서버 응답 메시지 |
+| `retCode` | `int` | 응답 코드. `0` 이면 성공, 응답 코드가 없으면 `-1`, 개인정보 동의 전이라 서버를 호출하지 않았으면 `-3` (`TotalPointInfo.retCodePrivacyNotAgreed`. 이 플러그인이 가져오는 SDK 의 동작이며 Android SDK 1.0.19 · iOS SDK 1.0.9 이상) |
+| `retMessage` | `String?` | 응답 메시지. 동의 전에는 "개인정보 수집 동의 전에는 적립 가능 포인트를 조회하지 않습니다." |
 | `isSuccess` | `bool` | `retCode` 가 `0` 이면 `true` |
 
-`null` 과 `isSuccess` 를 모두 확인하세요. 서버가 실패로 응답한 경우에는 `null` 이 아니라 `isSuccess` 가 `false` 인 결과가 옵니다. 값별 처리와 한쪽만 실패했을 때의 동작은 [Android 9. 적립 가능 포인트 조회](../android/total-point.md)·[iOS 9. 적립 가능 포인트 조회](../ios/total-point.md)와 같습니다.
+`null` 과 `isSuccess` 를 모두 확인하세요. 값별 처리와 한쪽만 실패했을 때의 동작은 [Android 9. 적립 가능 포인트 조회](../android/total-point.md)·[iOS 9. 적립 가능 포인트 조회](../ios/total-point.md)와 같습니다.
 
 > 이 값은 **광고 참여로 받을 수 있는 포인트의 총합**입니다. 사용자가 이미 적립한 **잔액**과는 다릅니다. 잔액은 개발사 서버가 [서버 보상 콜백](../common/server-callback.md)으로 받은 값을 직접 관리합니다.
 
@@ -137,6 +137,29 @@ if (info != null && info.isSuccess && info.adCount > 0) {
 await TnkPpiHybSdk.setUserName('<새 사용자 식별값>');
 await TnkPpiHybSdk.clearApiSession(); // 이전 사용자 정보로 조회가 이어지지 않도록
 ```
+
+### 동의 전에는 조회하지 않습니다
+
+개인정보 수집 동의를 받기 전에 세 호출을 하면 TNK 서버에 요청하지 않고 아래 값의 실패 결과를 돌려줍니다.
+
+| 필드 | 값 |
+|---|---|
+| `isSuccess` | `false` |
+| `retCode` | `-3` (`TotalPointInfo.retCodePrivacyNotAgreed`) |
+| `retMessage` | 개인정보 수집 동의 전에는 적립 가능 포인트를 조회하지 않습니다. |
+| `pointAmount` · `adCount` | `0` |
+
+- **동의로 보는 경우:** 앱에서 `setAgreePrivacy(true)` 로 알렸거나 사용자가 오퍼월의 동의 팝업에서 동의한 상태입니다.
+- 앱 처리는 다른 실패와 같습니다. 위 예제의 조건을 그대로 두면 문구가 숨겨집니다. 동의 전 때문인지 알아야 하면 `retCode` 를 상수와 비교하세요.
+
+```dart
+if (info != null && info.retCode == TotalPointInfo.retCodePrivacyNotAgreed) {
+  // 동의 전입니다. 동의를 받은 뒤 다시 조회하세요
+}
+```
+
+- 동의를 받은 뒤 다시 조회하면 정상 값이 옵니다. 호출할 때 동의 전이었다면 곧바로 동의가 이뤄져도 그 호출의 결과는 `-3` 입니다.
+- 동의 여부를 판정하는 시점, 동의를 철회한 경우, `getTotalPoint` 에서 한쪽만 막혔을 때의 규칙은 [Android 9. 적립 가능 포인트 조회](../android/total-point.md)·[iOS 9. 적립 가능 포인트 조회](../ios/total-point.md)의 '동의 전에는 조회하지 않습니다'와 같습니다.
 
 ---
 

@@ -27,7 +27,7 @@ dependencies:
 
 pub.dev 에서 게시자가 인증된 `tnkfactory.com` 인지 확인하고 받으세요.
 
-플러그인은 하이브리드(V4) SDK(Android `com.tnkfactory.ad:hrwd` 1.0.18, iOS `TnkPpiHyb` 1.0.8)를 함께 가져옵니다. 이 SDK 들을 앱에 따로 추가하지 않습니다.
+플러그인은 하이브리드(V4) SDK(Android `com.tnkfactory.ad:hrwd` 1.0.19, iOS `TnkPpiHyb` 1.0.9)를 함께 가져옵니다. 이 SDK 들을 앱에 따로 추가하지 않습니다.
 
 ---
 
@@ -46,7 +46,7 @@ maven {
 
 `content` 필터는 이 저장소를 TNK 그룹(`com.tnkfactory.ad`)에만 쓰게 하여 다른 의존성은 이 저장소에서 찾지 않게 합니다.
 
-**안 하면:** 앱 빌드가 `Could not find com.tnkfactory.ad:hrwd:1.0.18` 로 실패합니다.
+**안 하면:** 앱 빌드가 `Could not find com.tnkfactory.ad:hrwd:1.0.19` 로 실패합니다.
 
 > ⚠️ 기존 `tnk_flutter_rwd` 플러그인과 한 앱에 함께 두는 동안에는 `content` 필터를 **넣지 마세요.** 필터가 기존 SDK(`com.tnkfactory:rwd`)를 가려 빌드가 실패합니다 — [기존 플러그인에서 이관](migration.md)
 
@@ -81,7 +81,7 @@ maven {
 ### SPM 과 CocoaPods
 
 - **Flutter 3.44 이상:** SPM 이 기본입니다. 따로 할 일이 없습니다.
-- **Flutter 3.41~3.43:** SPM 이 기본으로 꺼져 있어 CocoaPods 로 빌드되고, iOS SDK(`TnkPpiHyb`)는 1.0.8 에 머뭅니다. 이후 iOS SDK 를 받으려면 앱 `pubspec.yaml` 에 아래를 넣어 SPM 으로 전환하세요. 이 설정은 해당 프로젝트에만 적용되며 전역 설정이 아닙니다.
+- **Flutter 3.41~3.43:** SPM 이 기본으로 꺼져 있어 CocoaPods 로 빌드되고, iOS SDK(`TnkPpiHyb`)는 CocoaPods 로 받을 수 있는 버전에 머뭅니다. 이후 iOS SDK 를 받으려면 앱 `pubspec.yaml` 에 아래를 넣어 SPM 으로 전환하세요. 이 설정은 해당 프로젝트에만 적용되며 전역 설정이 아닙니다.
 
 ```yaml
 flutter:
@@ -89,7 +89,7 @@ flutter:
     enable-swift-package-manager: true
 ```
 
-- **CocoaPods 로 빌드하는 경우:** CocoaPods 공용 저장소(trunk)가 2026-12-02 부터 읽기 전용이 되므로, `TnkPpiHyb` 1.0.8 이 CocoaPods 로 받을 수 있는 마지막 버전입니다. 1.0.8 은 정상 동작합니다. 이후 SDK 는 SPM 으로만 받을 수 있습니다.
+- **CocoaPods 로 빌드하는 경우:** CocoaPods 공용 저장소(trunk)가 2026-12-02 부터 읽기 전용이 되므로, 그 뒤에 나오는 SDK 는 SPM 으로만 받을 수 있습니다. 이 플러그인은 `TnkPpiHyb` 1.0.9 이상 1.1 미만(`~> 1.0.9`)을 받습니다.
 - **업데이트:** SPM 은 `flutter pub upgrade tnk_ppi_hyb` 를 실행하면 플러그인 새 버전이 맞는 SDK 를 가져옵니다. CocoaPods 는 플러그인을 올린 뒤 `pod install` 이 `TnkPpiHyb` 버전 충돌을 알리면(`Podfile.lock` 이 옛 버전을 잡고 있는 경우) `cd ios && pod update TnkPpiHyb` 를 실행합니다.
 - **`TnkPpiHyb` 를 앱에 따로 추가하지 마세요.** `Podfile` 의 `pod 'TnkPpiHyb'` 와 Xcode 의 패키지 추가 모두 해당합니다. 플러그인이 이미 가져오므로 같은 SDK 가 중복으로 들어가거나 플러그인과 다른 버전에 묶여 빌드나 실행에서 문제가 생길 수 있습니다(공개 iOS 가이드 [1. 설치](../ios/install.md)의 경고와 같은 이유).
 

@@ -40,8 +40,8 @@ Flutter 앱에 오퍼월을 처음 붙이는 모든 개발사에게 필요합니
 
 | 플랫폼 | 하이브리드(V4) SDK |
 |---|---|
-| Android | `com.tnkfactory.ad:hrwd` 1.0.18 |
-| iOS | `TnkPpiHyb` 1.0.8 |
+| Android | `com.tnkfactory.ad:hrwd` 1.0.19 |
+| iOS | `TnkPpiHyb` 1.0.9 |
 
 > ⚠️ Android 에뮬레이터·가상 기기에서는 오퍼월이 열리지 않습니다. 동작 확인은 실기기에서 해 주세요.
 
@@ -60,7 +60,7 @@ dependencies:
   tnk_ppi_hyb: ^1.0.0
 ```
 
-**안 하면(Android 에서 저장소를 추가하지 않으면):** Android 빌드가 `Could not find com.tnkfactory.ad:hrwd:1.0.18` 로 실패합니다.
+**안 하면(Android 에서 저장소를 추가하지 않으면):** Android 빌드가 `Could not find com.tnkfactory.ad:hrwd:1.0.19` 로 실패합니다.
 
 ### 2. 초기화
 

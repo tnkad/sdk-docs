@@ -198,7 +198,7 @@ await TnkPpiHybSdk.initialize(
 | 7 | `setCOPPA(coppa)` | `setCOPPA(enabled)` | 이름 그대로 |
 | 8 | `applicationStarted()` | `applicationStarted()` | 선택 사항 |
 | 9 | `showATTPopup()` | `requestTrackingAuthorization()` | iOS 전용. 결과를 `bool?` 로 돌려줍니다(Android 는 `null`) |
-| 10 | `getEarnPoint()` | `getTotalPoint()` | `TotalPointInfo?` 를 돌려주고, 포인트는 `pointAmount` |
+| 10 | `getEarnPoint()` | `getTotalPoint()` | `TotalPointInfo?` 를 돌려주고, 포인트는 `pointAmount`. 개인정보 동의 전에는 조회하지 않고 `retCode` `-3`(`TotalPointInfo.retCodePrivacyNotAgreed`)을 돌려주므로, 기존 코드를 옮긴 앱은 동의 전에는 포인트 문구가 보이지 않을 수 있습니다 |
 | 11 | `setNoUsePointIcon()` | 현재 지원하지 않음 | 오퍼월 디자인 설정 |
 | 12 | `setNoUsePrivacyAlert()` | `setAgreePrivacy(true)` | 앱에서 직접 동의를 받은(철회하지 않은) 사용자에게만, `setUserName` 다음에. 위 '개인정보 동의' 경고 참고 |
 | 13 | `getQueryPoint()` | 현재 지원하지 않음 | 잔액은 서버 보상 콜백으로 개발사 서버가 관리 |
